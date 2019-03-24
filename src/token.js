@@ -1,5 +1,3 @@
-import { useState, useEffect } from 'react';
-
 class TokenStore {
   listeners = [];
 
@@ -46,15 +44,5 @@ class TokenStore {
 }
 
 const store = new TokenStore();
-
-export function useToken() {
-  const [token, setToken] = useState(store.value);
-  useEffect(() =>
-    store.subscribe(value => {
-      setToken(value);
-    }),
-  );
-  return token;
-}
 
 export default store;

@@ -1,17 +1,12 @@
 import React from 'react';
 import { Route, Redirect } from 'react-router-dom';
 import { useMappedState } from 'redux-react-hook';
-import { createSelector } from 'reselect';
-import { useToken } from '../token';
-
-const selectIsLoggedIn = createSelector(
-  state => !!state.common.currentUser,
-  t => t,
-);
+import * as selectors from 'selectors';
+import { useToken } from 'hooks';
 
 const ProtectedRoute = ({ component: Component, render, ...pageProps }) => {
   const token = useToken();
-  const isLoggedIn = useMappedState(selectIsLoggedIn);
+  const { isLoggedIn } = useMappedState(selectors.isLoggedIn);
 
   const protectedRender = props => {
     if (token) {

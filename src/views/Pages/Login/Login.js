@@ -14,7 +14,8 @@ import {
   InputGroupText,
   Row,
 } from 'reactstrap';
-import { useSaga, login } from '../../../saga';
+import { useSaga } from 'hooks';
+import { login } from 'saga';
 
 const useField = (name, defval = '') => {
   const [value, setValue] = useState(defval);
@@ -38,7 +39,7 @@ const Login = () => {
     const msg = typeof err === 'string' ? err : err.error || err.error_message || err.message;
     setError(msg);
   });
-  const onSubmit = (e) => {
+  const onSubmit = e => {
     e.preventDefault();
     onLogin();
   };
@@ -108,9 +109,7 @@ const Login = () => {
                 <CardBody className="text-center">
                   <div>
                     <h2>Sign up</h2>
-                    <p>
-                      Lingvo Graph helps to learn your second language
-                    </p>
+                    <p>Lingvo Graph helps to learn your second language</p>
                     <Link to="/register">
                       <Button color="primary" className="mt-3" active tabIndex={-1}>
                         Register Now!

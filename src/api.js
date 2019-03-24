@@ -1,53 +1,57 @@
-import tokenStore from './token';
+import * as axios from 'axios';
+import token from './token';
 
-const stdHeaders = {
-  Accept: 'application/json',
-  'Content-Type': 'application/json',
-};
+export const DEFAULT_LIMIT = 100;
 
-export function fetchJSON(url, payload, options = {}) {
-  const token = tokenStore.value;
+axios.defaults.headers.common['Accept'] = 'application/json';
+axios.defaults.headers.post['Content-Type'] = 'application/json';
 
-  const headers = {
-    ...stdHeaders,
-    Authorization: token ? `Bearer ${token}` : undefined,
-    ...(options.headers || {}),
-  };
+axios.interceptors.request.use(config => {
+  if (token.value && !config.auth) {
+    config.headers['Authorization'] = `Bearer ${token.value}`;
+  }
+  return config;
+});
 
-  return fetch(url, {
-    method: options.method || (payload !== undefined ? 'POST' : 'GET'),
-    headers,
-    body: payload !== undefined ? JSON.stringify(payload) : undefined,
-    ...options,
-  }).then(resp => resp.json());
+export function login(username, password) {
+  return axios
+    .post('/api/login', undefined, {
+      auth: { username, password },
+    })
+    .then(resp => {
+      token.value = resp.data.token;
+      return me();
+    });
 }
 
-export function post(url, payload, options = {}) {
-  return fetchJSON(url, payload, {
-    ...options,
-    method: 'POST',
-  });
-}
-
-export function get(url, options = {}) {
-  return fetchJSON(url, undefined, {
-    ...options,
-    method: 'GET',
-  });
+export function get(path, params) {
+  return axios.get(path, params).then(resp => resp.data);
 }
 
 export function me() {
   return get('/api/me');
 }
 
-export function login(username, password) {
-  const creds = btoa(`${username}:${password}`);
-  return post('/api/login', undefined, {
-    headers: {
-      Authorization: `Basic ${creds}`,
-    },
-  }).then(resp => {
-    tokenStore.value = resp.token;
-    return me();
-  });
+export function paginationParams(qs, defaultLimit = DEFAULT_LIMIT) {
+  const params = new URLSearchParams(qs);
+  const page = parseInt(params.get('page'), 10);
+  const limit = parseInt(params.get('limit'), 10);
+  return {
+    page: isNaN(page) || page <= 0 ? 1 : page,
+    limit: isNaN(limit) || limit <= 0 ? defaultLimit : page,
+  };
 }
+
+export function getList(path, {page = 1, limit = DEFAULT_LIMIT}) {
+  const offset = (page - 1) * 100;
+  const params = new URLSearchParams();
+  params.append('offset', offset);
+  params.append('limit', limit);
+  return get(path, params);
+}
+
+export const user = {
+  list({page = 1, limit = DEFAULT_LIMIT}) {
+    return getList('/api/data/user/list', {page, limit});
+  }
+};

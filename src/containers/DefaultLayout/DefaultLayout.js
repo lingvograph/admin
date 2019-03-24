@@ -1,7 +1,6 @@
 import React, { Suspense } from 'react';
 import { Redirect, Switch } from 'react-router-dom';
 import { Container } from 'reactstrap';
-
 import {
   AppAside,
   AppBreadcrumb,
@@ -15,11 +14,12 @@ import {
   AppSidebarNav,
 } from '@coreui/react';
 // sidebar nav config
-import navigation from '../../_nav';
+import navigation from '_nav';
 // routes config
-import routes from '../../routes';
-import Route from '../../components/ProtectedRoute';
-import { useSaga, logout } from '../../saga';
+import routes from 'routes';
+import Route from 'components/ProtectedRoute';
+import { useSaga } from 'hooks';
+import { logout } from '../../saga';
 
 const DefaultAside = React.lazy(() => import('./DefaultAside'));
 const DefaultFooter = React.lazy(() => import('./DefaultFooter'));
@@ -27,10 +27,10 @@ const DefaultHeader = React.lazy(() => import('./DefaultHeader'));
 
 const loading = () => <div className="animated fadeIn pt-1 text-center">Loading...</div>;
 
-const DefaultLayout = (props) => {
+const DefaultLayout = props => {
   const doLogout = useSaga(logout);
 
-  const signOut = (e) => {
+  const signOut = e => {
     e.preventDefault();
     doLogout();
   };
@@ -86,6 +86,6 @@ const DefaultLayout = (props) => {
       </AppFooter>
     </div>
   );
-}
+};
 
 export default DefaultLayout;

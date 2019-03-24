@@ -1,5 +1,3 @@
-import { useContext } from 'react';
-import { StoreContext } from 'redux-react-hook';
 import { spawn, call, put } from 'redux-saga/effects';
 import { push } from 'connected-react-router';
 import * as api from './api';
@@ -46,15 +44,4 @@ export function* autoLogin() {
 
 export function* rootSaga() {
   yield spawn(autoLogin);
-}
-
-export function useStore() {
-  return useContext(StoreContext);
-}
-
-export function useSaga(saga, ...args) {
-  const store = useStore();
-  return () => {
-    store.runSaga(saga, ...args);
-  };
 }
