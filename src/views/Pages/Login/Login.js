@@ -34,10 +34,14 @@ const Login = () => {
   const username = useField('username');
   const password = useField('password');
   const [error, setError] = useState('');
-  const submit = useSaga(login, username.value, password.value, err => {
+  const onLogin = useSaga(login, username.value, password.value, err => {
     const msg = typeof err === 'string' ? err : err.error || err.error_message || err.message;
     setError(msg);
   });
+  const onSubmit = (e) => {
+    e.preventDefault();
+    onLogin();
+  };
 
   return (
     <div className="app flex-row align-items-center">
@@ -47,7 +51,7 @@ const Login = () => {
             <CardGroup>
               <Card className="p-4">
                 <CardBody>
-                  <Form onSubmit={submit}>
+                  <Form onSubmit={onSubmit}>
                     <h1>Login</h1>
                     <p className="text-muted">Sign In to your account</p>
                     <InputGroup className="mb-3">
@@ -87,7 +91,7 @@ const Login = () => {
                     ) : null}
                     <Row>
                       <Col xs="6">
-                        <Button color="primary" className="px-4" onClick={submit}>
+                        <Button color="primary" className="px-4" onClick={onLogin}>
                           Login
                         </Button>
                       </Col>
