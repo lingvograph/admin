@@ -6,7 +6,7 @@ import createRootReducer from './reducers';
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
-export const history = createBrowserHistory();
+export const history = createBrowserHistory({ basename: '/admin' });
 
 export function configureStore() {
   const sagaMiddleware = createSagaMiddleware();
