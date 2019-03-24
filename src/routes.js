@@ -1,5 +1,5 @@
 import React from 'react';
-import DefaultLayout from './containers/DefaultLayout';
+import warning from 'warning';
 
 const Breadcrumbs = React.lazy(() => import('./views/Base/Breadcrumbs'));
 const Cards = React.lazy(() => import('./views/Base/Cards'));
@@ -39,7 +39,6 @@ const User = React.lazy(() => import('./views/Users/User'));
 
 // https://github.com/ReactTraining/react-router/tree/master/packages/react-router-config
 const routes = [
-  { path: '/', exact: true, name: 'Home', component: DefaultLayout },
   { path: '/dashboard', name: 'Dashboard', component: Dashboard },
   { path: '/theme', exact: true, name: 'Theme', component: Colors },
   { path: '/theme/colors', name: 'Colors', component: Colors },
@@ -78,8 +77,24 @@ const routes = [
   { path: '/notifications/modals', name: 'Modals', component: Modals },
   { path: '/widgets', name: 'Widgets', component: Widgets },
   { path: '/charts', name: 'Charts', component: Charts },
-  { path: '/users', exact: true,  name: 'Users', component: Users },
+  { path: '/users', exact: true, name: 'Users', component: Users },
   { path: '/users/:id', exact: true, name: 'User Details', component: User },
 ];
+
+export function resolvePath(routeName) {
+  warning(!!routeName, 'route name is not defined');
+
+  if (routeName.indexOf('/') >= 0) {
+    return routeName;
+  }
+
+  const route = routes.find(t => t.name.toLowerCase() === routeName.toLowerCase());
+  if (!route) {
+    warning(false, `bad route name ${routeName}`);
+    return undefined;
+  }
+
+  return route.path;
+}
 
 export default routes;

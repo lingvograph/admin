@@ -1,13 +1,29 @@
 import 'react-app-polyfill/ie9'; // For IE 9-11 support
 import 'react-app-polyfill/ie11'; // For IE 11 support
-import './polyfill'
+import './polyfill';
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { Provider } from 'react-redux';
+import { StoreContext } from 'redux-react-hook';
+import { ConnectedRouter } from 'connected-react-router';
 import './index.css';
+import store, { history } from './store';
+import { rootSaga } from './saga';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 
-ReactDOM.render(<App />, document.getElementById('root'));
+store.runSaga(rootSaga);
+
+ReactDOM.render(
+  <Provider store={store}>
+    <StoreContext.Provider value={store}>
+      <ConnectedRouter history={history}>
+        <App />
+      </ConnectedRouter>
+    </StoreContext.Provider>
+  </Provider>,
+  document.getElementById('root'),
+);
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.
