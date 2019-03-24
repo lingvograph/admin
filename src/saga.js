@@ -5,6 +5,7 @@ import { push } from 'connected-react-router';
 import * as api from './api';
 import { setCurrentUser } from './actions';
 import { resolvePath } from './routes';
+import tokenStore from './token';
 
 export function* navigate(routeName) {
   const path = resolvePath(routeName);
@@ -27,6 +28,11 @@ export function* login(username, password, onError) {
   } catch (err) {
     onError(err);
   }
+}
+
+export function* logout() {
+  tokenStore.value = '';
+  yield call(navigate, '/login');
 }
 
 export function* autoLogin() {
