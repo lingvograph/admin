@@ -24,13 +24,16 @@ const UserRow = ({ user }) => {
     }
   };
 
+  const fullName = [user.first_name, user.last_name].filter(t => !!t).join(' ');
+  const name = fullName || user.name;
+
   return (
     <tr key={user.uid}>
       <th scope="row">
         <Link to={userLink}>{user.uid}</Link>
       </th>
       <td>
-        <Link to={userLink}>{user.name}</Link>
+        <Link to={userLink}>{name}</Link>
       </td>
       <td>{user.registered_at}</td>
       <td>{user.role}</td>
