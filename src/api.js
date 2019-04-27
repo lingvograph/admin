@@ -61,7 +61,7 @@ export function paginationParams(qs, defaultLimit = DEFAULT_LIMIT) {
 }
 
 export function getList(path, {abortController, page = 1, limit = DEFAULT_LIMIT}) {
-  const offset = (page - 1) * 100;
+  const offset = (page - 1) * limit;
   const params = new URLSearchParams();
   params.append('offset', offset);
   params.append('limit', limit);

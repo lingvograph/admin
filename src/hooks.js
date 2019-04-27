@@ -27,11 +27,11 @@ export const useLocation = () => useMappedState(selectors.currentLocation);
 
 export const useFetchList = fetchList => {
   const { location } = useLocation();
-  const params = api.paginationParams(location.search);
 
   const task = useAsyncTask(async (abortController) => {
+    const params = api.paginationParams(location.search);
     const { items, total } = await fetchList({ abortController, ...params });
-    return { items, total, params };
+    return { items, total, ...params };
   }, [location]);
 
   useAsyncRun(task);
