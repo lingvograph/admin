@@ -1,8 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Badge, Card, CardBody, CardHeader, Col, Row, Table } from 'reactstrap';
+import { Badge, Card, CardBody, CardHeader, CardFooter, Col, Row, Table } from 'reactstrap';
 import * as api from 'api';
-import { useDataList } from 'hooks';
+import { useFetchList } from 'hooks';
 import Loading from 'components/Loading';
 import Pagination from 'components/Pagination';
 
@@ -53,7 +53,7 @@ export const Users = ({ items, total, limit = api.DEFAULT_LIMIT, page = 1 }) => 
         <Col xl={6}>
           <Card>
             <CardHeader>
-              <i className="fa fa-align-justify" /> Users <small className="text-muted">example</small>
+              <i className="fa fa-align-justify" /> Users
             </CardHeader>
             <CardBody>
               <Table responsive hover>
@@ -73,7 +73,9 @@ export const Users = ({ items, total, limit = api.DEFAULT_LIMIT, page = 1 }) => 
                 </tbody>
               </Table>
             </CardBody>
-            <Pagination page={page} total={total} limit={limit} />
+            <CardFooter className="flex-center">
+              <Pagination page={page} total={total} limit={limit} />
+            </CardFooter>
           </Card>
         </Col>
       </Row>
@@ -82,7 +84,7 @@ export const Users = ({ items, total, limit = api.DEFAULT_LIMIT, page = 1 }) => 
 };
 
 export const ConnectedUsers = () => {
-  const task = useDataList(api.user.list);
+  const task = useFetchList(api.user.list);
   if (task.pending) {
     return <Loading/>;
   }

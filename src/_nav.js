@@ -11,6 +11,23 @@ export default {
     },
     {
       title: true,
+      name: 'Resources',
+      wrapper: {
+        element: '',
+        attributes: {},
+      },
+    },
+    {
+      name: 'Users',
+      url: '/users',
+    },
+    {
+      name: 'Terms',
+      url: '/terms',
+    },
+    // CORE UI examples, remove later
+    {
+      title: true,
       name: 'Theme',
       wrapper: {
         // optional wrapper object

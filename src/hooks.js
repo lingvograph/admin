@@ -4,6 +4,7 @@ import { useAsyncTask, useAsyncRun } from 'react-hooks-async';
 import * as api from 'api';
 import * as selectors from 'selectors';
 import token from 'token';
+import { matchRoute } from 'routes';
 
 export function useToken() {
   const [value, setValue] = useState(token.value);
@@ -22,13 +23,30 @@ export function useSaga(saga, ...args) {
   };
 }
 
-export const useDataList = fetch => {
-  const { location } = useMappedState(selectors.currentLocation);
+export const useLocation = () => useMappedState(selectors.currentLocation);
+
+export const useFetchList = fetchList => {
+  const { location } = useLocation();
   const params = api.paginationParams(location.search);
 
   const task = useAsyncTask(async (abortController) => {
-    const { items, total } = await fetch({ abortController, ...params });
+    const { items, total } = await fetchList({ abortController, ...params });
     return { items, total, params };
+  }, [location]);
+
+  useAsyncRun(task);
+
+  return task;
+};
+
+export const useFetchItem = fetchItem => {
+  const { location } = useLocation();
+
+  const task = useAsyncTask(async (abortController) => {
+    const route = matchRoute(location);
+    const params = route ? route.params : {};
+    const data = await fetchItem({ abortController, ...params });
+    return data;
   }, [location]);
 
   useAsyncRun(task);

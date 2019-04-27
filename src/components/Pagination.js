@@ -11,7 +11,7 @@ const ListPagination = ({ page, total, limit }) => {
   const itemCount = Math.min(5, pageCount);
   const items = R.range(1, itemCount);
 
-  const buttons = R.map((t, k) => (
+  const buttons = items.map((t, k) => (
     <PaginationItem key={k}>
       <PaginationLink tag="button">{t}</PaginationLink>
     </PaginationItem>
@@ -19,11 +19,11 @@ const ListPagination = ({ page, total, limit }) => {
 
   return (
     <Pagination>
-      <PaginationItem>
+      <PaginationItem key={'prev'}>
         <PaginationLink previous tag="button" disabled={page === 1} />
       </PaginationItem>
-      {buttons(items)}
-      <PaginationItem>
+      {buttons}
+      <PaginationItem key={'next'}>
         <PaginationLink next tag="button" disabled={page === pageCount} />
       </PaginationItem>
     </Pagination>

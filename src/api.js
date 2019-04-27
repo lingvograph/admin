@@ -1,7 +1,7 @@
 import * as axios from 'axios';
 import token from './token';
 
-export const DEFAULT_LIMIT = 100;
+export const DEFAULT_LIMIT = 20;
 
 axios.defaults.headers.common['Accept'] = 'application/json';
 axios.defaults.headers.post['Content-Type'] = 'application/json';
@@ -38,7 +38,12 @@ function makeCancelConfig(abortController) {
 }
 
 export function get(path, params = {}, config = {}) {
-  return axios.get(path, { params, ...config }).then(resp => resp.data);
+  const { abortController, ...axiosConfig } = config;
+  const combinedConfig = {
+    ...axiosConfig,
+    ...makeCancelConfig(abortController),
+  };
+  return axios.get(path, { params, ...combinedConfig }).then(resp => resp.data);
 }
 
 export function me() {
@@ -60,11 +65,24 @@ export function getList(path, {abortController, page = 1, limit = DEFAULT_LIMIT}
   const params = new URLSearchParams();
   params.append('offset', offset);
   params.append('limit', limit);
-  return get(path, params, makeCancelConfig(abortController));
+  return get(path, params, { abortController });
 }
 
 export const user = {
+  get({id, abortController}) {
+    return get(`/api/data/user/${id}`, {}, { abortController });
+  },
   list({abortController, page = 1, limit = DEFAULT_LIMIT}) {
     return getList('/api/data/user/list', {abortController, page, limit});
+  }
+};
+
+export const term = {
+  // TODO custom queries
+  get({id, abortController}) {
+    return get(`/api/data/term/${id}`, {}, { abortController });
+  },
+  list({abortController, page = 1, limit = DEFAULT_LIMIT}) {
+    return getList('/api/data/term/list', {abortController, page, limit});
   }
 };

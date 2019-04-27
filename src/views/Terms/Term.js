@@ -4,8 +4,8 @@ import {useFetchItem} from 'hooks';
 import * as api from 'api';
 import Loading from 'components/Loading';
 
-export const User = ({ user }) => {
-  const details = user ? Object.entries(user) : [['id', (<span><i className="text-muted icon-ban"></i> Not found</span>)]];
+const Term  = ({ term }) => {
+  const details = term ? Object.entries(term) : [['id', (<span><i className="text-muted icon-ban"></i> Not found</span>)]]
 
   return (
     <div className="animated fadeIn">
@@ -13,7 +13,7 @@ export const User = ({ user }) => {
         <Col lg={6}>
           <Card>
             <CardHeader>
-              <strong><i className="icon-info pr-1"></i>User id: {user ? user.uid : 'undefined'}</strong>
+              <strong><i className="icon-info pr-1"></i>User id: {term ? term.uid : 'undefined'}</strong>
             </CardHeader>
             <CardBody>
                 <Table responsive striped hover>
@@ -35,15 +35,15 @@ export const User = ({ user }) => {
         </Col>
       </Row>
     </div>
-  )
+  );
 };
 
-export const ConnectedUser = () => {
-  const task = useFetchItem(api.user.get);
+export const ConnectedTerm = () => {
+  const task = useFetchItem(api.term.get);
   if (task.pending) {
     return <Loading/>;
   }
-  return <User user={task.result}/>;
+  return <Term term={task.result}/>;
 };
 
-export default ConnectedUser;
+export default ConnectedTerm;
