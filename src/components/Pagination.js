@@ -43,11 +43,11 @@ function useNav({ page, total, limit, pageCount }) {
 
 const ListPagination = ({ page, total, limit }) => {
   const pageCount = Math.ceil(total / limit);
+  const { prev, next, go } = useNav({ page, total, limit, pageCount });
+
   if (pageCount <= 1) {
     return null;
   }
-
-  const { prev, next, go } = useNav({ page, total, limit, pageCount });
 
   const itemCount = Math.min(5, pageCount);
   const firstPage = Math.max(1, page - itemCount + 1);

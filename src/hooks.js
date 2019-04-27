@@ -8,7 +8,7 @@ import { matchRoute } from 'routes';
 
 export function useToken() {
   const [value, setValue] = useState(token.value);
-  useEffect(() => token.subscribe(setValue));
+  useEffect(() => token.subscribe(setValue), []);
   return value;
 }
 
