@@ -24,8 +24,21 @@ export function login(username, password) {
     });
 }
 
-export function get(path, params) {
-  return axios.get(path, params).then(resp => resp.data);
+function makeCancelConfig(abortController) {
+  if (abortController) {
+    const source = axios.CancelToken.source();
+    abortController.signal.addEventListener('abort', () => {
+      source.cancel('canceled');
+    });
+    return {
+      cancelToken: source.token,
+    };
+  }
+  return {};
+}
+
+export function get(path, params = {}, config = {}) {
+  return axios.get(path, { params, ...config }).then(resp => resp.data);
 }
 
 export function me() {
@@ -42,16 +55,16 @@ export function paginationParams(qs, defaultLimit = DEFAULT_LIMIT) {
   };
 }
 
-export function getList(path, {page = 1, limit = DEFAULT_LIMIT}) {
+export function getList(path, {abortController, page = 1, limit = DEFAULT_LIMIT}) {
   const offset = (page - 1) * 100;
   const params = new URLSearchParams();
   params.append('offset', offset);
   params.append('limit', limit);
-  return get(path, params);
+  return get(path, params, makeCancelConfig(abortController));
 }
 
 export const user = {
-  list({page = 1, limit = DEFAULT_LIMIT}) {
-    return getList('/api/data/user/list', {page, limit});
+  list({abortController, page = 1, limit = DEFAULT_LIMIT}) {
+    return getList('/api/data/user/list', {abortController, page, limit});
   }
 };

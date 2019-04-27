@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { Badge, Card, CardBody, CardHeader, Col, Row, Table } from 'reactstrap';
 import * as api from 'api';
 import { useDataList } from 'hooks';
+import Loading from 'components/Loading';
 import Pagination from 'components/Pagination';
 
 const UserRow = ({ user }) => {
@@ -78,8 +79,11 @@ export const Users = ({ items, total, limit = api.DEFAULT_LIMIT, page = 1 }) => 
 };
 
 export const ConnectedUsers = () => {
-  const data = useDataList(api.user.list);
-  return <Users {...data} />;
+  const task = useDataList(api.user.list);
+  if (task.pending) {
+    return <Loading/>;
+  }
+  return <Users {...task.result} />;
 };
 
 export default ConnectedUsers;

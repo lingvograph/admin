@@ -1,5 +1,6 @@
 import { useContext, useState, useEffect } from 'react';
 import { StoreContext, useMappedState } from 'redux-react-hook';
+import { useAsyncTask, useAsyncRun } from 'react-hooks-async';
 import * as api from 'api';
 import * as selectors from 'selectors';
 import token from 'token';
@@ -24,25 +25,13 @@ export function useSaga(saga, ...args) {
 export const useDataList = fetch => {
   const { location } = useMappedState(selectors.currentLocation);
   const params = api.paginationParams(location.search);
-  const [data, setData] = useState({ items: [], total: 0, ...params });
 
-  useEffect(() => {
-    let cancelled = false;
+  const task = useAsyncTask(async (abortController) => {
+    const { items, total } = await fetch({ abortController, ...params });
+    return { items, total, params };
+  }, [location]);
 
-    const fetchData = async () => {
-      const params = api.paginationParams(location.search);
-      const { items, total } = await fetch(params);
-      if (!cancelled) {
-        setData({ items, total, ...params });
-      }
-    };
+  useAsyncRun(task);
 
-    fetchData();
-
-    return () => {
-      cancelled = true;
-    };
-  }, [{ ...params }]);
-
-  return data;
+  return task;
 };
