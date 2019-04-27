@@ -5,7 +5,7 @@ import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { StoreContext } from 'redux-react-hook';
 import { ConnectedRouter } from 'connected-react-router';
-import './index.css';
+import './index.scss';
 import store, { history } from './store';
 import { rootSaga } from './saga';
 import App from './App';
