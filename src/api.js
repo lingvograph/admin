@@ -1,7 +1,7 @@
 import * as axios from 'axios';
 import token from './token';
 
-export const DEFAULT_LIMIT = 20;
+export const DEFAULT_LIMIT = 11;
 
 axios.defaults.headers.common['Accept'] = 'application/json';
 axios.defaults.headers.post['Content-Type'] = 'application/json';
