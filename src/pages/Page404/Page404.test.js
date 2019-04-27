@@ -1,9 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import Register from './Register';
+import Page404 from './';
 
 it('renders without crashing', () => {
   const div = document.createElement('div');
-  ReactDOM.render(<Register />, div);
+  ReactDOM.render(<Page404 />, div);
   ReactDOM.unmountComponentAtNode(div);
 });

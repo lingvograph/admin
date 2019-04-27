@@ -2,11 +2,11 @@ import React from 'react';
 import warning from 'warning';
 import { matchPath } from 'react-router-dom';
 
-const Dashboard = React.lazy(() => import('./views/Dashboard'));
-const Users = React.lazy(() => import('./views/Users/Users'));
-const User = React.lazy(() => import('./views/Users/User'));
-const Terms = React.lazy(() => import('./views/Terms/Terms'));
-const Term = React.lazy(() => import('./views/Terms/Term'));
+const Dashboard = React.lazy(() => import('./pages/Dashboard/Dashboard'));
+const Users = React.lazy(() => import('./pages/Users/Users'));
+const User = React.lazy(() => import('./pages/Users/User'));
+const Terms = React.lazy(() => import('./pages/Terms/Terms'));
+const Term = React.lazy(() => import('./pages/Terms/Term'));
 
 // https://github.com/ReactTraining/react-router/tree/master/packages/react-router-config
 const routes = [

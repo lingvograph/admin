@@ -7,11 +7,11 @@ import './App.scss';
 const DefaultLayout = React.lazy(() => import('./containers/DefaultLayout'));
 
 // Pages
-const Login = React.lazy(() => import('./views/Pages/Login'));
-const Register = React.lazy(() => import('./views/Pages/Register'));
-const Page401 = React.lazy(() => import('./views/Pages/Page401'));
-const Page404 = React.lazy(() => import('./views/Pages/Page404'));
-const Page500 = React.lazy(() => import('./views/Pages/Page500'));
+const Login = React.lazy(() => import('./pages/Login/Login'));
+const Register = React.lazy(() => import('./pages/Register/Register'));
+const Page401 = React.lazy(() => import('./pages/Page401/Page401'));
+const Page404 = React.lazy(() => import('./pages/Page404/Page404'));
+const Page500 = React.lazy(() => import('./pages/Page500/Page500'));
 
 class App extends Component {
   render() {
