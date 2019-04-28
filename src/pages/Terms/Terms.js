@@ -14,9 +14,7 @@ import {
   DropdownItem,
 } from 'reactstrap';
 import * as api from 'api';
-import { useDispatch } from 'redux-react-hook';
-import { replace } from 'connected-react-router';
-import { useFetchList, useLocation } from 'hooks';
+import { useFetchList, useLocation, useSearchParams } from 'hooks';
 import Loading from 'components/Loading';
 import Pagination from 'components/Pagination';
 import SearchInput from 'components/SearchInput';
@@ -24,21 +22,14 @@ import SearchInput from 'components/SearchInput';
 const langs = ['any', 'en', 'ru'];
 
 const LangItem = ({ lang }) => {
-  const location = useLocation();
-  const params = new URLSearchParams(location.search);
-  const dispatch = useDispatch();
+  const { params, replaceParams } = useSearchParams();
   const handleClick = () => {
     if (lang === 'any') {
       params.delete('lang');
     } else {
       params.set('lang', lang);
     }
-    dispatch(
-      replace({
-        pathname: location.pathname,
-        search: params.toString(),
-      }),
-    );
+    replaceParams(params);
   };
   return <DropdownItem onClick={handleClick}>{lang}</DropdownItem>;
 };

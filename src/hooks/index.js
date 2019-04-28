@@ -1,7 +1,8 @@
 import { useContext, useState, useEffect } from 'react';
-import { StoreContext, useMappedState } from 'redux-react-hook';
+import { StoreContext, useDispatch, useMappedState } from 'redux-react-hook';
 import { useAsyncRun, useAsyncCombineSeq } from 'react-hooks-async';
 import useAsyncTaskDelay from 'react-hooks-async/dist/use-async-task-delay';
+import { replace } from 'connected-react-router';
 import * as api from 'api';
 import * as selectors from 'selectors';
 import token from 'token';
@@ -25,10 +26,29 @@ export function useSaga(saga, ...args) {
   };
 }
 
-export const useLocation = () => {
+export function useLocation() {
   const { location } = useMappedState(selectors.currentLocation);
   return location;
-};
+}
+
+export function useSearchParams() {
+  const location = useLocation();
+  const dispatch = useDispatch();
+  const params = new URLSearchParams(location.search);
+  return {
+    location,
+    dispatch,
+    params,
+    replaceParams(params) {
+      dispatch(
+        replace({
+          pathname: location.pathname,
+          search: params.toString(),
+        }),
+      );
+    },
+  };
+}
 
 export const useFetchList = (fetchList, makeParams = () => ({}), delay = 0) => {
   const location = useLocation();

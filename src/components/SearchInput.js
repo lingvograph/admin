@@ -1,16 +1,12 @@
 import React from 'react';
 import { Input } from 'reactstrap';
-import { useDispatch } from 'redux-react-hook';
-import { replace } from 'connected-react-router';
-import { useLocation } from 'hooks';
+import { useSearchParams } from 'hooks';
 
 const SearchInput = () => {
-  const location = useLocation();
-  const params = new URLSearchParams(location.search);
+  const { params, replaceParams } = useSearchParams();
   const paramKey = 'searchString';
   const searchString = params.get(paramKey) || '';
 
-  const dispatch = useDispatch();
   const handleChange = e => {
     const value = e.target.value;
     if (value) {
@@ -18,15 +14,10 @@ const SearchInput = () => {
     } else {
       params.delete(paramKey);
     }
-    dispatch(
-      replace({
-        pathname: location.pathname,
-        search: params.toString(),
-      }),
-    );
+    replaceParams(params);
   };
 
-  return <Input type="text" placeholder="Search by text" value={searchString} onChange={handleChange} />;
+  return <Input type="text" placeholder="Search by text" value={searchString} onChange={handleChange}/>;
 };
 
 export default SearchInput;
