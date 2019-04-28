@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
 import {
   Card,
@@ -8,48 +8,13 @@ import {
   Col,
   Row,
   Table,
-  ButtonDropdown,
-  DropdownToggle,
-  DropdownMenu,
-  DropdownItem,
 } from 'reactstrap';
 import * as api from 'api';
-import { useFetchList, useLocation, useSearchParams } from 'hooks';
+import { useFetchList } from 'hooks';
 import Loading from 'components/Loading';
 import Pagination from 'components/Pagination';
 import SearchInput from 'components/SearchInput';
-
-const langs = ['any', 'en', 'ru'];
-
-const LangItem = ({ lang }) => {
-  const { params, replaceParams } = useSearchParams();
-  const handleClick = () => {
-    if (lang === 'any') {
-      params.delete('lang');
-    } else {
-      params.set('lang', lang);
-    }
-    replaceParams(params);
-  };
-  return <DropdownItem onClick={handleClick}>{lang}</DropdownItem>;
-};
-
-const LangFilter = () => {
-  const location = useLocation();
-  const params = new URLSearchParams(location.search);
-  const lang = params.get('lang') || 'any';
-  const [isOpen, setIsOpen] = useState(false);
-  const toggle = () => {
-    setIsOpen(!isOpen);
-  };
-  const items = langs.map((t, k) => <LangItem key={k} lang={t} />);
-  return (
-    <ButtonDropdown isOpen={isOpen} toggle={toggle}>
-      <DropdownToggle caret>{lang}</DropdownToggle>
-      <DropdownMenu right>{items}</DropdownMenu>
-    </ButtonDropdown>
-  );
-};
+import LangFilter from './LangFilter';
 
 const TermRow = ({ term }) => {
   const termLink = `/terms/${term.uid}`;
