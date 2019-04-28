@@ -1,10 +1,55 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Card, CardBody, CardHeader, CardFooter, Col, Row, Table } from 'reactstrap';
+import { Card, CardBody, CardHeader, CardFooter, Col, Row, Table, ButtonDropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 import * as api from 'api';
-import { useFetchList } from 'hooks';
+import { useDispatch } from 'redux-react-hook';
+import { replace } from 'connected-react-router';
+import { useFetchList, useLocation } from 'hooks';
 import Loading from 'components/Loading';
 import Pagination from 'components/Pagination';
+
+const langs = ['any', 'en', 'ru'];
+
+const LangItem = ({ lang }) => {
+  const { location } = useLocation();
+  const params = new URLSearchParams(location.search);
+  const dispatch = useDispatch();
+  const handleClick = () => {
+    if (lang === 'any') {
+      params.delete('lang');
+    } else {
+      params.set('lang', lang);
+    }
+    dispatch(replace({
+      pathname: location.path,
+      search: params.toString(),
+    }));
+  };
+  return (
+    <DropdownItem onClick={handleClick}>{lang}</DropdownItem>
+  );
+};
+
+const LangFilter = () => {
+  const { location } = useLocation();
+  const params = new URLSearchParams(location.search);
+  const lang = params.get('lang') || 'any';
+  const [isOpen, setIsOpen] = useState(false);
+  const toggle = () => {
+    setIsOpen(!isOpen);
+  };
+  const items = langs.map((t, k) => <LangItem key={k} lang={t}/>);
+  return (
+    <ButtonDropdown isOpen={isOpen} toggle={toggle}>
+      <DropdownToggle caret>
+        {lang}
+      </DropdownToggle>
+      <DropdownMenu right>
+        {items}
+      </DropdownMenu>
+    </ButtonDropdown>
+  );
+};
 
 const TermRow = ({ term }) => {
   const termLink = `/terms/${term.uid}`;
@@ -23,34 +68,52 @@ const TermRow = ({ term }) => {
   );
 };
 
-export const Terms = ({ items, total, limit = api.DEFAULT_LIMIT, page = 1 }) => {
+const makeSearchParams = (query) => {
+  return {
+    lang: query.get('lang'),
+  };
+};
+
+// TODO show previous result
+
+export const Terms = ({}) => {
+  const task = useFetchList(api.term.list, makeSearchParams);
+  const result = task.result || {};
+  const { items = [], total = 0, limit = api.DEFAULT_LIMIT, page = 1 } = result;
+
+  const rows = task.pending ? (
+    <tr>
+      <td colSpan={4}><Loading/></td>
+    </tr>
+  ) : items.map((term, index) => (
+    <TermRow key={index} term={term}/>
+  ));
+
   return (
     <div className="animated fadeIn">
       <Row>
         <Col xl={6}>
           <Card>
             <CardHeader>
-              <i className="fa fa-align-justify" /> Terms
+              <i className="fa fa-align-justify"/> Terms <LangFilter/>
             </CardHeader>
             <CardBody>
               <Table responsive hover>
                 <thead>
-                  <tr>
-                    <th scope="col">id</th>
-                    <th scope="col">lang</th>
-                    <th scope="col">text</th>
-                    <th scope="col">created</th>
-                  </tr>
+                <tr>
+                  <th scope="col">id</th>
+                  <th scope="col">lang</th>
+                  <th scope="col">text</th>
+                  <th scope="col">created</th>
+                </tr>
                 </thead>
                 <tbody>
-                  {items.map((term, index) => (
-                    <TermRow key={index} term={term} />
-                  ))}
+                  {rows}
                 </tbody>
               </Table>
             </CardBody>
             <CardFooter className="flex-center">
-              <Pagination page={page} total={total} limit={limit} />
+              <Pagination page={page} total={total} limit={limit}/>
             </CardFooter>
           </Card>
         </Col>
@@ -59,12 +122,4 @@ export const Terms = ({ items, total, limit = api.DEFAULT_LIMIT, page = 1 }) => 
   );
 };
 
-export const ConnectedTerms = () => {
-  const task = useFetchList(api.term.list);
-  if (task.pending) {
-    return <Loading/>;
-  }
-  return <Terms {...task.result} />;
-};
-
-export default ConnectedTerms;
+export default Terms;

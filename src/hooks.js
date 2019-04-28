@@ -25,13 +25,14 @@ export function useSaga(saga, ...args) {
 
 export const useLocation = () => useMappedState(selectors.currentLocation);
 
-export const useFetchList = fetchList => {
+export const useFetchList = (fetchList, makeParams = () => ({})) => {
   const { location } = useLocation();
 
   const task = useAsyncTask(async (abortController) => {
-    const params = api.paginationParams(location.search);
-    const { items, total } = await fetchList({ abortController, ...params });
-    return { items, total, ...params };
+    const range = api.paginationParams(location.search);
+    const params = makeParams(new URLSearchParams(location.search));
+    const data = await fetchList({ abortController, ...range, ...params });
+    return { ...data, ...range };
   }, [location]);
 
   useAsyncRun(task);

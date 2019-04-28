@@ -1,5 +1,6 @@
 import * as axios from 'axios';
 import token from './token';
+import { makeTermQuery } from './termquery';
 
 export const DEFAULT_LIMIT = 11;
 
@@ -37,13 +38,22 @@ function makeCancelConfig(abortController) {
   return {};
 }
 
-export function get(path, params = {}, config = {}) {
-  const { abortController, ...axiosConfig } = config;
-  const combinedConfig = {
+function makeAxiosConfig(options = {}) {
+  const { abortController, ...axiosConfig } = options;
+  return {
     ...axiosConfig,
     ...makeCancelConfig(abortController),
   };
-  return axios.get(path, { params, ...combinedConfig }).then(resp => resp.data);
+}
+
+export function get(path, params = {}, options = {}) {
+  const config = makeAxiosConfig(options);
+  return axios.get(path, { params, ...config }).then(resp => resp.data);
+}
+
+export function query(queryString, options = {}) {
+  const config = makeAxiosConfig(options);
+  return axios.post('/api/query', queryString, config).then(resp => resp.data);
 }
 
 export function me() {
@@ -60,7 +70,7 @@ export function paginationParams(qs, defaultLimit = DEFAULT_LIMIT) {
   };
 }
 
-export function getList(path, {abortController, page = 1, limit = DEFAULT_LIMIT}) {
+export function getList(path, { abortController, page = 1, limit = DEFAULT_LIMIT }) {
   const offset = (page - 1) * limit;
   const params = new URLSearchParams();
   params.append('offset', offset);
@@ -69,20 +79,35 @@ export function getList(path, {abortController, page = 1, limit = DEFAULT_LIMIT}
 }
 
 export const user = {
-  get({id, abortController}) {
+  get({ id, abortController }) {
     return get(`/api/data/user/${id}`, {}, { abortController });
   },
-  list({abortController, page = 1, limit = DEFAULT_LIMIT}) {
-    return getList('/api/data/user/list', {abortController, page, limit});
+  list({ abortController, page = 1, limit = DEFAULT_LIMIT }) {
+    return getList('/api/data/user/list', { abortController, page, limit });
   }
 };
 
 export const term = {
-  // TODO custom queries
-  get({id, abortController}) {
-    return get(`/api/data/term/${id}`, {}, { abortController });
+  get({ id, abortController }) {
+    const q = makeTermQuery({ kind: 'audioList', termUid: id });
+    return query(q, { abortController }).then(data => {
+      const term = data.terms[0];
+      if (!term) {
+        return null;
+      }
+      term.audioTotal = data.count[0].total;
+      return term;
+    });
   },
-  list({abortController, page = 1, limit = DEFAULT_LIMIT}) {
-    return getList('/api/data/term/list', {abortController, page, limit});
+
+  list({ abortController, page = 1, limit = DEFAULT_LIMIT, lang, searchString }) {
+    const offset = (page - 1) * limit;
+    const q = makeTermQuery({ offset, limit, lang, searchString });
+    return query(q, { abortController }).then(data => ({
+      items: data.terms,
+      total: data.count[0].total,
+      page,
+      limit
+    }));
   }
 };

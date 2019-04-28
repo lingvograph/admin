@@ -21,7 +21,7 @@ function useNav({ page, total, limit, pageCount }) {
     }
 
     dispatch(push({
-      pathname: location.path,
+      pathname: location.pathname,
       search: params.toString(),
     }));
   };
