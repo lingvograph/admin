@@ -16,6 +16,7 @@ const labelKey = 'text@en';
 
 const suggestTheme = {
   container: {
+    display: 'inline-block',
     position: 'relative'
   },
   input: {
