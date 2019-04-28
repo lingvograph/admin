@@ -90,7 +90,7 @@ const makeSearchParams = (query) => {
 
 // TODO show previous result
 
-export const Terms = ({}) => {
+export const Terms = () => {
   const task = useFetchList(api.term.list, makeSearchParams, 500);
   const result = task.result || {};
   const { items = [], total = 0, limit = api.DEFAULT_LIMIT, page = 1 } = result;
