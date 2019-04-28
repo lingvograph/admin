@@ -5,6 +5,7 @@ import * as api from 'api';
 import { useFetchList } from 'hooks';
 import Loading from 'components/Loading';
 import Pagination from 'components/Pagination';
+import { gravatarURL } from 'utils';
 
 const UserRow = ({ user }) => {
   const userLink = `/users/${user.uid}`;
@@ -26,6 +27,7 @@ const UserRow = ({ user }) => {
 
   const fullName = [user.first_name, user.last_name].filter(t => !!t).join(' ');
   const name = fullName || user.name;
+  const avatar = user.avatar || gravatarURL(user.email);
 
   return (
     <tr key={user.uid}>
@@ -33,8 +35,12 @@ const UserRow = ({ user }) => {
         <Link to={userLink}>{user.uid}</Link>
       </th>
       <td>
-        <Link to={userLink}>{name}</Link>
+        <Link to={userLink}>
+          <img className="img-avatar" src={avatar} alt={user.email} width={35} height={35} style={{margin: '0 10px'}} />
+          <span>{name}</span>
+        </Link>
       </td>
+      <td>{user.email}</td>
       <td>{user.registered_at}</td>
       <td>{user.role}</td>
       <td>
@@ -64,7 +70,7 @@ export const Users = () => {
   return (
     <div className="animated fadeIn">
       <Row>
-        <Col xl={6}>
+        <Col xl={12}>
           <Card>
             <CardHeader>
               <i className="fa fa-align-justify" /> Users
@@ -75,6 +81,7 @@ export const Users = () => {
                   <tr>
                     <th scope="col">id</th>
                     <th scope="col">name</th>
+                    <th scope="col">email</th>
                     <th scope="col">registered</th>
                     <th scope="col">role</th>
                     <th scope="col">status</th>
