@@ -3,6 +3,7 @@ import { combineReducers } from 'redux';
 import { handleActions } from 'redux-actions';
 import { connectRouter } from 'connected-react-router';
 import { setCurrentUser } from './actions';
+import { gravatarURL } from 'utils';
 
 const GlobalState = Immutable.Record({
   currentUser: undefined,
@@ -11,7 +12,11 @@ const GlobalState = Immutable.Record({
 const commonReducer = handleActions(
   {
     [setCurrentUser]: (state, action) => {
-      return state.set('currentUser', action.payload);
+      const user = Object.assign({}, action.payload);
+      if (!user.avatar) {
+        user.avatar = gravatarURL(user.email);
+      }
+      return state.set('currentUser', user);
     },
   },
   GlobalState(),

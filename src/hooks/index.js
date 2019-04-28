@@ -26,6 +26,11 @@ export function useSaga(saga, ...args) {
   };
 }
 
+export function useCurrentUser() {
+  const { currentUser } = useMappedState(selectors.currentUser);
+  return currentUser || {};
+}
+
 export function useLocation() {
   const { location } = useMappedState(selectors.currentLocation);
   return location;
