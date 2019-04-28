@@ -87,6 +87,15 @@ export const user = {
   }
 };
 
+export const tag = {
+  get({ id, abortController }) {
+    return get(`/api/data/tag/${id}`, {}, { abortController });
+  },
+  list({ abortController, page = 1, limit = DEFAULT_LIMIT }) {
+    return getList('/api/data/tag/list', { abortController, page, limit });
+  }
+};
+
 export const term = {
   get({ id, abortController }) {
     const q = makeTermQuery({ kind: 'audioList', termUid: id });

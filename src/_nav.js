@@ -18,6 +18,10 @@ export default {
       url: '/users',
     },
     {
+      name: 'Tags',
+      url: '/tags',
+    },
+    {
       name: 'Terms',
       url: '/terms',
     }
