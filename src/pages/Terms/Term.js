@@ -1,10 +1,11 @@
 import React from 'react';
-import { Col, Row } from 'reactstrap';
+import { Col, Row, Card, CardHeader, CardBody } from 'reactstrap';
 import { useFetchItem, useSubmit } from 'hooks';
 import * as api from 'api';
 import Loading from 'components/Loading';
 import FormCard from 'components/FormCard';
 import TagsCard from 'components/TagsCard';
+import TermSlider from './TermSlider';
 
 const fields = [
   {
@@ -45,6 +46,18 @@ export const Term = () => {
         </Col>
         <Col lg={6}>
           <TagsCard id={term.uid} tags={term.tag} refreshTask={task} />
+        </Col>
+      </Row>
+      <Row>
+        <Col lg={6}>
+          <Card>
+            <CardHeader>
+              <strong>Visual</strong>
+            </CardHeader>
+            <CardBody>
+              <TermSlider term={term}/>
+            </CardBody>
+          </Card>
         </Col>
       </Row>
     </div>
