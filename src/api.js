@@ -72,7 +72,7 @@ function formatNquad(value) {
     return value;
   }
 
-  const wrapId = v => v.startsWith('0x') ? `<${v}>` : v;
+  const wrapId = v => (v.startsWith('0x') ? `<${v}>` : v);
   const format = (subject, predicate, object) => `${wrapId(subject)} <${predicate}> ${wrapId(object)} .`;
 
   if (_.isArray(value)) {
@@ -161,11 +161,9 @@ export const tag = {
   updateObjectTags({ id, oldTags, newTags, abortController }) {
     const removedTags = oldTags.filter(t => !newTags.some(q => q.uid === t.uid));
     const addedTags = newTags.filter(t => !oldTags.some(q => q.uid === t.uid));
-    return updateGraph(
-      addedTags.map(t => [id, 'tag', t.uid]),
-      removedTags.map(t => [id, 'tag', t.uid]),
-      { abortController }
-    );
+    const set = addedTags.map(t => [id, 'tag', t.uid]);
+    const del = removedTags.map(t => [id, 'tag', t.uid]);
+    return updateGraph(set, del, { abortController });
   },
 };
 

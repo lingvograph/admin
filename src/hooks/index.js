@@ -35,7 +35,7 @@ export function useSearchParams() {
   const location = useLocation();
   const dispatch = useDispatch();
   const params = new URLSearchParams(location.search);
-  const replaceParams = (params) => {
+  const replaceParams = params => {
     dispatch(
       replace({
         pathname: location.pathname,
@@ -55,7 +55,7 @@ export function useSearchParams() {
         params.delete(name);
       }
       replaceParams(params);
-    }
+    },
   };
 }
 

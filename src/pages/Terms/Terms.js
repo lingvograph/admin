@@ -1,14 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import {
-  Card,
-  CardBody,
-  CardHeader,
-  CardFooter,
-  Col,
-  Row,
-  Table,
-} from 'reactstrap';
+import { Card, CardBody, CardHeader, CardFooter, Col, Row, Table } from 'reactstrap';
 import * as api from 'api';
 import { useFetchList } from 'hooks';
 import Loading from 'components/Loading';
@@ -72,8 +64,8 @@ export const Terms = () => {
               <div style={{ display: 'inline-block', width: 250 }}>
                 <SearchInput />
               </div>
-              <div style={{ display: 'inline-block', width: 500, marginLeft: 50, }}>
-                <TagsFilter/>
+              <div style={{ display: 'inline-block', width: 500, marginLeft: 50 }}>
+                <TagsFilter />
               </div>
             </CardHeader>
             <CardBody>

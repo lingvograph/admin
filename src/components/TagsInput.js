@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState } from 'react';
 import { useAsyncRun } from 'react-hooks-async';
 import TagsInput from 'react-tagsinput';
 import Autosuggest from 'react-autosuggest';
@@ -17,7 +17,7 @@ const labelKey = 'text@en';
 const suggestTheme = {
   container: {
     display: 'inline-block',
-    position: 'relative'
+    position: 'relative',
   },
   input: {
     width: 240,
@@ -27,14 +27,14 @@ const suggestTheme = {
     //fontSize: 16,
   },
   inputFocused: {
-    outline: 'none'
+    outline: 'none',
   },
   inputOpen: {
     borderBottomLeftRadius: 0,
-    borderBottomRightRadius: 0
+    borderBottomRightRadius: 0,
   },
   suggestionsContainer: {
-    display: 'none'
+    display: 'none',
   },
   suggestionsContainerOpen: {
     display: 'block',
@@ -48,7 +48,7 @@ const suggestTheme = {
     //fontSize: 16,
     borderBottomLeftRadius: 4,
     borderBottomRightRadius: 4,
-    zIndex: 100
+    zIndex: 100,
   },
   suggestionsList: {
     margin: 0,
@@ -57,17 +57,17 @@ const suggestTheme = {
   },
   suggestion: {
     cursor: 'pointer',
-    padding: '10px 20px'
+    padding: '10px 20px',
   },
   suggestionHighlighted: {
-    backgroundColor: '#ddd'
-  }
+    backgroundColor: '#ddd',
+  },
 };
 
 const CustomTagsInput = ({ tags, onChange }) => {
   const location = useLocation();
   const [suggestions, setSuggestions] = useState([]);
-  const fetchAllTags = (abortController) => api.tag.list({ abortController, page: 1, limit: 100 });
+  const fetchAllTags = abortController => api.tag.list({ abortController, page: 1, limit: 100 });
   const task = useAsyncTask(fetchAllTags, [location]);
   useAsyncRun(task);
 
@@ -81,9 +81,7 @@ const CustomTagsInput = ({ tags, onChange }) => {
     }
 
     const regex = new RegExp(`^${escapedValue}`, 'i');
-    return allTags
-      .filter(t => !tags.some(t2 => t2[labelKey] === t[labelKey]))
-      .filter(t => regex.test(t[labelKey]));
+    return allTags.filter(t => !tags.some(t2 => t2[labelKey] === t[labelKey])).filter(t => regex.test(t[labelKey]));
   }
 
   const renderAutocomplete = ({ addTag, ...props }) => {
@@ -100,8 +98,8 @@ const CustomTagsInput = ({ tags, onChange }) => {
         ref={props.ref}
         suggestions={suggestions}
         shouldRenderSuggestions={() => true}
-        getSuggestionValue={(t) => t[labelKey]}
-        renderSuggestion={(t) => <span>{t[labelKey]}</span>}
+        getSuggestionValue={t => t[labelKey]}
+        renderSuggestion={t => <span>{t[labelKey]}</span>}
         inputProps={{ ...props, onChange: handleOnChange }}
         onSuggestionSelected={(e, { suggestion }) => {
           addTag(suggestion[labelKey]);
@@ -109,7 +107,7 @@ const CustomTagsInput = ({ tags, onChange }) => {
         onSuggestionsClearRequested={() => {
           setSuggestions([]);
         }}
-        onSuggestionsFetchRequested={({value}) => {
+        onSuggestionsFetchRequested={({ value }) => {
           setSuggestions(getSuggestions(value));
         }}
         theme={suggestTheme}
@@ -117,7 +115,7 @@ const CustomTagsInput = ({ tags, onChange }) => {
     );
   };
 
-  const handleChange = (tags) => {
+  const handleChange = tags => {
     const tagObjects = allTags.filter(t => {
       return tags.includes(t[labelKey]) || tags.includes(t['text@ru']);
     });
@@ -126,7 +124,7 @@ const CustomTagsInput = ({ tags, onChange }) => {
 
   const value = tags.map(t => t[labelKey]);
 
-  return <TagsInput renderInput={renderAutocomplete} value={value} onChange={handleChange}/>;
+  return <TagsInput renderInput={renderAutocomplete} value={value} onChange={handleChange} />;
 };
 
 export default CustomTagsInput;

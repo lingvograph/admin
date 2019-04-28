@@ -1,10 +1,5 @@
 import React, { useState } from 'react';
-import {
-  ButtonDropdown,
-  DropdownToggle,
-  DropdownMenu,
-  DropdownItem,
-} from 'reactstrap';
+import { ButtonDropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 import { useLocation, useSearchParams } from 'hooks';
 
 const langs = ['any', 'en', 'ru'];

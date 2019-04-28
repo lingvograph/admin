@@ -9,7 +9,7 @@ const SearchInput = () => {
 
   const handleChange = e => replaceParam(paramKey, e.target.value);
 
-  return <Input type="text" placeholder="Search by text" value={searchString} onChange={handleChange}/>;
+  return <Input type="text" placeholder="Search by text" value={searchString} onChange={handleChange} />;
 };
 
 export default SearchInput;
