@@ -1,12 +1,25 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Card, CardBody, CardHeader, CardFooter, Col, Row, Table, ButtonDropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
+import {
+  Card,
+  CardBody,
+  CardHeader,
+  CardFooter,
+  Col,
+  Row,
+  Table,
+  ButtonDropdown,
+  DropdownToggle,
+  DropdownMenu,
+  DropdownItem
+} from 'reactstrap';
 import * as api from 'api';
 import { useDispatch } from 'redux-react-hook';
 import { replace } from 'connected-react-router';
 import { useFetchList, useLocation } from 'hooks';
 import Loading from 'components/Loading';
 import Pagination from 'components/Pagination';
+import SearchInput from 'components/SearchInput';
 
 const langs = ['any', 'en', 'ru'];
 
@@ -21,7 +34,7 @@ const LangItem = ({ lang }) => {
       params.set('lang', lang);
     }
     dispatch(replace({
-      pathname: location.path,
+      pathname: location.pathname,
       search: params.toString(),
     }));
   };
@@ -71,13 +84,14 @@ const TermRow = ({ term }) => {
 const makeSearchParams = (query) => {
   return {
     lang: query.get('lang'),
+    searchString: query.get('searchString')
   };
 };
 
 // TODO show previous result
 
 export const Terms = ({}) => {
-  const task = useFetchList(api.term.list, makeSearchParams);
+  const task = useFetchList(api.term.list, makeSearchParams, 500);
   const result = task.result || {};
   const { items = [], total = 0, limit = api.DEFAULT_LIMIT, page = 1 } = result;
 
@@ -95,7 +109,13 @@ export const Terms = ({}) => {
         <Col xl={6}>
           <Card>
             <CardHeader>
-              <i className="fa fa-align-justify"/> Terms <LangFilter/>
+              <i className="fa fa-align-justify"/>
+              <div style={{ display: 'inline-block', width: 200 }}>
+                Language <LangFilter/>
+              </div>
+              <div style={{ display: 'inline-block', width: 200 }}>
+                <SearchInput/>
+              </div>
             </CardHeader>
             <CardBody>
               <Table responsive hover>
@@ -108,7 +128,7 @@ export const Terms = ({}) => {
                 </tr>
                 </thead>
                 <tbody>
-                  {rows}
+                {rows}
                 </tbody>
               </Table>
             </CardBody>

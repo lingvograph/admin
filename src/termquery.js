@@ -26,8 +26,8 @@ export function makeTermQuery({ kind = 'termList', termUid, offset = 0, limit = 
     }
 
     // too small word fails with 'regular expression is too wide-ranging and can't be executed efficiently'
-    const regexp = isWord(str) && str.length >= 3 ? 'regexp(text, /$str.*/i)' : '';
-    const anyoftext = 'anyoftext(text, "$str")';
+    const regexp = isWord(str) && str.length >= 3 ? `regexp(text, /${str}.*/i)` : '';
+    const anyoftext = `anyoftext(text, "${str}")`;
     const exprs = [anyoftext, regexp].filter(s => !!s);
     if (exprs.length > 1) {
       return `(${exprs.join(' or ')})`;

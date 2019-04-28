@@ -1,6 +1,7 @@
 import { useContext, useState, useEffect } from 'react';
 import { StoreContext, useMappedState } from 'redux-react-hook';
-import { useAsyncTask, useAsyncRun } from 'react-hooks-async';
+import { useAsyncTask, useAsyncRun, useAsyncCombineSeq } from 'react-hooks-async';
+import useAsyncTaskDelay from 'react-hooks-async/dist/use-async-task-delay';
 import * as api from 'api';
 import * as selectors from 'selectors';
 import token from 'token';
@@ -25,8 +26,9 @@ export function useSaga(saga, ...args) {
 
 export const useLocation = () => useMappedState(selectors.currentLocation);
 
-export const useFetchList = (fetchList, makeParams = () => ({})) => {
+export const useFetchList = (fetchList, makeParams = () => ({}), delay = 0) => {
   const { location } = useLocation();
+  const delayTask = useAsyncTaskDelay(delay, [location]);
 
   const task = useAsyncTask(async (abortController) => {
     const range = api.paginationParams(location.search);
@@ -35,7 +37,9 @@ export const useFetchList = (fetchList, makeParams = () => ({})) => {
     return { ...data, ...range };
   }, [location]);
 
-  useAsyncRun(task);
+  const combinedTask = useAsyncCombineSeq(delayTask, task);
+
+  useAsyncRun(combinedTask);
 
   return task;
 };
