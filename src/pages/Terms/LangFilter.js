@@ -28,8 +28,8 @@ const LangFilter = () => {
   const items = langs.map((t, k) => <LangItem key={k} lang={t} />);
   return (
     <ButtonDropdown isOpen={isOpen} toggle={toggle}>
-      <DropdownToggle caret>{lang}</DropdownToggle>
-      <DropdownMenu right>{items}</DropdownMenu>
+      <DropdownToggle caret>{`Language: ${lang}`}</DropdownToggle>
+      <DropdownMenu>{items}</DropdownMenu>
     </ButtonDropdown>
   );
 };

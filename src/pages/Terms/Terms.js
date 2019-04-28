@@ -59,7 +59,7 @@ export const Terms = () => {
             <CardHeader>
               <i className="fa fa-align-justify" />
               <div style={{ display: 'inline-block', width: 200 }}>
-                Language <LangFilter />
+                <LangFilter />
               </div>
               <div style={{ display: 'inline-block', width: 250 }}>
                 <SearchInput />
