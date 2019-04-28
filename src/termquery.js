@@ -42,9 +42,10 @@ export function makeTermQuery({ kind = 'termList', termUid, offset = 0, limit = 
   const visualRange = kind === 'visualList' ? `(${range})` : '(first: 10)';
   const termRange = isTermList ? `, ${range}` : '';
 
+  const brace = s => `(${s})`;
   const searchFilter = makeSearchFilter();
   const langFilter = lang ? `eq(lang, "${lang}")` : '';
-  const tagFilter = !_.isEmpty(tags) ? `uid_in(tag, ${tags.map(t => t.uid)})` : '';
+  const tagFilter = !_.isEmpty(tags) ? brace(tags.map(t => `uid_in(tag, ${t.uid})`).join(' or ')) : '';
 
   const filterExpr = ['has(Term)', langFilter, tagFilter, searchFilter].filter(s => !!s).join(' and ');
   const termFilter = isTermList ? `@filter(${filterExpr})` : '';
