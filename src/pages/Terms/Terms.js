@@ -24,7 +24,7 @@ import SearchInput from 'components/SearchInput';
 const langs = ['any', 'en', 'ru'];
 
 const LangItem = ({ lang }) => {
-  const { location } = useLocation();
+  const location = useLocation();
   const params = new URLSearchParams(location.search);
   const dispatch = useDispatch();
   const handleClick = () => {
@@ -44,7 +44,7 @@ const LangItem = ({ lang }) => {
 };
 
 const LangFilter = () => {
-  const { location } = useLocation();
+  const location = useLocation();
   const params = new URLSearchParams(location.search);
   const lang = params.get('lang') || 'any';
   const [isOpen, setIsOpen] = useState(false);

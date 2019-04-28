@@ -24,10 +24,13 @@ export function useSaga(saga, ...args) {
   };
 }
 
-export const useLocation = () => useMappedState(selectors.currentLocation);
+export const useLocation = () => {
+  const { location } = useMappedState(selectors.currentLocation);
+  return location;
+};
 
 export const useFetchList = (fetchList, makeParams = () => ({}), delay = 0) => {
-  const { location } = useLocation();
+  const location = useLocation();
   const delayTask = useAsyncTaskDelay(delay, [location]);
 
   const task = useAsyncTask(async (abortController) => {
@@ -45,7 +48,7 @@ export const useFetchList = (fetchList, makeParams = () => ({}), delay = 0) => {
 };
 
 export const useFetchItem = fetchItem => {
-  const { location } = useLocation();
+  const location = useLocation();
 
   const task = useAsyncTask(async (abortController) => {
     const route = matchRoute(location);

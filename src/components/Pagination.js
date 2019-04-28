@@ -8,7 +8,7 @@ import { useLocation } from 'hooks';
 
 function useNav({ page, total, limit, pageCount }) {
   const dispatch = useDispatch();
-  const { location } = useLocation();
+  const location = useLocation();
 
   const go = (page) => {
     warning(page >= 1 && page <= pageCount, 'invalid page');

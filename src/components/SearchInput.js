@@ -5,7 +5,7 @@ import { replace } from 'connected-react-router';
 import { useLocation } from 'hooks';
 
 const SearchInput = () => {
-  const { location } = useLocation();
+  const location = useLocation();
   const params = new URLSearchParams(location.search);
   const paramKey = 'searchString';
   const searchString = params.get(paramKey) || '';
