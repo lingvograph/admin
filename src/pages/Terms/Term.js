@@ -1,28 +1,55 @@
 import React from 'react';
 import { Col, Row } from 'reactstrap';
-import { useFetchItem } from 'hooks';
+import { useFetchItem, useSubmit } from 'hooks';
 import * as api from 'api';
 import Loading from 'components/Loading';
-import DetailsCard from 'components/DetailsCard';
+import FormCard from 'components/FormCard';
 
-const Term = ({ term }) => {
+const fields = [
+  {
+    id: 'lang',
+  },
+  {
+    id: 'text',
+  },
+  {
+    id: 'transcript@en',
+  },
+  {
+    id: 'transcript@ru',
+  },
+];
+
+export const Term = () => {
+  const task = useFetchItem(api.term.get);
+  const submit = useSubmit(api.term.update, task);
+
+  if (task.pending) {
+    return <Loading/>;
+  }
+  const term = task.result;
+
+  const header = (
+    <span>
+      <strong>Term</strong>
+      <small> {term.uid}</small>
+    </span>
+  );
+
   return (
     <div className="animated fadeIn">
       <Row>
         <Col lg={6}>
-          <DetailsCard item={term} />
+          <FormCard header={header}
+                    id={term.uid}
+                    fields={fields}
+                    data={term}
+                    submit={submit}
+          />
         </Col>
       </Row>
     </div>
   );
 };
 
-export const ConnectedTerm = () => {
-  const task = useFetchItem(api.term.get);
-  if (task.pending) {
-    return <Loading />;
-  }
-  return <Term term={task.result} />;
-};
-
-export default ConnectedTerm;
+export default Term;

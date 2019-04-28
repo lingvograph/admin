@@ -132,4 +132,8 @@ export const term = {
       limit,
     }));
   },
+
+  update({ id, data, abortController }) {
+    return put(`/api/data/term/${id}`, data, { abortController });
+  },
 };
