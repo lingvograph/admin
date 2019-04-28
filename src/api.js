@@ -5,7 +5,7 @@ import { makeTermQuery } from './termquery';
 export const DEFAULT_LIMIT = 11;
 
 axios.defaults.headers.common['Accept'] = 'application/json';
-axios.defaults.headers.post['Content-Type'] = 'application/json';
+axios.defaults.headers.common['Content-Type'] = 'application/json';
 
 axios.interceptors.request.use(config => {
   if (token.value && !config.auth) {
@@ -51,6 +51,16 @@ export function get(path, params = {}, options = {}) {
   return axios.get(path, { params, ...config }).then(resp => resp.data);
 }
 
+export function post(path, data, options = {}) {
+  const config = makeAxiosConfig(options);
+  return axios.post(path, data, config).then(resp => resp.data);
+}
+
+export function put(path, data, options = {}) {
+  const config = makeAxiosConfig(options);
+  return axios.put(path, data, config).then(resp => resp.data);
+}
+
 export function query(queryString, options = {}) {
   const config = makeAxiosConfig(options);
   return axios.post('/api/query', queryString, config).then(resp => resp.data);
@@ -93,7 +103,10 @@ export const tag = {
   },
   list({ abortController, page = 1, limit = DEFAULT_LIMIT }) {
     return getList('/api/data/tag/list', { abortController, page, limit });
-  }
+  },
+  update({ id, data, abortController }) {
+    return put(`/api/data/tag/${id}`, data, { abortController });
+  },
 };
 
 export const term = {

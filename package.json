@@ -24,6 +24,7 @@
     "core-js": "^3.0.1",
     "flag-icon-css": "^3.3.0",
     "font-awesome": "^4.7.0",
+    "formik": "^1.5.4",
     "history": "^4.9.0",
     "immutable": "^4.0.0-rc.12",
     "lodash": "^4.17.11",

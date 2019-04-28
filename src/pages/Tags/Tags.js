@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Badge, Card, CardBody, CardHeader, CardFooter, Col, Row, Table } from 'reactstrap';
+import { Card, CardBody, CardHeader, CardFooter, Col, Row, Table } from 'reactstrap';
 import * as api from 'api';
 import { useFetchList } from 'hooks';
 import Loading from 'components/Loading';

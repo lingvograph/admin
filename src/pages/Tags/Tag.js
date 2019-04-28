@@ -1,28 +1,50 @@
 import React from 'react';
 import { Col, Row } from 'reactstrap';
-import { useFetchItem } from 'hooks';
+import { useFetchItem, useSubmit } from 'hooks';
 import * as api from 'api';
 import Loading from 'components/Loading';
-import DetailsCard from 'components/DetailsCard';
+import FormCard from 'components/FormCard';
 
-export const Tag = ({ tag }) => {
-  return (
-    <div className="animated fadeIn">
-      <Row>
-        <Col lg={6}>
-          <DetailsCard item={tag}/>
-        </Col>
-      </Row>
-    </div>
-  )
-};
+const fields = [
+  {
+    id: 'text@en',
+  },
+  {
+    id: 'text@ru',
+  },
+];
 
-export const ConnectedTag = () => {
+export const Tag = () => {
   const task = useFetchItem(api.tag.get);
+  const submit = useSubmit(api.tag.update, task);
+
   if (task.pending) {
     return <Loading/>;
   }
-  return <Tag tag={task.result}/>;
+
+  const tag = task.result;
+
+  const header = (
+    <span>
+      <strong>Tag</strong>
+      <small> Form</small>
+    </span>
+  );
+
+  return (
+    <div className="animated fadeIn">
+      <Row>
+        <Col xs="12" sm="6">
+          <FormCard header={header}
+                    id={tag.uid}
+                    fields={fields}
+                    data={tag}
+                    submit={submit}
+          />
+        </Col>
+      </Row>
+    </div>
+  );
 };
 
-export default ConnectedTag;
+export default Tag;
