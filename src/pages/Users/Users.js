@@ -46,7 +46,19 @@ const UserRow = ({ user }) => {
   );
 };
 
-export const Users = ({ items, total, limit = api.DEFAULT_LIMIT, page = 1 }) => {
+export const Users = () => {
+  const task = useFetchList(api.user.list);
+  const result = task.result || {};
+  const { items = [], total = 0, limit = api.DEFAULT_LIMIT, page = 1 } = result;
+
+  const rows = task.pending ? (
+    <tr>
+      <td colSpan={5}><Loading/></td>
+    </tr>
+  ) : items.map((user, index) => (
+    <UserRow key={index} user={user} />
+  ));
+
   return (
     <div className="animated fadeIn">
       <Row>
@@ -67,9 +79,7 @@ export const Users = ({ items, total, limit = api.DEFAULT_LIMIT, page = 1 }) => 
                   </tr>
                 </thead>
                 <tbody>
-                  {items.map((user, index) => (
-                    <UserRow key={index} user={user} />
-                  ))}
+                  {rows}
                 </tbody>
               </Table>
             </CardBody>
@@ -83,12 +93,4 @@ export const Users = ({ items, total, limit = api.DEFAULT_LIMIT, page = 1 }) => 
   );
 };
 
-export const ConnectedUsers = () => {
-  const task = useFetchList(api.user.list);
-  if (task.pending) {
-    return <Loading/>;
-  }
-  return <Users {...task.result} />;
-};
-
-export default ConnectedUsers;
+export default Users;
