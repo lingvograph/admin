@@ -51,7 +51,7 @@ export const useAsyncTask = (func, deps) => {
   useEffect(() => {
     let dispatchSafe = action => dispatch(action);
     let abortController = null;
-    const start = async (args) => {
+    const start = async args => {
       if (abortController) return;
       abortController = new AbortController();
       dispatchSafe({ type: 'start' });

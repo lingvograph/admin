@@ -10,19 +10,19 @@ export const User = ({ user }) => {
     <div className="animated fadeIn">
       <Row>
         <Col lg={6}>
-          <DetailsCard item={user}/>
+          <DetailsCard item={user} />
         </Col>
       </Row>
     </div>
-  )
+  );
 };
 
 export const ConnectedUser = () => {
   const task = useFetchItem(api.user.get);
   if (task.pending) {
-    return <Loading/>;
+    return <Loading />;
   }
-  return <User user={task.result}/>;
+  return <User user={task.result} />;
 };
 
 export default ConnectedUser;

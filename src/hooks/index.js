@@ -34,12 +34,15 @@ export const useFetchList = (fetchList, makeParams = () => ({}), delay = 0) => {
   const location = useLocation();
   const delayTask = useAsyncTaskDelay(delay, [location]);
 
-  const task = useAsyncTask(async (abortController, args = {}) => {
-    const range = api.paginationParams(location.search);
-    const params = makeParams(new URLSearchParams(location.search));
-    const data = await fetchList({ abortController, ...args, ...range, ...params });
-    return { ...data, ...range };
-  }, [location]);
+  const task = useAsyncTask(
+    async (abortController, args = {}) => {
+      const range = api.paginationParams(location.search);
+      const params = makeParams(new URLSearchParams(location.search));
+      const data = await fetchList({ abortController, ...args, ...range, ...params });
+      return { ...data, ...range };
+    },
+    [location],
+  );
 
   const combinedTask = useAsyncCombineSeq(delayTask, task);
 
@@ -51,12 +54,15 @@ export const useFetchList = (fetchList, makeParams = () => ({}), delay = 0) => {
 export const useFetchItem = fetchItem => {
   const location = useLocation();
 
-  const task = useAsyncTask(async (abortController, args = {}) => {
-    const route = matchRoute(location);
-    const params = route ? route.params : {};
-    const data = await fetchItem({ abortController, ...args, ...params });
-    return data;
-  }, [location]);
+  const task = useAsyncTask(
+    async (abortController, args = {}) => {
+      const route = matchRoute(location);
+      const params = route ? route.params : {};
+      const data = await fetchItem({ abortController, ...args, ...params });
+      return data;
+    },
+    [location],
+  );
 
   useAsyncRun(task);
 
@@ -66,12 +72,15 @@ export const useFetchItem = fetchItem => {
 export const useSubmit = (update, fetchTask) => {
   const location = useLocation();
 
-  const task = useAsyncTask(async (abortController, args = {}) => {
-    const data = await update({ abortController, ...args });
-    return data;
-  }, [location]);
+  const task = useAsyncTask(
+    async (abortController, args = {}) => {
+      const data = await update({ abortController, ...args });
+      return data;
+    },
+    [location],
+  );
 
-  return async (args) => {
+  return async args => {
     await task.start(args);
 
     if (fetchTask) {

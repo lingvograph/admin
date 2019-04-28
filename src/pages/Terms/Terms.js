@@ -11,7 +11,7 @@ import {
   ButtonDropdown,
   DropdownToggle,
   DropdownMenu,
-  DropdownItem
+  DropdownItem,
 } from 'reactstrap';
 import * as api from 'api';
 import { useDispatch } from 'redux-react-hook';
@@ -33,14 +33,14 @@ const LangItem = ({ lang }) => {
     } else {
       params.set('lang', lang);
     }
-    dispatch(replace({
-      pathname: location.pathname,
-      search: params.toString(),
-    }));
+    dispatch(
+      replace({
+        pathname: location.pathname,
+        search: params.toString(),
+      }),
+    );
   };
-  return (
-    <DropdownItem onClick={handleClick}>{lang}</DropdownItem>
-  );
+  return <DropdownItem onClick={handleClick}>{lang}</DropdownItem>;
 };
 
 const LangFilter = () => {
@@ -51,15 +51,11 @@ const LangFilter = () => {
   const toggle = () => {
     setIsOpen(!isOpen);
   };
-  const items = langs.map((t, k) => <LangItem key={k} lang={t}/>);
+  const items = langs.map((t, k) => <LangItem key={k} lang={t} />);
   return (
     <ButtonDropdown isOpen={isOpen} toggle={toggle}>
-      <DropdownToggle caret>
-        {lang}
-      </DropdownToggle>
-      <DropdownMenu right>
-        {items}
-      </DropdownMenu>
+      <DropdownToggle caret>{lang}</DropdownToggle>
+      <DropdownMenu right>{items}</DropdownMenu>
     </ButtonDropdown>
   );
 };
@@ -81,10 +77,10 @@ const TermRow = ({ term }) => {
   );
 };
 
-const makeSearchParams = (query) => {
+const makeSearchParams = query => {
   return {
     lang: query.get('lang'),
-    searchString: query.get('searchString')
+    searchString: query.get('searchString'),
   };
 };
 
@@ -97,11 +93,13 @@ export const Terms = () => {
 
   const rows = task.pending ? (
     <tr>
-      <td colSpan={4}><Loading/></td>
+      <td colSpan={4}>
+        <Loading />
+      </td>
     </tr>
-  ) : items.map((term, index) => (
-    <TermRow key={index} term={term}/>
-  ));
+  ) : (
+    items.map((term, index) => <TermRow key={index} term={term} />)
+  );
 
   return (
     <div className="animated fadeIn">
@@ -109,31 +107,29 @@ export const Terms = () => {
         <Col xl={6}>
           <Card>
             <CardHeader>
-              <i className="fa fa-align-justify"/>
+              <i className="fa fa-align-justify" />
               <div style={{ display: 'inline-block', width: 200 }}>
-                Language <LangFilter/>
+                Language <LangFilter />
               </div>
               <div style={{ display: 'inline-block', width: 200 }}>
-                <SearchInput/>
+                <SearchInput />
               </div>
             </CardHeader>
             <CardBody>
               <Table responsive hover>
                 <thead>
-                <tr>
-                  <th scope="col">id</th>
-                  <th scope="col">lang</th>
-                  <th scope="col">text</th>
-                  <th scope="col">created</th>
-                </tr>
+                  <tr>
+                    <th scope="col">id</th>
+                    <th scope="col">lang</th>
+                    <th scope="col">text</th>
+                    <th scope="col">created</th>
+                  </tr>
                 </thead>
-                <tbody>
-                {rows}
-                </tbody>
+                <tbody>{rows}</tbody>
               </Table>
             </CardBody>
             <CardFooter className="flex-center">
-              <Pagination page={page} total={total} limit={limit}/>
+              <Pagination page={page} total={total} limit={limit} />
             </CardFooter>
           </Card>
         </Col>

@@ -11,22 +11,22 @@ const SearchInput = () => {
   const searchString = params.get(paramKey) || '';
 
   const dispatch = useDispatch();
-  const handleChange = (e) => {
+  const handleChange = e => {
     const value = e.target.value;
     if (value) {
       params.set(paramKey, value);
     } else {
       params.delete(paramKey);
     }
-    dispatch(replace({
-      pathname: location.pathname,
-      search: params.toString(),
-    }));
+    dispatch(
+      replace({
+        pathname: location.pathname,
+        search: params.toString(),
+      }),
+    );
   };
 
-  return (
-    <Input type="text" placeholder="Search by text" value={searchString} onChange={handleChange}/>
-  );
+  return <Input type="text" placeholder="Search by text" value={searchString} onChange={handleChange} />;
 };
 
 export default SearchInput;

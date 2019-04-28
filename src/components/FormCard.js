@@ -1,5 +1,18 @@
 import React from 'react';
-import { Col, Card, CardHeader, CardBody, CardFooter, Form, FormGroup, FormText, FormFeedback, Label, Input, Button } from 'reactstrap';
+import {
+  Col,
+  Card,
+  CardHeader,
+  CardBody,
+  CardFooter,
+  Form,
+  FormGroup,
+  FormText,
+  FormFeedback,
+  Label,
+  Input,
+  Button,
+} from 'reactstrap';
 import { Formik } from 'formik';
 
 const FormCard = ({ className, header, id, fields, data, submit }) => {
@@ -54,9 +67,7 @@ const FormCard = ({ className, header, id, fields, data, submit }) => {
 
         return (
           <Card>
-            <CardHeader>
-              {header}
-            </CardHeader>
+            <CardHeader>{header}</CardHeader>
             <CardBody>
               <Form className={className} onSubmit={handleSubmit}>
                 {inputs}
@@ -64,17 +75,17 @@ const FormCard = ({ className, header, id, fields, data, submit }) => {
             </CardBody>
             <CardFooter>
               <Button type="submit" size="sm" color="primary" disabled={!dirty || isSubmitting} onClick={handleSubmit}>
-                <i className="fa fa-dot-circle-o"></i> Submit
+                <i className="fa fa-dot-circle-o" /> Submit
               </Button>
               <Button type="reset" size="sm" color="danger" disabled={!dirty || isSubmitting} onClick={handleReset}>
-                <i className="fa fa-ban"></i> Reset
+                <i className="fa fa-ban" /> Reset
               </Button>
             </CardFooter>
           </Card>
         );
       }}
     </Formik>
-  )
+  );
 };
 
 export default FormCard;

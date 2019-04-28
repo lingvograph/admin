@@ -42,7 +42,7 @@ export function matchRoutes(location) {
   for (const route of routes) {
     const match = matchPath(location.pathname, route);
     if (!match) continue;
-    const result = {...match, route};
+    const result = { ...match, route };
     if (match.exact) {
       return [result];
     }

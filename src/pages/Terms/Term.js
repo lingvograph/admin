@@ -10,7 +10,7 @@ const Term = ({ term }) => {
     <div className="animated fadeIn">
       <Row>
         <Col lg={6}>
-          <DetailsCard item={term}/>
+          <DetailsCard item={term} />
         </Col>
       </Row>
     </div>
@@ -20,9 +20,9 @@ const Term = ({ term }) => {
 export const ConnectedTerm = () => {
   const task = useFetchItem(api.term.get);
   if (task.pending) {
-    return <Loading/>;
+    return <Loading />;
   }
-  return <Term term={task.result}/>;
+  return <Term term={task.result} />;
 };
 
 export default ConnectedTerm;

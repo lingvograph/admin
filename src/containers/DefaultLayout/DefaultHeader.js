@@ -4,8 +4,8 @@ import { DropdownItem, DropdownMenu, DropdownToggle, Nav, NavItem } from 'reacts
 import PropTypes from 'prop-types';
 
 import { AppAsideToggler, AppHeaderDropdown, AppNavbarBrand, AppSidebarToggler } from '@coreui/react';
-import logo from '../../assets/img/brand/logo.svg'
-import sygnet from '../../assets/img/brand/sygnet.svg'
+import logo from '../../assets/img/brand/logo.svg';
+import sygnet from '../../assets/img/brand/sygnet.svg';
 
 const propTypes = {
   children: PropTypes.node,
@@ -17,7 +17,6 @@ const defaultProps = {};
 
 class DefaultHeader extends Component {
   render() {
-
     // eslint-disable-next-line
     const { children, ...attributes } = this.props;
 
@@ -32,7 +31,9 @@ class DefaultHeader extends Component {
 
         <Nav className="d-md-down-none" navbar>
           <NavItem className="px-3">
-            <NavLink to="/dashboard" className="nav-link" >Dashboard</NavLink>
+            <NavLink to="/dashboard" className="nav-link">
+              Dashboard
+            </NavLink>
           </NavItem>
         </Nav>
         <Nav className="ml-auto" navbar>
@@ -41,9 +42,13 @@ class DefaultHeader extends Component {
               <img src={'../../assets/img/avatars/6.jpg'} className="img-avatar" alt="admin@bootstrapmaster.com" />
             </DropdownToggle>
             <DropdownMenu right style={{ right: 'auto' }}>
-              <DropdownItem><i className="fa fa-user"></i> Profile</DropdownItem>
+              <DropdownItem>
+                <i className="fa fa-user" /> Profile
+              </DropdownItem>
               <DropdownItem divider />
-              <DropdownItem onClick={e => this.props.onLogout(e)}><i className="fa fa-lock"></i> Logout</DropdownItem>
+              <DropdownItem onClick={e => this.props.onLogout(e)}>
+                <i className="fa fa-lock" /> Logout
+              </DropdownItem>
             </DropdownMenu>
           </AppHeaderDropdown>
         </Nav>

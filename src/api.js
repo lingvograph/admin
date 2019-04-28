@@ -94,7 +94,7 @@ export const user = {
   },
   list({ abortController, page = 1, limit = DEFAULT_LIMIT }) {
     return getList('/api/data/user/list', { abortController, page, limit });
-  }
+  },
 };
 
 export const tag = {
@@ -129,7 +129,7 @@ export const term = {
       items: data.terms,
       total: data.count[0].total,
       page,
-      limit
+      limit,
     }));
-  }
+  },
 };

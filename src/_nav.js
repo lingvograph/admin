@@ -24,6 +24,6 @@ export default {
     {
       name: 'Terms',
       url: '/terms',
-    }
+    },
   ],
 };

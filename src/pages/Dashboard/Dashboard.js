@@ -1,10 +1,5 @@
 import React, { Component } from 'react';
-import {
-  Card,
-  CardBody,
-  Col,
-  Row,
-} from 'reactstrap';
+import { Card, CardBody, Col, Row } from 'reactstrap';
 
 class Dashboard extends Component {
   render() {

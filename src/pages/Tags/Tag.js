@@ -19,7 +19,7 @@ export const Tag = () => {
   const submit = useSubmit(api.tag.update, task);
 
   if (task.pending) {
-    return <Loading/>;
+    return <Loading />;
   }
 
   const tag = task.result;
@@ -35,12 +35,7 @@ export const Tag = () => {
     <div className="animated fadeIn">
       <Row>
         <Col xs="12" sm="6">
-          <FormCard header={header}
-                    id={tag.uid}
-                    fields={fields}
-                    data={tag}
-                    submit={submit}
-          />
+          <FormCard header={header} id={tag.uid} fields={fields} data={tag} submit={submit} />
         </Col>
       </Row>
     </div>

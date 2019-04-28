@@ -53,11 +53,13 @@ export const Users = () => {
 
   const rows = task.pending ? (
     <tr>
-      <td colSpan={5}><Loading/></td>
+      <td colSpan={5}>
+        <Loading />
+      </td>
     </tr>
-  ) : items.map((user, index) => (
-    <UserRow key={index} user={user} />
-  ));
+  ) : (
+    items.map((user, index) => <UserRow key={index} user={user} />)
+  );
 
   return (
     <div className="animated fadeIn">
@@ -78,9 +80,7 @@ export const Users = () => {
                     <th scope="col">status</th>
                   </tr>
                 </thead>
-                <tbody>
-                  {rows}
-                </tbody>
+                <tbody>{rows}</tbody>
               </Table>
             </CardBody>
             <CardFooter className="flex-center">

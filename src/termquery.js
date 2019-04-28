@@ -44,11 +44,7 @@ export function makeTermQuery({ kind = 'termList', termUid, offset = 0, limit = 
   const langFilter = lang ? `eq(lang, "${lang}")` : '';
 
   // TODO add filter by tags
-  const filterExpr = [
-    'has(Term)',
-    langFilter,
-    searchFilter,
-  ].filter(s => !!s).join(' and ');
+  const filterExpr = ['has(Term)', langFilter, searchFilter].filter(s => !!s).join(' and ');
   const termFilter = isTermList ? `@filter(${filterExpr})` : '';
 
   const q = `{

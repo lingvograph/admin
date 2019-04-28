@@ -33,11 +33,13 @@ export const Tags = () => {
 
   const rows = task.pending ? (
     <tr>
-      <td colSpan={5}><Loading/></td>
+      <td colSpan={5}>
+        <Loading />
+      </td>
     </tr>
-  ) : items.map((tag, index) => (
-    <TagRow key={index} tag={tag} />
-  ));
+  ) : (
+    items.map((tag, index) => <TagRow key={index} tag={tag} />)
+  );
 
   return (
     <div className="animated fadeIn">
@@ -58,9 +60,7 @@ export const Tags = () => {
                     <th scope="col">created_by</th>
                   </tr>
                 </thead>
-                <tbody>
-                  {rows}
-                </tbody>
+                <tbody>{rows}</tbody>
               </Table>
             </CardBody>
             <CardFooter className="flex-center">

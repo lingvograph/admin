@@ -10,7 +10,7 @@ function useNav({ page, total, limit, pageCount }) {
   const dispatch = useDispatch();
   const location = useLocation();
 
-  const go = (page) => {
+  const go = page => {
     warning(page >= 1 && page <= pageCount, 'invalid page');
 
     const params = new URLSearchParams(location.search);
@@ -20,10 +20,12 @@ function useNav({ page, total, limit, pageCount }) {
       params.set('page', page);
     }
 
-    dispatch(push({
-      pathname: location.pathname,
-      search: params.toString(),
-    }));
+    dispatch(
+      push({
+        pathname: location.pathname,
+        search: params.toString(),
+      }),
+    );
   };
 
   const prev = () => {
@@ -55,7 +57,9 @@ const ListPagination = ({ page, total, limit }) => {
 
   const buttons = items.map((p, idx) => (
     <PaginationItem key={idx} active={p === page}>
-      <PaginationLink tag="button" onClick={() => go(p)}>{p}</PaginationLink>
+      <PaginationLink tag="button" onClick={() => go(p)}>
+        {p}
+      </PaginationLink>
     </PaginationItem>
   ));
 

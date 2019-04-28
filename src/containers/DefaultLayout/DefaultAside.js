@@ -10,7 +10,6 @@ const propTypes = {
 const defaultProps = {};
 
 class DefaultAside extends Component {
-
   constructor(props) {
     super(props);
 
@@ -29,7 +28,6 @@ class DefaultAside extends Component {
   }
 
   render() {
-
     // eslint-disable-next-line
     const { children, ...attributes } = this.props;
 
@@ -37,11 +35,13 @@ class DefaultAside extends Component {
       <React.Fragment>
         <Nav tabs>
           <NavItem>
-            <NavLink className={classNames({ active: this.state.activeTab === '1' })}
-                     onClick={() => {
-                       this.toggle('1');
-                     }}>
-              <i className="icon-settings"></i>
+            <NavLink
+              className={classNames({ active: this.state.activeTab === '1' })}
+              onClick={() => {
+                this.toggle('1');
+              }}
+            >
+              <i className="icon-settings" />
             </NavLink>
           </NavItem>
         </Nav>
@@ -50,25 +50,33 @@ class DefaultAside extends Component {
             <h6>System Utilization</h6>
 
             <div className="text-uppercase mb-1 mt-4">
-              <small><b>CPU Usage</b></small>
+              <small>
+                <b>CPU Usage</b>
+              </small>
             </div>
             <Progress className="progress-xs" color="info" value="25" />
             <small className="text-muted">348 Processes. 1/4 Cores.</small>
 
             <div className="text-uppercase mb-1 mt-2">
-              <small><b>Memory Usage</b></small>
+              <small>
+                <b>Memory Usage</b>
+              </small>
             </div>
             <Progress className="progress-xs" color="warning" value="70" />
             <small className="text-muted">11444GB/16384MB</small>
 
             <div className="text-uppercase mb-1 mt-2">
-              <small><b>SSD 1 Usage</b></small>
+              <small>
+                <b>SSD 1 Usage</b>
+              </small>
             </div>
             <Progress className="progress-xs" color="danger" value="95" />
             <small className="text-muted">243GB/256GB</small>
 
             <div className="text-uppercase mb-1 mt-2">
-              <small><b>SSD 2 Usage</b></small>
+              <small>
+                <b>SSD 2 Usage</b>
+              </small>
             </div>
             <Progress className="progress-xs" color="success" value="10" />
             <small className="text-muted">25GB/256GB</small>
