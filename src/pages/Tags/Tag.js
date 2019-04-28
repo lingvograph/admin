@@ -27,7 +27,7 @@ export const Tag = () => {
   const header = (
     <span>
       <strong>Tag</strong>
-      <small> Form</small>
+      <small> {tag.uid}</small>
     </span>
   );
 
