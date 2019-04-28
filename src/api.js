@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import * as axios from 'axios';
 import token from './token';
 import { makeTermQuery } from './termquery';
@@ -66,6 +67,56 @@ export function query(queryString, options = {}) {
   return axios.post('/api/query', queryString, config).then(resp => resp.data);
 }
 
+function formatNquad(value) {
+  if (_.isString(value)) {
+    return value;
+  }
+
+  const wrapId = v => v.startsWith('0x') ? `<${v}>` : v;
+  const format = (subject, predicate, object) => `${wrapId(subject)} <${predicate}> ${wrapId(object)} .`;
+
+  if (_.isArray(value)) {
+    if (value.length !== 3) {
+      throw new Error('unexpected nquad array');
+    }
+    return format(value[0], value[1], value[2]);
+  }
+
+  if (_.isObject(value)) {
+    if (!value.subject || !value.predicate || !value.object) {
+      throw new Error('invalid nquad object');
+    }
+    return format(value.subject, value.predicate, value.object);
+  }
+
+  throw new Error('unexpected nquad value');
+}
+
+function formatNquads(value) {
+  if (!value) {
+    return undefined;
+  }
+  if (_.isString(value)) {
+    return value;
+  }
+  if (!_.isArray(value)) {
+    throw new Error('unexpected value');
+  }
+  return value.map(formatNquad).join('\n');
+}
+
+export function updateGraph(set, del, options = {}) {
+  const data = {
+    set: formatNquads(set),
+    delete: formatNquads(del),
+  };
+  if (!data.set && !data.delete) {
+    throw new Error('please specify set or delete mutations');
+  }
+  const config = makeAxiosConfig(options);
+  return axios.post('/api/nquads', data, config).then(resp => resp.data);
+}
+
 export function me() {
   return get('/api/me');
 }
@@ -106,6 +157,15 @@ export const tag = {
   },
   update({ id, data, abortController }) {
     return put(`/api/data/tag/${id}`, data, { abortController });
+  },
+  updateObjectTags({ id, oldTags, newTags, abortController }) {
+    const removedTags = oldTags.filter(t => !newTags.some(q => q.uid === t.uid));
+    const addedTags = newTags.filter(t => !oldTags.some(q => q.uid === t.uid));
+    return updateGraph(
+      addedTags.map(t => [id, 'tag', t.uid]),
+      removedTags.map(t => [id, 'tag', t.uid]),
+      { abortController }
+    );
   },
 };
 

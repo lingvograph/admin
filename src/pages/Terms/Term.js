@@ -4,6 +4,7 @@ import { useFetchItem, useSubmit } from 'hooks';
 import * as api from 'api';
 import Loading from 'components/Loading';
 import FormCard from 'components/FormCard';
+import TagsCard from 'components/TagsCard';
 
 const fields = [
   {
@@ -46,6 +47,9 @@ export const Term = () => {
                     data={term}
                     submit={submit}
           />
+        </Col>
+        <Col lg={6}>
+          <TagsCard id={term.uid} tags={term.tag} refreshTask={task}/>
         </Col>
       </Row>
     </div>
