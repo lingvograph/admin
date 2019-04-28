@@ -15,6 +15,7 @@ import Loading from 'components/Loading';
 import Pagination from 'components/Pagination';
 import SearchInput from 'components/SearchInput';
 import LangFilter from './LangFilter';
+import TagsFilter, { parseTags } from './TagsFilter';
 
 const TermRow = ({ term }) => {
   const termLink = `/terms/${term.uid}`;
@@ -37,6 +38,7 @@ const makeSearchParams = query => {
   return {
     lang: query.get('lang'),
     searchString: query.get('searchString'),
+    tags: parseTags(query.get('tags')),
   };
 };
 
@@ -60,15 +62,18 @@ export const Terms = () => {
   return (
     <div className="animated fadeIn">
       <Row>
-        <Col xl={6}>
+        <Col xl={12}>
           <Card>
             <CardHeader>
               <i className="fa fa-align-justify" />
               <div style={{ display: 'inline-block', width: 200 }}>
                 Language <LangFilter />
               </div>
-              <div style={{ display: 'inline-block', width: 200 }}>
+              <div style={{ display: 'inline-block', width: 250 }}>
                 <SearchInput />
+              </div>
+              <div style={{ display: 'inline-block', width: 500, marginLeft: 50, }}>
+                <TagsFilter/>
               </div>
             </CardHeader>
             <CardBody>

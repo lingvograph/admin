@@ -182,9 +182,9 @@ export const term = {
     });
   },
 
-  list({ abortController, page = 1, limit = DEFAULT_LIMIT, lang, searchString }) {
+  list({ abortController, page = 1, limit = DEFAULT_LIMIT, lang, searchString, tags }) {
     const offset = (page - 1) * limit;
-    const q = makeTermQuery({ offset, limit, lang, searchString });
+    const q = makeTermQuery({ offset, limit, lang, searchString, tags });
     return query(q, { abortController }).then(data => ({
       items: data.terms,
       total: data.count[0].total,

@@ -1,6 +1,8 @@
+import _ from 'lodash';
+
 const isWord = s => s && s.match(/^\w+$/);
 
-export function makeTermQuery({ kind = 'termList', termUid, offset = 0, limit = 10, lang, searchString }) {
+export function makeTermQuery({ kind = 'termList', termUid, offset = 0, limit = 10, lang, searchString, tags }) {
   const matchFn = termUid ? `uid(${termUid})` : 'has(Term)';
   const isTermList = kind === 'termList';
 
@@ -42,9 +44,9 @@ export function makeTermQuery({ kind = 'termList', termUid, offset = 0, limit = 
 
   const searchFilter = makeSearchFilter();
   const langFilter = lang ? `eq(lang, "${lang}")` : '';
+  const tagFilter = !_.isEmpty(tags) ? `uid_in(tag, ${tags.map(t => t.uid)})` : '';
 
-  // TODO add filter by tags
-  const filterExpr = ['has(Term)', langFilter, searchFilter].filter(s => !!s).join(' and ');
+  const filterExpr = ['has(Term)', langFilter, tagFilter, searchFilter].filter(s => !!s).join(' and ');
   const termFilter = isTermList ? `@filter(${filterExpr})` : '';
 
   const q = `{

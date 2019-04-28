@@ -12,7 +12,7 @@ const langs = ['any', 'en', 'ru'];
 const LangItem = ({ lang }) => {
   const { params, replaceParams } = useSearchParams();
   const handleClick = () => {
-    if (lang === 'any') {
+    if (!lang || lang === 'any') {
       params.delete('lang');
     } else {
       params.set('lang', lang);

@@ -35,18 +35,27 @@ export function useSearchParams() {
   const location = useLocation();
   const dispatch = useDispatch();
   const params = new URLSearchParams(location.search);
+  const replaceParams = (params) => {
+    dispatch(
+      replace({
+        pathname: location.pathname,
+        search: params.toString(),
+      }),
+    );
+  };
   return {
     location,
     dispatch,
     params,
-    replaceParams(params) {
-      dispatch(
-        replace({
-          pathname: location.pathname,
-          search: params.toString(),
-        }),
-      );
-    },
+    replaceParams,
+    replaceParam(name, value) {
+      if (value) {
+        params.set(name, value);
+      } else {
+        params.delete(name);
+      }
+      replaceParams(params);
+    }
   };
 }
 

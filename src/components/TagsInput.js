@@ -22,9 +22,9 @@ const suggestTheme = {
   input: {
     width: 240,
     height: 30,
-    fontFamily: 'Helvetica, sans-serif',
+    //fontFamily: 'Helvetica, sans-serif',
     fontWeight: 300,
-    fontSize: 16,
+    //fontSize: 16,
   },
   inputFocused: {
     outline: 'none'
@@ -43,9 +43,9 @@ const suggestTheme = {
     width: 280,
     border: '1px solid #aaa',
     backgroundColor: '#fff',
-    fontFamily: 'Helvetica, sans-serif',
+    //fontFamily: 'Helvetica, sans-serif',
     fontWeight: 300,
-    fontSize: 16,
+    //fontSize: 16,
     borderBottomLeftRadius: 4,
     borderBottomRightRadius: 4,
     zIndex: 100
