@@ -5,7 +5,7 @@ import * as api from 'api';
 import Loading from 'components/Loading';
 import FormCard from 'components/FormCard';
 import TagsCard from 'components/TagsCard';
-import TermSlider from './TermSlider';
+import TermCarousel from './TermCarousel';
 
 const fields = [
   {
@@ -55,7 +55,7 @@ export const Term = () => {
               <strong>Visual</strong>
             </CardHeader>
             <CardBody>
-              <TermSlider term={term}/>
+              <TermCarousel term={term}/>
             </CardBody>
           </Card>
         </Col>
