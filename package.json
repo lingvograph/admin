@@ -39,6 +39,7 @@
     "react-grid-gallery": "^0.5.4",
     "react-hooks-async": "^2.1.0",
     "react-images": "^0.5.19",
+    "react-json-view": "^1.19.1",
     "react-redux": "^7.0.2",
     "react-router-config": "^4.4.0-beta.8",
     "react-router-dom": "^4.3.1",

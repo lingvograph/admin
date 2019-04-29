@@ -1,5 +1,6 @@
 import React from 'react';
 import { Col, Row, Card, CardHeader, CardBody } from 'reactstrap';
+import JSONView from 'react-json-view';
 import { useFetchItem, useSubmit } from 'hooks';
 import * as api from 'api';
 import Loading from 'components/Loading';
@@ -56,6 +57,18 @@ export const Term = () => {
             </CardHeader>
             <CardBody>
               <TermGallery term={term}/>
+            </CardBody>
+          </Card>
+        </Col>
+      </Row>
+      <Row>
+        <Col lg={6}>
+          <Card>
+            <CardHeader>
+              <strong>JSON</strong>
+            </CardHeader>
+            <CardBody>
+              <JSONView src={term} displayDataTypes={false}/>
             </CardBody>
           </Card>
         </Col>
