@@ -14,9 +14,6 @@ const TermRow = ({ term }) => {
 
   return (
     <tr key={term.uid}>
-      <th scope="row">
-        <Link to={termLink}>{term.uid}</Link>
-      </th>
       <td>{term.lang}</td>
       <td>
         <Link to={termLink}>{term.text}</Link>
@@ -72,7 +69,6 @@ export const Terms = () => {
               <Table responsive hover>
                 <thead>
                   <tr>
-                    <th scope="col">id</th>
                     <th scope="col">lang</th>
                     <th scope="col">text</th>
                     <th scope="col">created</th>

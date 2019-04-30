@@ -31,9 +31,6 @@ const UserRow = ({ user }) => {
 
   return (
     <tr key={user.uid}>
-      <th scope="row">
-        <Link to={userLink}>{user.uid}</Link>
-      </th>
       <td>
         <Link to={userLink}>
           <img className="img-avatar" src={avatar} alt={user.email} width={35} height={35} style={{margin: '0 10px'}} />
@@ -79,7 +76,6 @@ export const Users = () => {
               <Table responsive hover>
                 <thead>
                   <tr>
-                    <th scope="col">id</th>
                     <th scope="col">name</th>
                     <th scope="col">email</th>
                     <th scope="col">registered</th>

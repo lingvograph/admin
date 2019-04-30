@@ -11,9 +11,6 @@ const TagRow = ({ tag }) => {
 
   return (
     <tr>
-      <th scope="row">
-        <Link to={tagLink}>{tag.uid}</Link>
-      </th>
       <td>
         <Link to={tagLink}>{tag['text@en']}</Link>
       </td>
@@ -53,7 +50,6 @@ export const Tags = () => {
               <Table responsive hover>
                 <thead>
                   <tr>
-                    <th scope="col">id</th>
                     <th scope="col">text@en</th>
                     <th scope="col">text@ru</th>
                     <th scope="col">created_at</th>
