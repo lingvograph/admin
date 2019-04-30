@@ -200,5 +200,5 @@ export const term = {
     const set = [[id, 'visual', obj.uid]];
     await updateGraph(set, undefined, { abortController });
     return await get(`/api/data/term/${id}`);
-  }
+  },
 };

@@ -7,11 +7,7 @@ const TermGallery = ({ term }) => {
     thumbnail: t.url,
     caption: t.source,
   }));
-  return (
-    <Gallery
-      images={images}
-    />
-  );
+  return <Gallery images={images} />;
 };
 
 export default TermGallery;

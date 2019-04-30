@@ -21,7 +21,7 @@ const Slider = ({ term }) => {
     setActiveIndex(nextIndex);
   };
 
-  const goto = (newIndex) => {
+  const goto = newIndex => {
     if (animating) return;
     setActiveIndex(newIndex);
   };
@@ -29,11 +29,7 @@ const Slider = ({ term }) => {
   const caption = term.text;
   const slides = items.map(item => {
     return (
-      <CarouselItem
-        onExiting={onExiting}
-        onExited={onExited}
-        key={item.uid}
-      >
+      <CarouselItem onExiting={onExiting} onExited={onExited} key={item.uid}>
         <img className="d-block w-100" src={item.url} alt={item.alt} />
         <CarouselCaption captionText={term.text} captionHeader={caption} />
       </CarouselItem>

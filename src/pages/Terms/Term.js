@@ -28,7 +28,7 @@ export const Term = () => {
   const submit = useSubmit(api.term.update, task);
 
   if (task.pending) {
-    return <Loading/>;
+    return <Loading />;
   }
   const term = task.result;
 
@@ -36,10 +36,10 @@ export const Term = () => {
     <div className="animated fadeIn">
       <Row>
         <Col lg={6}>
-          <FormCard type="Term" id={term.uid} fields={fields} data={term} submit={submit}/>
+          <FormCard type="Term" id={term.uid} fields={fields} data={term} submit={submit} />
         </Col>
         <Col lg={6}>
-          <TagsCard id={term.uid} tags={term.tag} refreshTask={task}/>
+          <TagsCard id={term.uid} tags={term.tag} refreshTask={task} />
         </Col>
       </Row>
       <Row>
@@ -48,11 +48,11 @@ export const Term = () => {
             <CardHeader>
               <strong>Visual</strong>
               <span className="ml-2">
-                <AddImageByURL termId={term.uid} refreshTask={task}/>
+                <AddImageByURL termId={term.uid} refreshTask={task} />
               </span>
             </CardHeader>
             <CardBody>
-              <TermGallery term={term}/>
+              <TermGallery term={term} />
             </CardBody>
           </Card>
         </Col>

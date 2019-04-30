@@ -28,7 +28,7 @@ const FormCard = ({ className, type, header, id, fields, data, submit }) => {
         <strong>{type}</strong>
         <small> {id}</small>
         <span className="ml-2">
-          <JSONButton data={data}/>
+          <JSONButton data={data} />
         </span>
       </span>
     );

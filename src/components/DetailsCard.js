@@ -47,7 +47,7 @@ const Details = ({ item }) => {
           ID: {item ? item.uid : 'undefined'}
         </strong>
         <span className="ml-2">
-          <JSONButton data={item}/>
+          <JSONButton data={item} />
         </span>
       </CardHeader>
       <CardBody>

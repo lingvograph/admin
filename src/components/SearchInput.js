@@ -13,7 +13,9 @@ const SearchInput = () => {
     <InputGroup>
       <Input type="text" placeholder="Search by text" value={searchString} onChange={handleChange} />
       <InputGroupAddon addonType="append">
-        <Button type="button" color="primary"><i className="fa fa-search"></i></Button>
+        <Button type="button" color="primary">
+          <i className="fa fa-search" />
+        </Button>
       </InputGroupAddon>
     </InputGroup>
   );

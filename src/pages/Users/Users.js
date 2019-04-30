@@ -33,7 +33,14 @@ const UserRow = ({ user }) => {
     <tr key={user.uid}>
       <td>
         <Link to={userLink}>
-          <img className="img-avatar" src={avatar} alt={user.email} width={35} height={35} style={{margin: '0 10px'}} />
+          <img
+            className="img-avatar"
+            src={avatar}
+            alt={user.email}
+            width={35}
+            height={35}
+            style={{ margin: '0 10px' }}
+          />
           <span>{name}</span>
         </Link>
       </td>
