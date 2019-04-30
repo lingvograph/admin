@@ -3,7 +3,7 @@ import { Modal, ModalHeader, ModalBody, ModalFooter, Button } from 'reactstrap';
 import JSONView from 'react-json-view';
 
 const JSONButton = ({data, ...props}) => {
-  const [isOpen, setIsOpen] = useState();
+  const [isOpen, setIsOpen] = useState(false);
   const toggle = () => setIsOpen(!isOpen);
 
   return (
