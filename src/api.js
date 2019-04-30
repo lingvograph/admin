@@ -76,7 +76,7 @@ function formatNquad(value) {
   const format = (subject, predicate, object) => `${wrapId(subject)} <${predicate}> ${wrapId(object)} .`;
 
   if (_.isArray(value)) {
-    if (value.length !== 3) {
+    if (value.length !== 3 || value.some(s => !s)) {
       throw new Error('unexpected nquad array');
     }
     return format(value[0], value[1], value[2]);
@@ -194,4 +194,11 @@ export const term = {
   update({ id, data, abortController }) {
     return put(`/api/data/term/${id}`, data, { abortController });
   },
+
+  async addVisualURL({ id, url, abortController }) {
+    const obj = await get(`/api/fileproxy/${url}`, {}, { abortController });
+    const set = [[id, 'visual', obj.uid]];
+    await updateGraph(set, undefined, { abortController });
+    return await get(`/api/data/term/${id}`);
+  }
 };
