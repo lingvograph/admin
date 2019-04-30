@@ -1,12 +1,11 @@
-import React, { useState } from 'react';
-import { ButtonDropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
-import { useLocation, useSearchParams } from 'hooks';
+import React from 'react';
+import { useSearchParams } from 'hooks';
+import LangDropdown from 'components/LangDropdown';
 
-const langs = ['any', 'en', 'ru'];
-
-const LangItem = ({ lang }) => {
+const LangFilter = () => {
   const { params, replaceParams } = useSearchParams();
-  const handleClick = () => {
+  const lang = params.get('lang') || 'any';
+  const handleChange = lang => {
     if (!lang || lang === 'any') {
       params.delete('lang');
     } else {
@@ -14,24 +13,7 @@ const LangItem = ({ lang }) => {
     }
     replaceParams(params);
   };
-  return <DropdownItem onClick={handleClick}>{lang}</DropdownItem>;
-};
-
-const LangFilter = () => {
-  const location = useLocation();
-  const params = new URLSearchParams(location.search);
-  const lang = params.get('lang') || 'any';
-  const [isOpen, setIsOpen] = useState(false);
-  const toggle = () => {
-    setIsOpen(!isOpen);
-  };
-  const items = langs.map((t, k) => <LangItem key={k} lang={t} />);
-  return (
-    <ButtonDropdown isOpen={isOpen} toggle={toggle}>
-      <DropdownToggle caret>{`Language: ${lang}`}</DropdownToggle>
-      <DropdownMenu>{items}</DropdownMenu>
-    </ButtonDropdown>
-  );
+  return <LangDropdown lang={lang} onChange={handleChange}/>;
 };
 
 export default LangFilter;

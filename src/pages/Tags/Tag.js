@@ -7,10 +7,14 @@ import FormCard from 'components/FormCard';
 
 const fields = [
   {
-    id: 'text@en',
+    id: 'text',
+    label: 'Text',
+    type: 'multilang',
   },
   {
-    id: 'text@ru',
+    id: 'description',
+    label: 'Description',
+    type: 'multilang',
   },
 ];
 

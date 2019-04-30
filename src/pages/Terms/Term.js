@@ -16,10 +16,9 @@ const fields = [
     id: 'text',
   },
   {
-    id: 'transcript@en',
-  },
-  {
-    id: 'transcript@ru',
+    id: 'transcript',
+    label: 'Transcription',
+    type: 'multilang',
   },
 ];
 
