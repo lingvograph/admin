@@ -17,14 +17,8 @@ import { Formik } from 'formik';
 import JSONButton from './JSONButton';
 import { langs } from './LangDropdown';
 
-const SimpleField = ( { field, formikProps }) => {
-  const {
-    values,
-    touched,
-    errors,
-    handleChange,
-    handleBlur,
-  } = formikProps;
+const SimpleField = ({ field, formikProps }) => {
+  const { values, touched, errors, handleChange, handleBlur } = formikProps;
 
   const label = field.label || field.id;
   const isTouched = touched[field.id];
@@ -55,11 +49,7 @@ const SimpleField = ( { field, formikProps }) => {
 };
 
 const MultiLangField = ({ field, formikProps }) => {
-  const {
-    values,
-    handleChange,
-    handleBlur,
-  } = formikProps;
+  const { values, handleChange, handleBlur } = formikProps;
 
   const label = field.label || field.id;
   const fieldInputs = langs.map(lang => {
@@ -90,7 +80,7 @@ const MultiLangField = ({ field, formikProps }) => {
         <Col xs="12">
           <div className="hr-heading">
             <span>{label}</span>
-            <span className="hr"></span>
+            <span className="hr" />
           </div>
         </Col>
       </FormGroup>
@@ -120,12 +110,7 @@ const FormCard = ({ className, type, header, id, fields, data, submit }) => {
   return (
     <Formik initialValues={data} onSubmit={onSubmit}>
       {props => {
-        const {
-          dirty,
-          isSubmitting,
-          handleSubmit,
-          handleReset,
-        } = props;
+        const { dirty, isSubmitting, handleSubmit, handleReset } = props;
 
         // TODO support inline field group
         const inputs = fields.map((field, idx) => {

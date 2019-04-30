@@ -13,7 +13,7 @@ const LangFilter = () => {
     }
     replaceParams(params);
   };
-  return <LangDropdown lang={lang} onChange={handleChange}/>;
+  return <LangDropdown lang={lang} onChange={handleChange} />;
 };
 
 export default LangFilter;
