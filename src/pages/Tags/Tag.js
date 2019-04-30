@@ -24,18 +24,11 @@ export const Tag = () => {
 
   const tag = task.result;
 
-  const header = (
-    <span>
-      <strong>Tag</strong>
-      <small> {tag.uid}</small>
-    </span>
-  );
-
   return (
     <div className="animated fadeIn">
       <Row>
         <Col xs="12" sm="6">
-          <FormCard header={header} id={tag.uid} fields={fields} data={tag} submit={submit} />
+          <FormCard type="Tag" id={tag.uid} fields={fields} data={tag} submit={submit} />
         </Col>
       </Row>
     </div>

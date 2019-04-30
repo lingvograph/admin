@@ -1,6 +1,7 @@
 import _ from 'lodash';
 import React from 'react';
 import { Card, CardBody, CardHeader, Table, ListGroup, ListGroupItem } from 'reactstrap';
+import JSONButton from './JSONButton';
 
 // TODO render collapsible property grid
 
@@ -45,6 +46,9 @@ const Details = ({ item }) => {
           <i className="icon-info pr-1" />
           ID: {item ? item.uid : 'undefined'}
         </strong>
+        <span className="ml-2">
+          <JSONButton data={item}/>
+        </span>
       </CardHeader>
       <CardBody>
         <Table responsive striped hover>

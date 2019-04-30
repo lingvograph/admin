@@ -14,12 +14,25 @@ import {
   Button,
 } from 'reactstrap';
 import { Formik } from 'formik';
+import JSONButton from './JSONButton';
 
-const FormCard = ({ className, header, id, fields, data, submit }) => {
+const FormCard = ({ className, type, header, id, fields, data, submit }) => {
   const onSubmit = async (values, actions) => {
     await submit({ id, data: values });
     actions.setSubmitting(false);
   };
+
+  if (!header) {
+    header = (
+      <span>
+        <strong>{type}</strong>
+        <small> {id}</small>
+        <span className="ml-2">
+          <JSONButton data={data}/>
+        </span>
+      </span>
+    );
+  }
 
   return (
     <Formik initialValues={data} onSubmit={onSubmit}>
