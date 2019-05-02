@@ -5,8 +5,6 @@ import { matchPath } from 'react-router-dom';
 const Dashboard = React.lazy(() => import('./pages/Dashboard/Dashboard'));
 const Users = React.lazy(() => import('./pages/Users/Users'));
 const User = React.lazy(() => import('./pages/Users/User'));
-const Tags = React.lazy(() => import('./pages/Tags/Tags'));
-const Tag = React.lazy(() => import('./pages/Tags/Tag'));
 const Terms = React.lazy(() => import('./pages/Terms/Terms'));
 const Term = React.lazy(() => import('./pages/Terms/Term'));
 
@@ -15,8 +13,6 @@ const routes = [
   { path: '/dashboard', name: 'Dashboard', component: Dashboard },
   { path: '/users', exact: true, name: 'Users', component: Users },
   { path: '/users/:id', exact: true, name: 'User Details', component: User },
-  { path: '/tags', exact: true, name: 'Tags', component: Tags },
-  { path: '/tags/:id', exact: true, name: 'Tag Details', component: Tag },
   { path: '/terms', exact: true, name: 'Terms', component: Terms },
   { path: '/terms/:id', exact: true, name: 'Term Details', component: Term },
 ];

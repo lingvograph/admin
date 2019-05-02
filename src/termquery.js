@@ -59,8 +59,10 @@ export function makeTermQuery({ kind = 'termList', termUid, offset = 0, limit = 
       transcript@en
       tag {
         uid
-        text@en
-        text@ru
+        text
+        lang
+        transcript@ru
+        transcript@en
       }
       translated_as {
         uid
@@ -70,8 +72,10 @@ export function makeTermQuery({ kind = 'termList', termUid, offset = 0, limit = 
         transcript@en
         tag {
           uid
-          text@en
-          text@ru
+          text
+          lang
+          transcript@ru
+          transcript@en
         }
       }
       audio ${audioRange} {

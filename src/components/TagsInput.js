@@ -12,7 +12,7 @@ function escapeRegexCharacters(str) {
   return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 }
 
-const labelKey = 'text@en';
+const labelKey = 'text';
 
 const suggestTheme = {
   container: {
@@ -98,8 +98,8 @@ const CustomTagsInput = ({ tags, onChange }) => {
         ref={props.ref}
         suggestions={suggestions}
         shouldRenderSuggestions={() => true}
-        getSuggestionValue={t => t[labelKey]}
-        renderSuggestion={t => <span>{t[labelKey]}</span>}
+        getSuggestionValue={t => t[labelKey] || t.uid}
+        renderSuggestion={t => <span>{t[labelKey] || t.uid}</span>}
         inputProps={{ ...props, onChange: handleOnChange }}
         onSuggestionSelected={(e, { suggestion }) => {
           addTag(suggestion[labelKey]);
@@ -116,9 +116,7 @@ const CustomTagsInput = ({ tags, onChange }) => {
   };
 
   const handleChange = tags => {
-    const tagObjects = allTags.filter(t => {
-      return tags.includes(t[labelKey]) || tags.includes(t['text@ru']);
-    });
+    const tagObjects = allTags.filter(t => tags.includes(t[labelKey]));
     onChange(tagObjects);
   };
 
