@@ -11,6 +11,7 @@ import AddImageByURL from './AddImageByURL';
 const fields = [
   {
     id: 'lang',
+    type: 'lang',
   },
   {
     id: 'text',

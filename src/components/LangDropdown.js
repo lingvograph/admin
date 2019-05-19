@@ -10,15 +10,18 @@ const LangItem = ({ lang, onChange }) => {
   return <DropdownItem onClick={handleClick}>{lang}</DropdownItem>;
 };
 
-const LangDropdown = ({ lang, onChange }) => {
+const LangDropdown = ({ value, onChange, withAny, label = '' }) => {
   const [isOpen, setIsOpen] = useState(false);
   const toggle = () => {
     setIsOpen(!isOpen);
   };
-  const items = ['any'].concat(langs).map((t, k) => <LangItem key={k} lang={t} onChange={onChange} />);
+  const items = [withAny ? 'any' : undefined]
+    .filter(t => !!t)
+    .concat(langs)
+    .map((t, k) => <LangItem key={k} lang={t} onChange={onChange} />);
   return (
     <ButtonDropdown isOpen={isOpen} toggle={toggle}>
-      <DropdownToggle caret>{`Language: ${lang}`}</DropdownToggle>
+      <DropdownToggle caret>{`${label}${value}`}</DropdownToggle>
       <DropdownMenu>{items}</DropdownMenu>
     </ButtonDropdown>
   );

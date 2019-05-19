@@ -14,12 +14,33 @@ import {
 } from 'reactstrap';
 import { Formik } from 'formik';
 import JSONButton from './JSONButton';
-import { langs } from './LangDropdown';
+import LangDropdown, { langs } from './LangDropdown';
+
+const FieldLabel = ({ field }) => {
+  const label = field.label || field.id;
+  return (
+    <Col md="3">
+      <span>{label}</span>
+    </Col>
+  );
+};
+
+const FieldFeedback = ({ field, formikProps }) => {
+  const { touched, errors } = formikProps;
+  const isTouched = touched[field.id];
+  const error = isTouched && errors[field.id];
+
+  return (
+    <React.Fragment>
+      {field.help ? <FormText color="muted">{field.help}</FormText> : null}
+      {error ? <FormFeedback>{error}</FormFeedback> : null}
+    </React.Fragment>
+  );
+};
 
 const SimpleField = ({ field, formikProps }) => {
   const { values, touched, errors, handleChange, handleBlur } = formikProps;
 
-  const label = field.label || field.id;
   const isTouched = touched[field.id];
   const error = isTouched && errors[field.id];
   const inputProps = {
@@ -34,14 +55,31 @@ const SimpleField = ({ field, formikProps }) => {
   };
 
   return (
-    <FormGroup className="flex-center" row key={field.id}>
-      <Col md="3">
-        <span>{label}</span>
-      </Col>
+    <FormGroup className="flex-center" row>
+      <FieldLabel field={field} />
       <Col xs="12" md="9">
         <Input {...inputProps} />
-        {field.help ? <FormText color="muted">{field.help}</FormText> : null}
-        {error ? <FormFeedback>{error}</FormFeedback> : null}
+        <FieldFeedback field={field} formikProps={formikProps} />
+      </Col>
+    </FormGroup>
+  );
+};
+
+const LangField = ({ field, formikProps }) => {
+  const { values, setFieldValue } = formikProps;
+
+  const value = values[field.id];
+
+  const handleChange = val => {
+    setFieldValue(field.id, val);
+  };
+
+  return (
+    <FormGroup className="flex-center" row>
+      <FieldLabel field={field} />
+      <Col xs="12" md="9">
+        <LangDropdown value={value} onChange={handleChange} />
+        <FieldFeedback field={field} formikProps={formikProps} />
       </Col>
     </FormGroup>
   );
@@ -75,7 +113,7 @@ const MultiLangField = ({ field, formikProps }) => {
 
   return (
     <React.Fragment>
-      <FormGroup className="flex-center" row key={field.id}>
+      <FormGroup className="flex-center" row>
         <Col xs="12">
           <div className="hr-heading">
             <span>{label}</span>
@@ -114,10 +152,12 @@ const FormCard = ({ className, type, header, id, fields, data, submit }) => {
         // TODO support inline field group
         const inputs = fields.map((field, idx) => {
           switch (field.type) {
+            case 'lang':
+              return <LangField key={field.id} field={field} formikProps={props} />;
             case 'multilang':
-              return <MultiLangField field={field} formikProps={props} />;
+              return <MultiLangField key={field.id} field={field} formikProps={props} />;
             default:
-              return <SimpleField field={field} formikProps={props} />;
+              return <SimpleField key={field.id} field={field} formikProps={props} />;
           }
         });
 

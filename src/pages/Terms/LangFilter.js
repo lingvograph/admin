@@ -13,7 +13,7 @@ const LangFilter = () => {
     }
     replaceParams(params);
   };
-  return <LangDropdown lang={lang} onChange={handleChange} />;
+  return <LangDropdown value={lang} onChange={handleChange} label="Language: " withAny />;
 };
 
 export default LangFilter;
