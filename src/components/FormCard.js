@@ -5,10 +5,13 @@ import JSONButton from './JSONButton';
 import { renderFields } from './FormFields';
 import { SubmitButton, ResetButton } from './FormButtons';
 
-const FormCard = ({ className, type, header, id, fields, data, submit }) => {
+const FormCard = ({ className, type, header, id, fields, data, submit, handleResult }) => {
   const onSubmit = async (values, actions) => {
-    await submit({ id, data: values });
+    const result = await submit({ id, data: values });
     actions.setSubmitting(false);
+    if (handleResult) {
+      handleResult(result);
+    }
   };
 
   if (!header) {
@@ -40,7 +43,7 @@ const FormCard = ({ className, type, header, id, fields, data, submit }) => {
             </CardBody>
             <CardFooter>
               <SubmitButton formikProps={props} />
-              <ResetButton formikProps={props} />
+              <ResetButton formikProps={props} className="ml-2" />
             </CardFooter>
           </Card>
         );

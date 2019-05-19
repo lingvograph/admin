@@ -25,7 +25,7 @@ const TagsCard = ({ id, tags, refreshTask }) => {
       </CardBody>
       <CardFooter>
         <Button type="submit" size="sm" color="primary" onClick={submit}>
-          <i className="fa fa-dot-circle-o" /> Save
+          Save
         </Button>
       </CardFooter>
     </Card>

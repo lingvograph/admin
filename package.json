@@ -30,6 +30,7 @@
     "lodash": "^4.17.11",
     "md5": "^2.2.1",
     "prop-types": "^15.7.2",
+    "query-string": "^6.5.0",
     "ramda": "^0.26.1",
     "react": "^16.8.6",
     "react-app-polyfill": "^1.0.1",

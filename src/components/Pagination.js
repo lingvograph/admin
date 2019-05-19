@@ -6,7 +6,7 @@ import * as R from 'ramda';
 import { push } from 'connected-react-router';
 import { useLocation } from 'hooks';
 
-function useNav({ page, total, limit, pageCount }) {
+function useNav({ page, pageCount }) {
   const dispatch = useDispatch();
   const location = useLocation();
 

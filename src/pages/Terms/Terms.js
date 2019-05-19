@@ -8,6 +8,7 @@ import Pagination from 'components/Pagination';
 import SearchInput from 'components/SearchInput';
 import LangFilter from './LangFilter';
 import TagsFilter, { parseTags } from './TagsFilter';
+import NewTermModal from './NewTermModal';
 
 const TermRow = ({ term }) => {
   const termLink = `/terms/${term.uid}`;
@@ -64,6 +65,9 @@ export const Terms = () => {
               <div style={{ display: 'inline-block', width: 500, marginLeft: 50 }}>
                 <TagsFilter />
               </div>
+              <div style={{ display: 'inline-block', marginLeft: 50 }}>
+                <NewTermModal />
+              </div>
             </CardHeader>
             <CardBody>
               <Table responsive hover>
@@ -79,6 +83,7 @@ export const Terms = () => {
             </CardBody>
             <CardFooter className="flex-center">
               <Pagination page={page} total={total} limit={limit} />
+              <div className="ml-2">Total: {total}</div>
             </CardFooter>
           </Card>
         </Col>

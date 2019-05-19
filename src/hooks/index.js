@@ -2,7 +2,9 @@ import { useContext, useState, useEffect } from 'react';
 import { StoreContext, useDispatch, useMappedState } from 'redux-react-hook';
 import { useAsyncRun, useAsyncCombineSeq } from 'react-hooks-async';
 import useAsyncTaskDelay from 'react-hooks-async/dist/use-async-task-delay';
-import { replace } from 'connected-react-router';
+import { push, replace } from 'connected-react-router';
+import qs from 'query-string';
+
 import * as api from 'api';
 import * as selectors from 'selectors';
 import token from 'token';
@@ -34,6 +36,17 @@ export function useCurrentUser() {
 export function useLocation() {
   const { location } = useMappedState(selectors.currentLocation);
   return location;
+}
+
+export function useNavigate(useReplace) {
+  const dispatch = useDispatch();
+  return ({ pathname, params }) => {
+    const action = (useReplace ? replace : push)({
+      pathname,
+      search: params ? qs.stringify(params) : undefined,
+    });
+    dispatch(action);
+  };
 }
 
 export function useSearchParams() {

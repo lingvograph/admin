@@ -34,7 +34,8 @@ const AddByURL = ({ termId, refreshTask }) => {
         <ModalFooter>
           <Button color="secondary" onClick={toggle}>
             Cancel
-          </Button>{' '}
+          </Button>
+          <span> </span>
           <Button color="primary" onClick={save}>
             Add
           </Button>

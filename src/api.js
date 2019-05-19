@@ -168,6 +168,10 @@ export const tag = {
 };
 
 export const term = {
+  create({ data, abortController }) {
+    return post('/api/data/term', data, { abortController });
+  },
+
   get({ id, abortController }) {
     const q = makeTermQuery({ kind: 'audioList', termUid: id });
     return query(q, { abortController }).then(data => {
