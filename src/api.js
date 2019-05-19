@@ -158,7 +158,7 @@ export const tag = {
   update({ id, data, abortController }) {
     return put(`/api/data/tag/${id}`, data, { abortController });
   },
-  updateObjectTags({ id, oldTags, newTags, abortController }) {
+  updateObjectTags({ id, oldTags = [], newTags = [], abortController }) {
     const removedTags = oldTags.filter(t => !newTags.some(q => q.uid === t.uid));
     const addedTags = newTags.filter(t => !oldTags.some(q => q.uid === t.uid));
     const set = addedTags.map(t => [id, 'tag', t.uid]);

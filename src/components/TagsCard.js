@@ -4,12 +4,12 @@ import TagsInput from './TagsInput';
 import { useSubmit } from 'hooks';
 import * as api from 'api';
 
-const TagsCard = ({ id, tags, refreshTask }) => {
+const TagsCard = ({ id, tags = [], refreshTask }) => {
   const updateTags = useSubmit(api.tag.updateObjectTags, refreshTask);
   const [value, setValue] = useState(tags);
 
   const submit = () => {
-    const params = { id, oldTags: tags, newTags: value };
+    const params = { id, oldTags: tags || [], newTags: value };
     return updateTags(params);
   };
 

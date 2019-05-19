@@ -64,7 +64,7 @@ const suggestTheme = {
   },
 };
 
-const CustomTagsInput = ({ tags, onChange }) => {
+const CustomTagsInput = ({ tags = [], onChange }) => {
   const location = useLocation();
   const [suggestions, setSuggestions] = useState([]);
   const fetchAllTags = abortController => api.tag.list({ abortController, page: 1, limit: 100 });
