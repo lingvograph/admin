@@ -1,5 +1,6 @@
+import _ from 'lodash';
 import React from 'react';
-import { Col, FormGroup, FormText, FormFeedback, Input } from 'reactstrap';
+import { Col, FormFeedback, FormGroup, FormText, Input } from 'reactstrap';
 import LangDropdown, { langs } from './LangDropdown';
 
 const FieldLabel = ({ field }) => {
@@ -29,12 +30,13 @@ const SimpleField = ({ field, formikProps }) => {
 
   const isTouched = touched[field.id];
   const error = isTouched && errors[field.id];
+  const value = values[field.id];
   const inputProps = {
     type: field.type || 'text',
     id: field.id,
     name: field.id,
     placeholder: field.placeholder,
-    value: values[field.id],
+    value: _.isNil(value) ? '' : value,
     onChange: handleChange,
     onBlur: handleBlur,
     valid: isTouched ? !error : undefined,
@@ -81,7 +83,7 @@ const MultiLangField = ({ field, formikProps }) => {
       type: 'text',
       id: fieldId,
       name: fieldId,
-      value: values[fieldId],
+      value: values[fieldId] || '',
       onChange: handleChange,
       onBlur: handleBlur,
     };

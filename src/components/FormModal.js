@@ -4,6 +4,7 @@ import { Formik } from 'formik';
 import { renderFields } from './FormFields';
 import { SubmitButton } from './FormButtons';
 
+// TODO extract base form to reuse in FormCard and FormModal
 const FormModal = ({ className, header, id, fields, data, submit, isOpen, toggle, handleResult }) => {
   const onSubmit = async (values, actions) => {
     const result = await submit({ id, data: values });
