@@ -58,10 +58,13 @@ export const useAsyncTask = (func, deps) => {
       try {
         const result = await func(abortController, ...args);
         dispatchSafe({ type: 'result', result });
-      } catch (e) {
-        dispatchSafe({ type: 'error', error: e });
+        abortController = null;
+        return { result };
+      } catch (error) {
+        dispatchSafe({ type: 'error', error });
+        abortController = null;
+        return { error };
       }
-      abortController = null;
     };
     const abort = () => {
       if (abortController) {

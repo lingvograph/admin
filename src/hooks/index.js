@@ -116,6 +116,7 @@ export const useFetchItem = fetchItem => {
   return task;
 };
 
+// TODO revise/remove this hook
 export const useSubmit = (update, fetchTask) => {
   const location = useLocation();
 
@@ -128,10 +129,12 @@ export const useSubmit = (update, fetchTask) => {
   );
 
   return async args => {
-    await task.start(args);
+    const state = await task.start(args);
 
     if (fetchTask) {
       await fetchTask.start();
     }
+
+    return state.result;
   };
 };
