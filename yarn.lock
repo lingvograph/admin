@@ -2988,10 +2988,10 @@ core-js@^2.4.0, core-js@^2.6.5:
   resolved "https://registry.yarnpkg.com/core-js/-/core-js-2.6.5.tgz#44bc8d249e7fb2ff5d00e0341a7ffb94fbf67895"
   integrity sha512-klh/kDpwX8hryYL14M9w/xei6vrv6sE8gTHDG7/T/+SEovB/G4ejwcfE/CBzO6Edsu+OETZMZ3wcX/EjUkrl5A==
 
-core-js@^3.1.0:
-  version "3.1.0"
-  resolved "https://registry.yarnpkg.com/core-js/-/core-js-3.1.0.tgz#7118f0dad99054204b6821c1f82e67b42cc21628"
-  integrity sha512-EyF8cMvUWRDWRLmC3+i50D1DqK4aFZWb/6PDPP2QfX2r0zXkgR2V9wt7jX7TRM0Qdj/3f6+JQkqfCaGkSj92iQ==
+core-js@^3.1.2:
+  version "3.1.2"
+  resolved "https://registry.yarnpkg.com/core-js/-/core-js-3.1.2.tgz#2549a2cfb3ca1a5d851c9f7838e8b282cef2f3ba"
+  integrity sha512-3poRGjbu56leCtZCZCzCgQ7GcKOflDFnjWIepaPFUsM0IXUBrne10sl3aa2Bkcz3+FjRdIxBe9dAMhIJmEnQNA==
 
 core-util-is@1.0.2, core-util-is@~1.0.0:
   version "1.0.2"
@@ -8876,6 +8876,11 @@ react-lifecycles-compat@^3.0.4:
   version "3.0.4"
   resolved "https://registry.yarnpkg.com/react-lifecycles-compat/-/react-lifecycles-compat-3.0.4.tgz#4f1a273afdfc8f3488a8c516bfda78f872352362"
   integrity sha512-fBASbA6LnOU9dOU2eW7aQ8xmYBSXUIWr+UmF9b1efZBazGNO+rcXT/icdKnYm2pTwcRylVUYwW7H1PHfLekVzA==
+
+react-moment@^0.9.2:
+  version "0.9.2"
+  resolved "https://registry.yarnpkg.com/react-moment/-/react-moment-0.9.2.tgz#1cdc6ed02f1735282282129edf0f607f420df039"
+  integrity sha512-jpKIEvcEOTSa4RXWTjDlvja7sN+ee5Gyk5ZKa704FZxE01OxmKIpq9GUliqTrAgdDYJJUQsnqQamczn0TN+DTg==
 
 react-onclickout@^2.0.8:
   version "2.0.8"

@@ -7,6 +7,7 @@ import FormCard from 'components/FormCard';
 import TagsCard from 'components/TagsCard';
 import TermGallery from './TermGallery';
 import AddImageByURL from './AddImageByURL';
+import AudioList from './AudioList';
 
 const fields = [
   {
@@ -37,13 +38,7 @@ export const Term = () => {
       <Row>
         <Col lg={6}>
           <FormCard type="Term" id={term.uid} fields={fields} data={term} submit={submit} />
-        </Col>
-        <Col lg={6}>
           <TagsCard id={term.uid} tags={term.tag} refreshTask={task} />
-        </Col>
-      </Row>
-      <Row>
-        <Col lg={6}>
           <Card>
             <CardHeader>
               <strong>Visual</strong>
@@ -53,6 +48,16 @@ export const Term = () => {
             </CardHeader>
             <CardBody>
               <TermGallery term={term} />
+            </CardBody>
+          </Card>
+        </Col>
+        <Col lg={6}>
+          <Card>
+            <CardHeader>
+              <strong>Audio</strong>
+            </CardHeader>
+            <CardBody>
+              <AudioList term={term} />
             </CardBody>
           </Card>
         </Col>
