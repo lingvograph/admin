@@ -66,7 +66,7 @@
     "eject": "react-scripts eject",
     "fmt": "prettier --write '**/*.*'",
     "predeploy": "npm run build",
-    "deploy": "gh-pages -d build"
+    "deploy": "gh-pages --dist build --add --dotfiles"
   },
   "eslintConfig": {
     "extends": "react-app"
