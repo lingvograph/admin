@@ -1,5 +1,8 @@
 import _ from 'lodash';
 import * as axios from 'axios';
+import { confirm } from 'components';
+import { navigate } from 'saga';
+import store from 'store';
 import token from './token';
 import { makeTermQuery } from './termquery';
 
@@ -8,12 +11,34 @@ export const DEFAULT_LIMIT = 11;
 axios.defaults.headers.common['Accept'] = 'application/json';
 axios.defaults.headers.common['Content-Type'] = 'application/json';
 
+function handleApiError(error) {
+  const status = error.response.status;
+  if (401 === status) {
+    confirm({
+      title: 'Session Expired',
+      content: 'Your session has expired. Would you like to be redirected to the login page?',
+      warning: true,
+      okLabel: 'Yes',
+      cancelLabel: 'No',
+      apply: [navigate, '/login'],
+    });
+  } else if (404 === status) {
+    store.runSaga(navigate, '/404');
+  } else if (status >= 500) {
+    store.runSaga(navigate, '/500');
+  } else {
+    return Promise.reject(error);
+  }
+}
+
 axios.interceptors.request.use(config => {
   if (token.value && !config.auth) {
     config.headers['Authorization'] = `Bearer ${token.value}`;
   }
   return config;
 });
+
+axios.interceptors.response.use(response => response, handleApiError);
 
 export function login(username, password) {
   return axios

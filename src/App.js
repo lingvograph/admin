@@ -19,11 +19,11 @@ class App extends Component {
       <div>
         <React.Suspense fallback={loading()}>
           <Switch>
-            <Route exact path="/login" name="Login Page" component={Login} />
-            <Route exact path="/register" name="Register Page" component={Register} />
-            <Route exact path="/401" name="Page 401" component={Page401} />
-            <Route exact path="/404" name="Page 404" component={Page404} />
-            <Route exact path="/500" name="Page 500" component={Page500} />
+            <Route exact path="/login" name="login" component={Login} />
+            <Route exact path="/register" name="register" component={Register} />
+            <Route exact path="/401" name="401" component={Page401} />
+            <Route exact path="/404" name="404" component={Page404} />
+            <Route exact path="/500" name="500" component={Page500} />
             <Route path="/" name="Home" component={DefaultLayout} />
           </Switch>
         </React.Suspense>
