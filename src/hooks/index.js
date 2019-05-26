@@ -77,7 +77,7 @@ export function useSearchParams() {
   };
 }
 
-export const useFetchList = (fetchList, makeParams = () => ({}), delay = 0) => {
+export const useFetch = (fn, makeParams = () => ({}), delay = 0) => {
   const location = useLocation();
   const delayTask = useAsyncTaskDelay(delay, [location]);
 
@@ -85,7 +85,9 @@ export const useFetchList = (fetchList, makeParams = () => ({}), delay = 0) => {
     async (abortController, args = {}) => {
       const range = api.paginationParams(location.search);
       const params = makeParams(new URLSearchParams(location.search));
-      const data = await fetchList({ abortController, ...args, ...range, ...params });
+      const route = matchRoute(location);
+      const routeParams = route ? route.params : {};
+      const data = await fn({ abortController, ...args, ...range, ...params, ...routeParams });
       return { ...data, ...range };
     },
     [location],
@@ -94,24 +96,6 @@ export const useFetchList = (fetchList, makeParams = () => ({}), delay = 0) => {
   const combinedTask = useAsyncCombineSeq(delayTask, task);
 
   useAsyncRun(combinedTask);
-
-  return task;
-};
-
-export const useFetchItem = fetchItem => {
-  const location = useLocation();
-
-  const task = useAsyncTask(
-    async (abortController, args = {}) => {
-      const route = matchRoute(location);
-      const params = route ? route.params : {};
-      const data = await fetchItem({ abortController, ...args, ...params });
-      return data;
-    },
-    [location],
-  );
-
-  useAsyncRun(task);
 
   return task;
 };

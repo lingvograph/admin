@@ -1,6 +1,6 @@
 import React from 'react';
 import { Col, Row } from 'reactstrap';
-import { useFetchItem } from 'hooks';
+import { useFetch } from 'hooks';
 import * as api from 'api';
 import Loading from 'components/Loading';
 import DetailsCard from 'components/DetailsCard';
@@ -18,7 +18,7 @@ export const User = ({ user }) => {
 };
 
 export const ConnectedUser = () => {
-  const task = useFetchItem(api.user.get);
+  const task = useFetch(api.user.get);
   if (task.pending) {
     return <Loading />;
   }

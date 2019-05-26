@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Badge, Card, CardBody, CardHeader, CardFooter, Col, Row, Table } from 'reactstrap';
 import * as api from 'api';
-import { useFetchList } from 'hooks';
+import { useFetch } from 'hooks';
 import Loading from 'components/Loading';
 import Pagination from 'components/Pagination';
 import { gravatarURL } from 'utils';
@@ -57,7 +57,7 @@ const UserRow = ({ user }) => {
 };
 
 export const Users = () => {
-  const task = useFetchList(api.user.list);
+  const task = useFetch(api.user.list);
   const result = task.result || {};
   const { items = [], total = 0, limit = api.DEFAULT_LIMIT, page = 1 } = result;
 

@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Card, CardBody, CardHeader, CardFooter, Col, Row, Table } from 'reactstrap';
 import * as api from 'api';
-import { useFetchList } from 'hooks';
+import { useFetch } from 'hooks';
 import Loading from 'components/Loading';
 import Pagination from 'components/Pagination';
 import SearchInput from 'components/SearchInput';
@@ -35,7 +35,7 @@ const makeSearchParams = query => {
 // TODO show previous result
 
 export const Terms = () => {
-  const task = useFetchList(api.term.list, makeSearchParams, 500);
+  const task = useFetch(api.term.list, makeSearchParams, 500);
   const result = task.result || {};
   const { items = [], total = 0, limit = api.DEFAULT_LIMIT, page = 1 } = result;
 
