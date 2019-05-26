@@ -934,14 +934,14 @@
   resolved "https://registry.yarnpkg.com/@coreui/icons/-/icons-0.3.0.tgz#d5bece91b1442a9543593d1146bc8042b18489e3"
   integrity sha512-RbBi5K5hUA8LUI9mM/i1BTaLjlyoS6kHwKbxWsH62+/j9L9WF8gAiJUhrNjMt1br8TY9RLeolyQys0E9480fIg==
 
-"@coreui/react@^2.5.0":
-  version "2.5.0"
-  resolved "https://registry.yarnpkg.com/@coreui/react/-/react-2.5.0.tgz#6f2aa18aab1692291ab8222bead71bc63505a38c"
-  integrity sha512-6/jPUEqAmFv+9fXYindXJgcV3BaVDfTaP9pzR8rIovocR43Y5p5nhmzLqwVT/x//AWmc70OcIgElBVdEq/AMlw==
+"@coreui/react@^2.5.1":
+  version "2.5.1"
+  resolved "https://registry.yarnpkg.com/@coreui/react/-/react-2.5.1.tgz#836517b78f2b971a418b323320e4db6105ea2dae"
+  integrity sha512-10vw0tXdF3/kNogEa6WoKzjpfCM7YTHQHojKU9bkLRF9+Vp+8sXQAeb1YDgGClGOBTQAcDg7wZGLrXFUVj+P0Q==
   dependencies:
     "@coreui/icons" "0.3.0"
     classnames "^2.2.6"
-    core-js "^2.6.5"
+    core-js "^2.6.8"
     prop-types "^15.7.2"
     react-onclickout "^2.0.8"
     react-perfect-scrollbar "^1.5.2"
@@ -2999,6 +2999,11 @@ core-js@^2.4.0, core-js@^2.6.5:
   version "2.6.5"
   resolved "https://registry.yarnpkg.com/core-js/-/core-js-2.6.5.tgz#44bc8d249e7fb2ff5d00e0341a7ffb94fbf67895"
   integrity sha512-klh/kDpwX8hryYL14M9w/xei6vrv6sE8gTHDG7/T/+SEovB/G4ejwcfE/CBzO6Edsu+OETZMZ3wcX/EjUkrl5A==
+
+core-js@^2.6.8:
+  version "2.6.8"
+  resolved "https://registry.yarnpkg.com/core-js/-/core-js-2.6.8.tgz#dc3a1e633a04267944e0cb850d3880f340248139"
+  integrity sha512-RWlREFU74TEkdXzyl1bka66O3kYp8jeTXrvJZDzVVMH8AiHUSOFpL1yfhQJ+wHocAm1m+4971W1PPzfLuCv1vg==
 
 core-js@^3.1.2:
   version "3.1.2"
