@@ -2,14 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { render, unmountComponentAtNode } from 'react-dom';
 import { Modal, ModalHeader, ModalBody, ModalFooter, Button } from 'reactstrap';
 import { call } from 'redux-saga/effects';
-import { useStore } from 'hooks';
 import { isGeneratorFunction } from 'utils';
+import store from '../store';
 
 const Confirm = ({ className, title, content, okLabel, cancelLabel, apply, container }) => {
   const [isOpen, setIsOpen] = useState(true);
   const close = () => setIsOpen(false);
   const toggle = () => setIsOpen(!isOpen);
-  const store = useStore();
 
   const handleOk = () => {
     new Promise(resolve => {
@@ -32,8 +31,12 @@ const Confirm = ({ className, title, content, okLabel, cancelLabel, apply, conta
 
   useEffect(() => {
     return () => {
-      unmountComponentAtNode(container);
-      container.parentNode.removeChild(container);
+      if (container) {
+        unmountComponentAtNode(container);
+      }
+      if (container && container.parentNode) {
+        container.parentNode.removeChild(container);
+      }
     };
   });
 
@@ -57,5 +60,5 @@ const Confirm = ({ className, title, content, okLabel, cancelLabel, apply, conta
 export function confirm(props) {
   const container = document.createElement('div');
   document.body.appendChild(container);
-  render(<Confirm {...props} />, container);
+  render(<Confirm {...props} container={container} />, container);
 }
