@@ -6,7 +6,7 @@ import logo from '../../assets/img/brand/logo.svg';
 import sygnet from '../../assets/img/brand/sygnet.svg';
 import { useCurrentUser } from 'hooks';
 
-const DefaultHeader = () => {
+const DefaultHeader = ({ onLogout }) => {
   const user = useCurrentUser();
   return (
     <React.Fragment>
@@ -34,7 +34,7 @@ const DefaultHeader = () => {
               <i className="fa fa-user" /> Profile
             </DropdownItem>
             <DropdownItem divider />
-            <DropdownItem onClick={e => this.props.onLogout(e)}>
+            <DropdownItem onClick={onLogout}>
               <i className="fa fa-lock" /> Logout
             </DropdownItem>
           </DropdownMenu>
