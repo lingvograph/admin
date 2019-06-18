@@ -15,6 +15,7 @@
     "classnames": "^2.2.6",
     "connected-react-router": "^6.4.0",
     "core-js": "^3.1.4",
+    "custom-event-polyfill": "^1.0.7",
     "flag-icon-css": "^3.3.0",
     "flux-standard-action": "^2.1.0",
     "font-awesome": "^4.7.0",
