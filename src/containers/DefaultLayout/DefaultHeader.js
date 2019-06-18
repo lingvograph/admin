@@ -1,7 +1,7 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-import { DropdownItem, DropdownMenu, DropdownToggle, Nav, NavItem } from 'reactstrap';
-import { AppAsideToggler, AppHeaderDropdown, AppNavbarBrand, AppSidebarToggler } from '@coreui/react';
+import { UncontrolledDropdown, DropdownItem, DropdownMenu, DropdownToggle, Nav, NavItem } from 'reactstrap';
+import { AppAsideToggler, AppNavbarBrand, AppSidebarToggler } from '@coreui/react';
 import logo from '../../assets/img/brand/logo.svg';
 import sygnet from '../../assets/img/brand/sygnet.svg';
 import { useCurrentUser } from 'hooks';
@@ -25,11 +25,11 @@ const DefaultHeader = () => {
         </NavItem>
       </Nav>
       <Nav className="ml-auto" navbar>
-        <AppHeaderDropdown direction="down">
+        <UncontrolledDropdown direction="down">
           <DropdownToggle nav>
             <img src={user.avatar} className="img-avatar" alt={user.email} />
           </DropdownToggle>
-          <DropdownMenu right style={{ right: 'auto' }}>
+          <DropdownMenu right>
             <DropdownItem>
               <i className="fa fa-user" /> Profile
             </DropdownItem>
@@ -38,7 +38,7 @@ const DefaultHeader = () => {
               <i className="fa fa-lock" /> Logout
             </DropdownItem>
           </DropdownMenu>
-        </AppHeaderDropdown>
+        </UncontrolledDropdown>
       </Nav>
       <AppAsideToggler className="d-md-down-none" />
       {/*<AppAsideToggler className="d-lg-none" mobile />*/}
