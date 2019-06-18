@@ -4,6 +4,7 @@ import { confirm } from 'components';
 import { navigate } from 'saga';
 import store from 'store';
 import token from './token';
+import { history } from './history';
 import { makeTermQuery } from './termquery';
 
 export const DEFAULT_LIMIT = 11;
@@ -72,16 +73,27 @@ export function login(username, password) {
 }
 
 function makeCancelConfig(abortController) {
-  if (abortController) {
-    const source = axios.CancelToken.source();
-    abortController.signal.addEventListener('abort', () => {
-      source.cancel('canceled');
+  if (!abortController) {
+    const path = history.location.pathname;
+
+    abortController = new AbortController();
+
+    history.listen(location => {
+      if (location.pathname !== path) {
+        abortController.abort();
+      }
     });
-    return {
-      cancelToken: source.token,
-    };
   }
-  return {};
+
+  const source = axios.CancelToken.source();
+
+  abortController.signal.addEventListener('abort', () => {
+    source.cancel('canceled');
+  });
+
+  return {
+    cancelToken: source.token,
+  };
 }
 
 function makeAxiosConfig(options = {}) {

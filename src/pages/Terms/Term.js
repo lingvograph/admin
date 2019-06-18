@@ -1,6 +1,6 @@
 import React from 'react';
 import { Card, CardBody, CardHeader, Col, Row } from 'reactstrap';
-import { useFetch, useSubmit } from 'hooks';
+import { useFetch, useSaga } from 'hooks';
 import * as api from 'api';
 import Loading from 'components/Loading';
 import FormCard from 'components/FormCard';
@@ -26,7 +26,7 @@ const fields = [
 
 export const Term = () => {
   const task = useFetch(api.term.get);
-  const submit = useSubmit(api.term.update, task);
+  const submit = useSaga(api.term.update);
 
   if (task.pending) {
     return <Loading />;

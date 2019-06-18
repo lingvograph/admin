@@ -1,4 +1,3 @@
-// TODO consider making a PR with customizations
 // borrowed from https://github.com/dai-shi/react-hooks-async/blob/master/src/use-async-task.js
 import { useEffect, useReducer } from 'react';
 
@@ -31,6 +30,7 @@ const reducer = (state, action) => {
       if (!state.pending) return state; // to bail out just in case
       return {
         ...state,
+        started: false,
         pending: false,
         result: action.result,
       };
@@ -38,6 +38,7 @@ const reducer = (state, action) => {
       if (!state.pending) return state; // to bail out just in case
       return {
         ...state,
+        started: false,
         pending: false,
         error: action.error,
       };
@@ -49,19 +50,18 @@ const reducer = (state, action) => {
 export const useAsyncTask = (func, deps) => {
   const [state, dispatch] = useReducer(reducer, initialState);
   useEffect(() => {
-    let dispatchSafe = action => dispatch(action);
     let abortController = null;
     const start = async (...args) => {
       if (abortController) return;
       abortController = new AbortController();
-      dispatchSafe({ type: 'start' });
+      dispatch({ type: 'start' });
       try {
         const result = await func(abortController, ...args);
-        dispatchSafe({ type: 'result', result });
+        dispatch({ type: 'result', result });
         abortController = null;
         return { result };
       } catch (error) {
-        dispatchSafe({ type: 'error', error });
+        dispatch({ type: 'error', error });
         abortController = null;
         return { error };
       }
@@ -72,11 +72,9 @@ export const useAsyncTask = (func, deps) => {
       }
     };
     dispatch({ type: 'ready', start, abort });
-    const cleanup = () => {
-      dispatchSafe = () => null; // avoid to dispatch after stopped
+    return () => {
       dispatch({ type: 'init' });
     };
-    return cleanup;
   }, deps); // eslint-disable-line react-hooks/exhaustive-deps
   return state;
 };

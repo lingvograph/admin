@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Button } from 'reactstrap';
 import FormModal from 'components/FormModal';
-import { useSubmit, useNavigate } from 'hooks';
+import { useNavigate, useSaga } from 'hooks';
 import * as api from 'api';
 
 const fields = [
@@ -22,7 +22,12 @@ const fields = [
 const NewTermModal = () => {
   const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
-  const submit = useSubmit(api.term.create);
+
+  const onResult = result => {
+    navigate({ pathname: `/terms/${result.uid}` });
+  };
+
+  const submit = useSaga(api.term.create, { onResult, norefresh: true });
 
   const toggle = () => setIsOpen(!isOpen);
 
@@ -33,22 +38,10 @@ const NewTermModal = () => {
     text: '',
   };
 
-  const handleResult = result => {
-    navigate({ pathname: `/terms/${result.uid}` });
-  };
-
   return (
     <React.Fragment>
       <Button onClick={toggle}>New Term</Button>
-      <FormModal
-        isOpen={isOpen}
-        toggle={toggle}
-        header={header}
-        fields={fields}
-        data={data}
-        submit={submit}
-        handleResult={handleResult}
-      />
+      <FormModal isOpen={isOpen} toggle={toggle} header={header} fields={fields} data={data} submit={submit} />
     </React.Fragment>
   );
 };

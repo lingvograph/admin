@@ -35,10 +35,11 @@ const Login = () => {
   const username = useField('username');
   const password = useField('password');
   const [error, setError] = useState('');
-  const onLogin = useSaga(login, username.value, password.value, err => {
+  const onError = err => {
     const msg = typeof err === 'string' ? err : err.error || err.error_message || err.message;
     setError(msg);
-  });
+  };
+  const onLogin = useSaga(login, { args: [username.value, password.value, onError] });
   const onSubmit = e => {
     e.preventDefault();
     onLogin();

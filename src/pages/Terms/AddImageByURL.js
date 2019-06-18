@@ -1,19 +1,15 @@
 import React, { useState } from 'react';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Col, FormGroup, FormText, Input } from 'reactstrap';
-import { useSubmit } from 'hooks';
+import { useSaga } from 'hooks';
 import * as api from 'api';
 
-const AddByURL = ({ termId, refreshTask }) => {
+const AddByURL = ({ termId }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [url, setUrl] = useState('');
-  const submit = useSubmit(api.term.addVisualURL, refreshTask);
-
   const toggle = () => setIsOpen(!isOpen);
   const handleChange = e => setUrl(e.target.value);
-  const save = async () => {
-    await submit({ id: termId, url });
-    toggle();
-  };
+  const submit = useSaga(api.term.addVisualURL, { onResult: toggle });
+  const save = () => submit({ id: termId, url });
 
   return (
     <React.Fragment>

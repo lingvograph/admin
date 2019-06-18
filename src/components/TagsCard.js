@@ -1,15 +1,20 @@
 import React, { useState } from 'react';
 import { Col, Card, CardHeader, CardBody, CardFooter, Button } from 'reactstrap';
 import TagsInput from './TagsInput';
-import { useSubmit } from 'hooks';
+import { useSaga } from 'hooks';
 import * as api from 'api';
 
-const TagsCard = ({ id, tags = [], refreshTask }) => {
-  const updateTags = useSubmit(api.tag.updateObjectTags, refreshTask);
-  const [value, setValue] = useState(tags);
+const TagsCard = ({ id, tags = [] }) => {
+  const [oldTags, setOldTags] = useState(tags || []);
+  const [value, setValue] = useState(tags || []);
+  const updateTags = useSaga(api.tag.updateObjectTags, {
+    onResult: () => {
+      setOldTags(value);
+    },
+  });
 
   const submit = () => {
-    const params = { id, oldTags: tags || [], newTags: value };
+    const params = { id, oldTags, newTags: value };
     return updateTags(params);
   };
 

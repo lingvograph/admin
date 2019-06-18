@@ -1,9 +1,7 @@
 import React, { useState } from 'react';
-import { useAsyncRun } from 'react-hooks-async';
 import TagsInput from 'react-tagsinput';
 import Autosuggest from 'react-autosuggest';
-import { useLocation } from 'hooks';
-import useAsyncTask from 'hooks/useAsyncTask';
+import { useFetch } from 'hooks';
 import * as api from 'api';
 import 'scss/react-tagsinput.scss';
 
@@ -65,11 +63,9 @@ const suggestTheme = {
 };
 
 const CustomTagsInput = ({ tags = [], onChange }) => {
-  const location = useLocation();
   const [suggestions, setSuggestions] = useState([]);
-  const fetchAllTags = abortController => api.tag.list({ abortController, page: 1, limit: 100 });
-  const task = useAsyncTask(fetchAllTags, [location]);
-  useAsyncRun(task);
+  const fetchAllTags = ({ abortController }) => api.tag.list({ abortController, page: 1, limit: 100 });
+  const task = useFetch(fetchAllTags);
 
   const allTags = (task.result || {}).items || [];
 

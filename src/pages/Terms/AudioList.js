@@ -1,5 +1,5 @@
 import React from 'react';
-import { ListGroup, ListGroupItem, ListGroupItemText, ButtonGroup, Button, Badge } from 'reactstrap';
+import { ListGroup, ListGroupItem, ButtonGroup, Button, Badge } from 'reactstrap';
 import Moment from 'react-moment';
 
 const source = src => {
@@ -16,22 +16,22 @@ const AudioItem = ({ audio }) => {
 
   return (
     <ListGroupItem className="flex">
-      <ListGroupItemText className="mr-2">
+      <div className="mr-2">
         <Button onClick={play}>
           <i className="fa fa-play-circle fa-lg" />
         </Button>
-      </ListGroupItemText>
-      <ListGroupItemText className="mr-2">
+      </div>
+      <div className="mr-2">
         <Moment date={audio.created_at} fromNow />
-      </ListGroupItemText>
-      <ListGroupItemText className="mr-2">
+      </div>
+      <div className="mr-2">
         <span>by&nbsp;</span>
         <span>{audio.created_by.name || 'system'}</span>
-      </ListGroupItemText>
-      <ListGroupItemText className="mr-2">
+      </div>
+      <div className="mr-2">
         <Badge color="info">{source(audio.url)}</Badge>
-      </ListGroupItemText>
-      <ListGroupItemText className="mr-2">
+      </div>
+      <div className="mr-2">
         <ButtonGroup size="sm">
           <Button outline color="info">
             <i className="fa fa-eye" />
@@ -46,7 +46,7 @@ const AudioItem = ({ audio }) => {
             &nbsp;{audio.dislikes}
           </Button>
         </ButtonGroup>
-      </ListGroupItemText>
+      </div>
     </ListGroupItem>
   );
 };
