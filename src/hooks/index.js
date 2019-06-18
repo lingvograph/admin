@@ -32,7 +32,7 @@ export function useAsyncRun(asyncTask) {
       window.removeEventListener(REFRESH_EVENT, listener);
       abort();
     };
-  }, [start, abort, forceUpdate]);
+  }, [start, abort]);
 }
 
 export function useForceUpdate() {
