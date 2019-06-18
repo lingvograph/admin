@@ -39,25 +39,7 @@ axios.interceptors.request.use(config => {
   return config;
 });
 
-function isEmpty(data) {
-  return _.every(data, (val, key) => {
-    if (Array.isArray(val)) {
-      if (val.length === 1) {
-        if (key === 'count') {
-          return _.every(val[0], t => t === 0);
-        }
-        return _.isEqual(_.keys(val[0]), ['uid']);
-      }
-      return val.length === 0;
-    }
-    return false;
-  });
-}
-
 axios.interceptors.response.use(response => {
-  if (isEmpty(response.data)) {
-    store.runSaga(navigate, '/404');
-  }
   return response;
 }, handleApiError);
 
