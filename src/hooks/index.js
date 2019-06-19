@@ -16,14 +16,12 @@ import useAsyncTask from './useAsyncTask';
 const REFRESH_EVENT = 'refresh';
 
 export function useAsyncRun(asyncTask) {
-  const forceUpdate = useForceUpdate();
   const start = (asyncTask && asyncTask.start) || noop;
   const abort = (asyncTask && asyncTask.abort) || noop;
 
   useEffect(() => {
     const listener = () => {
       start();
-      forceUpdate();
     };
     window.addEventListener(REFRESH_EVENT, listener);
     start();
