@@ -42,7 +42,7 @@ const Confirm = ({ className, title, content, okLabel, cancelLabel, apply, conta
 
   return (
     <Modal isOpen={isOpen} toggle={toggle} className={className}>
-      <ModalHeader toggle={toggle}>{title}</ModalHeader>
+      <ModalHeader toggle={toggle}>{title || 'Confirmation'}</ModalHeader>
       <ModalBody>{content}</ModalBody>
       <ModalFooter>
         <Button color="primary" onClick={handleOk}>

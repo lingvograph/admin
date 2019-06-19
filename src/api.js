@@ -78,11 +78,11 @@ function makeCancelConfig(abortController) {
   };
 }
 
-function makeAxiosConfig(options = {}) {
+function makeAxiosConfig(options = {}, abortable = true) {
   const { abortController, ...axiosConfig } = options;
   return {
     ...axiosConfig,
-    ...makeCancelConfig(abortController),
+    ...(abortable ? makeCancelConfig(abortController) : {}),
   };
 }
 
@@ -99,6 +99,11 @@ export function post(path, data, options = {}) {
 export function put(path, data, options = {}) {
   const config = makeAxiosConfig(options);
   return axios.put(path, data, config).then(resp => resp.data);
+}
+
+export function del(path, options = {}) {
+  const config = makeAxiosConfig(options, false);
+  return axios.delete(path, { ...config });
 }
 
 export function query(queryString, options = {}) {
@@ -243,5 +248,11 @@ export const term = {
     const set = [[id, 'visual', obj.uid]];
     await updateGraph(set, undefined, { abortController });
     return await get(`/api/data/term/${id}`);
+  },
+};
+
+export const file = {
+  delete({ id }) {
+    return del(`/api/file/${id}`);
   },
 };
