@@ -1,5 +1,6 @@
 // borrowed from https://github.com/dai-shi/react-hooks-async/blob/master/src/use-async-task.js
 import { useEffect, useReducer } from 'react';
+import { REFRESH_EVENT } from './useRefresh';
 
 const initialState = {
   started: false,
@@ -119,3 +120,31 @@ export const useAsyncTask = (func, { delay = 0 } = {}, deps = []) => {
 
   return state;
 };
+
+export function useAsyncRun(asyncTask) {
+  useEffect(() => {
+    const start = () => {
+      if (asyncTask && asyncTask.start) {
+        asyncTask.start();
+      }
+    };
+
+    const abort = () => {
+      if (asyncTask && asyncTask.abort) {
+        asyncTask && asyncTask.abort();
+      }
+    };
+
+    const listener = () => {
+      start();
+    };
+
+    window.addEventListener(REFRESH_EVENT, listener);
+    start();
+
+    return () => {
+      window.removeEventListener(REFRESH_EVENT, listener);
+      abort();
+    };
+  }, [asyncTask && asyncTask.start, asyncTask && asyncTask.abort]);
+}

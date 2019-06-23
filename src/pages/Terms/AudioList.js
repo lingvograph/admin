@@ -1,8 +1,10 @@
-import React from 'react';
-import { ListGroup, ListGroupItem, ButtonGroup, Button, Badge } from 'reactstrap';
+import React, { useState } from 'react';
+import { ListGroupItem, ButtonGroup, Button, Badge } from 'reactstrap';
 import Moment from 'react-moment';
+import { FixedSizeList as List } from 'react-window';
+import InfiniteLoader from 'react-window-infinite-loader';
 import { confirm } from 'components/confirm';
-import { useSaga } from 'hooks';
+import { useSaga, useRefresh } from 'hooks';
 import * as api from 'api';
 
 const source = src => {
@@ -11,14 +13,23 @@ const source = src => {
   return host.length >= 3 ? host.slice(1).join('.') : url.host;
 };
 
-const AudioItem = ({ audio, remove }) => {
+const AudioItem = ({ style, term, audio }) => {
+  const deleteAudio = useSaga(api.file.deleteAudio);
+
+  const remove = () => {
+    confirm({
+      content: 'Are you sure you want to delete this audio file?',
+      apply: () => deleteAudio({ termId: term.uid, id: audio.uid }),
+    });
+  };
+
   const play = () => {
     const sound = new Audio(audio.url);
     sound.play();
   };
 
   return (
-    <ListGroupItem className="flex">
+    <ListGroupItem className="flex" style={style}>
       <div className="mr-2">
         <Button onClick={play}>
           <i className="fa fa-play-circle fa-lg" />
@@ -59,18 +70,50 @@ const AudioItem = ({ audio, remove }) => {
   );
 };
 
-const AudioList = ({ term }) => {
-  const deleteAudio = useSaga(api.file.deleteAudio);
-  const items = (term.audio || []).map((a, idx) => {
-    const remove = () => {
-      confirm({
-        content: 'Are you sure you want to delete this audio file?',
-        apply: () => deleteAudio({ termId: term.uid, id: a.uid }),
-      });
-    };
-    return <AudioItem key={idx} audio={a} remove={remove} />;
-  });
-  return <ListGroup>{items}</ListGroup>;
+const InfiniteAudioList = ({ term }) => {
+  const initialData = { items: term.audio, total: term.audioTotal };
+  const [data, setData] = useState(initialData);
+  useRefresh(() => setData(initialData));
+
+  const isItemLoaded = index => index >= 0 && index < data.items.length && !!data.items[index];
+
+  const loadMoreItems = async (startIndex, stopIndex) => {
+    const result = await api.term.getAudio({ id: term.uid, offset: startIndex, limit: stopIndex - startIndex + 1 });
+    const items = data.items.slice();
+    items.length = stopIndex + 1;
+    for (let i = 0; i < result.items.length; i++) {
+      items[startIndex + i] = result.items[i];
+    }
+    setData({ items, total: result.total });
+  };
+
+  return (
+    <InfiniteLoader isItemLoaded={isItemLoaded} itemCount={data.total} loadMoreItems={loadMoreItems}>
+      {({ onItemsRendered, ref }) => (
+        <List
+          className="list-group"
+          height={610}
+          itemCount={data.total}
+          itemSize={61}
+          onItemsRendered={onItemsRendered}
+          ref={ref}
+        >
+          {({ index, style }) => {
+            const audio = data.items[index];
+            if (audio) {
+              return <AudioItem key={index} style={style} term={term} audio={audio} />;
+            } else {
+              return (
+                <div key={index} style={style} className="list-group-item">
+                  Loading....
+                </div>
+              );
+            }
+          }}
+        </List>
+      )}
+    </InfiniteLoader>
+  );
 };
 
-export default AudioList;
+export default InfiniteAudioList;

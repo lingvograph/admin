@@ -5,6 +5,7 @@ const isWord = s => s && s.match(/^\w+$/);
 export function makeTermQuery({ kind = 'termList', termUid, offset = 0, limit = 10, lang, searchString, tags }) {
   const matchFn = termUid ? `uid(${termUid})` : 'has(Term)';
   const isTermList = kind === 'termList';
+  const isTerm = kind === 'term';
 
   function countBy() {
     switch (kind) {
@@ -38,7 +39,7 @@ export function makeTermQuery({ kind = 'termList', termUid, offset = 0, limit = 
   }
 
   const range = `offset: ${offset}, first: ${limit}`;
-  const audioRange = kind === 'audioList' ? `(${range})` : '(first: 1)';
+  const audioRange = kind === 'audioList' ? `(${range})` : '(first: 10)';
   const visualRange = kind === 'visualList' ? `(${range})` : '(first: 10)';
   const termRange = isTermList ? `, ${range}` : '';
 
@@ -49,6 +50,7 @@ export function makeTermQuery({ kind = 'termList', termUid, offset = 0, limit = 
 
   const filterExpr = ['has(Term)', langFilter, tagFilter, searchFilter].filter(s => !!s).join(' and ');
   const termFilter = isTermList ? `@filter(${filterExpr})` : '';
+  const makeTotal = (name, pred) => `${name}: count(${pred})`;
 
   const q = `{
     terms(func: ${matchFn}${termRange}) ${termFilter} {
@@ -107,7 +109,9 @@ export function makeTermQuery({ kind = 'termList', termUid, offset = 0, limit = 
       }
     }
     count(func: ${matchFn}) ${termFilter} {
-      total: count(${countBy()})
+      ${isTerm ? '' : makeTotal('total', countBy())}
+      ${isTerm ? makeTotal('audioTotal', 'audio') : ''}
+      ${isTerm ? makeTotal('visualTotal', 'visual') : ''}
     }
   }`;
   return q;

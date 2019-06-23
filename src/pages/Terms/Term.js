@@ -44,7 +44,7 @@ export const Term = () => {
           <Card>
             <CardHeader>
               <strong>
-                Visual <Badge color="info">{term.visual.length}</Badge>
+                Visual <Badge color="info">{term.visualTotal}</Badge>
               </strong>
               <span className="ml-2">
                 <AddImageByURL termId={term.uid} refreshTask={task} />
@@ -59,7 +59,7 @@ export const Term = () => {
           <Card>
             <CardHeader>
               <strong>
-                Audio <Badge color="info">{term.audio.length}</Badge>
+                Audio <Badge color="info">{term.audioTotal}</Badge>
               </strong>
               <span className="ml-2">
                 <Button size="sm" onClick={() => restoreAudio()}>

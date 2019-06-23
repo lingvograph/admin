@@ -9,37 +9,10 @@ import * as api from 'api';
 import * as selectors from 'selectors';
 import token from 'token';
 import { matchRoute } from 'routes';
-import { useAsyncTask } from './useAsyncTask';
+import { useRefresh, REFRESH_EVENT } from './useRefresh';
+import { useAsyncTask, useAsyncRun } from './useAsyncTask';
 
-const REFRESH_EVENT = 'refresh';
-
-export function useAsyncRun(asyncTask) {
-  useEffect(() => {
-    const start = () => {
-      if (asyncTask && asyncTask.start) {
-        asyncTask.start();
-      }
-    };
-
-    const abort = () => {
-      if (asyncTask && asyncTask.abort) {
-        asyncTask && asyncTask.abort();
-      }
-    };
-
-    const listener = () => {
-      start();
-    };
-
-    window.addEventListener(REFRESH_EVENT, listener);
-    start();
-
-    return () => {
-      window.removeEventListener(REFRESH_EVENT, listener);
-      abort();
-    };
-  }, [asyncTask && asyncTask.start, asyncTask && asyncTask.abort]);
-}
+export { useRefresh };
 
 export function useForceUpdate() {
   const [it, setIt] = useState(false);

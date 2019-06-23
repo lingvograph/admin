@@ -218,14 +218,29 @@ export const term = {
   },
 
   get({ id, abortController }) {
-    const q = makeTermQuery({ kind: 'audioList', termUid: id });
+    const q = makeTermQuery({ kind: 'term', termUid: id });
     return query(q, { abortController }).then(data => {
       const term = data.terms[0];
       if (!term) {
         return null;
       }
-      term.audioTotal = data.count[0].total;
+      term.audioTotal = data.count[0].audioTotal;
+      term.visualTotal = data.count[0].visualTotal;
       return term;
+    });
+  },
+
+  getAudio({ id, abortController, offset = 0, limit = DEFAULT_LIMIT }) {
+    const q = makeTermQuery({ kind: 'audioList', termUid: id, offset, limit });
+    return query(q, { abortController }).then(data => {
+      const term = data.terms[0];
+      if (!term) {
+        return null;
+      }
+      return {
+        items: term.audio,
+        total: data.count[0].total,
+      };
     });
   },
 
