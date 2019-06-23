@@ -26,7 +26,8 @@ function handleApiError(error) {
   } else if (404 === status) {
     store.runSaga(navigate, '/404');
   } else if (status >= 500) {
-    alert(error.response.data);
+    const data = error.response.data;
+    alert(_.isString(data) ? data : data.error);
   } else {
     return Promise.reject(error);
   }
@@ -264,5 +265,31 @@ export const file = {
       throw err;
     }
     await del(`/api/data/file/${id}`);
+  },
+};
+
+export const admin = {
+  searchAudio({ lang, text }) {
+    return get(`/api/pyadmin/search/audio/${decodeURIComponent(text)}`, { lang });
+  },
+  async restoreRemoteAudio({ term, userId }) {
+    const data = await admin.searchAudio({ lang: term.lang, text: term.text });
+    const mp3 = data.mp3.filter(t => !term.audio.some(a => a.url === t.url));
+    const set = [];
+    const now = new Date().toISOString();
+    for (let i = 0; i < mp3.length; i++) {
+      const id = `_:a${i + 1}`;
+      const url = new URL(mp3[i].url);
+      const src = url.hostname;
+      set.push(
+        [id, 'File', '""'],
+        [id, 'created_at', `"${now}"^^<xs:dateTime>`],
+        [id, 'created_by', userId],
+        [id, 'url', `"${mp3[i].url}"`],
+        [id, 'source', `"${src}"`],
+        [term.uid, 'audio', id],
+      );
+    }
+    await updateGraph(set, undefined);
   },
 };
