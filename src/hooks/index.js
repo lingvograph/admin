@@ -1,8 +1,6 @@
 import { noop } from 'lodash';
 import { useContext, useEffect, useState } from 'react';
 import { StoreContext, useDispatch, useMappedState } from 'redux-react-hook';
-import { useAsyncCombineSeq } from 'react-hooks-async';
-import useAsyncTaskDelay from 'react-hooks-async/dist/use-async-task-delay';
 import { push, replace } from 'connected-react-router';
 import qs from 'query-string';
 import { call } from 'redux-saga/effects';
@@ -11,18 +9,28 @@ import * as api from 'api';
 import * as selectors from 'selectors';
 import token from 'token';
 import { matchRoute } from 'routes';
-import useAsyncTask from './useAsyncTask';
+import { useAsyncTask } from './useAsyncTask';
 
 const REFRESH_EVENT = 'refresh';
 
 export function useAsyncRun(asyncTask) {
-  const start = (asyncTask && asyncTask.start) || noop;
-  const abort = (asyncTask && asyncTask.abort) || noop;
-
   useEffect(() => {
+    const start = () => {
+      if (asyncTask && asyncTask.start) {
+        asyncTask.start();
+      }
+    };
+
+    const abort = () => {
+      if (asyncTask && asyncTask.abort) {
+        asyncTask && asyncTask.abort();
+      }
+    };
+
     const listener = () => {
       start();
     };
+
     window.addEventListener(REFRESH_EVENT, listener);
     start();
 
@@ -30,7 +38,7 @@ export function useAsyncRun(asyncTask) {
       window.removeEventListener(REFRESH_EVENT, listener);
       abort();
     };
-  }, [start, abort]);
+  }, [asyncTask && asyncTask.start, asyncTask && asyncTask.abort]);
 }
 
 export function useForceUpdate() {
@@ -122,7 +130,6 @@ export function useSearchParams() {
 
 export const useFetch = (fn, makeParams = () => ({}), delay = 0) => {
   const location = useLocation();
-  const delayTask = useAsyncTaskDelay(delay, [location]);
 
   const task = useAsyncTask(
     async (abortController, args = {}) => {
@@ -133,12 +140,11 @@ export const useFetch = (fn, makeParams = () => ({}), delay = 0) => {
       const data = await fn({ abortController, ...args, ...range, ...params, ...routeParams });
       return { ...data, ...range };
     },
+    { delay },
     [location],
   );
 
-  const combinedTask = useAsyncCombineSeq(delayTask, task);
-
-  useAsyncRun(combinedTask);
+  useAsyncRun(task);
 
   return task;
 };
