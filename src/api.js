@@ -1,5 +1,7 @@
 import _ from 'lodash';
 import * as axios from 'axios';
+import NProgress from 'nprogress';
+import 'nprogress/nprogress.css';
 import { confirm } from 'components';
 import { navigate } from 'saga';
 import store from 'store';
@@ -11,6 +13,13 @@ export const DEFAULT_LIMIT = 11;
 
 axios.defaults.headers.common['Accept'] = 'application/json';
 axios.defaults.headers.common['Content-Type'] = 'application/json';
+
+const calculatePercentage = (loaded, total) => Math.floor(loaded * 1.0) / total;
+
+axios.defaults.onDownloadProgress = e => {
+  const percentage = calculatePercentage(e.loaded, e.total);
+  NProgress.set(percentage);
+};
 
 function handleApiError(error) {
   const status = error.response.status;
@@ -41,6 +50,7 @@ axios.interceptors.request.use(config => {
 });
 
 axios.interceptors.response.use(response => {
+  NProgress.done(true);
   return response;
 }, handleApiError);
 
