@@ -1,8 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Card, CardBody, CardHeader, CardFooter, Col, Row, Table } from 'reactstrap';
+import { Card, CardBody, CardHeader, CardFooter, Col, Row, Table, Button } from 'reactstrap';
 import * as api from 'api';
-import { useFetch } from 'hooks';
+import { useFetch, useSearchParams } from 'hooks';
 import Loading from 'components/Loading';
 import Pagination from 'components/Pagination';
 import SearchInput from 'components/SearchInput';
@@ -17,7 +17,7 @@ const TermRow = ({ term }) => {
     <tr key={term.uid}>
       <td>{term.lang}</td>
       <td>
-        <Link to={termLink}>{term.text}</Link>
+        <Link to={termLink}>{term.text || term.uid}</Link>
       </td>
       <td>{term.created_at}</td>
     </tr>
@@ -29,6 +29,7 @@ const makeSearchParams = query => {
     lang: query.get('lang'),
     searchString: query.get('searchString'),
     tags: parseTags(query.get('tags')),
+    onlyTags: query.get('onlyTags') === 'true',
   };
 };
 
@@ -36,8 +37,17 @@ const makeSearchParams = query => {
 
 export const Terms = () => {
   const task = useFetch(api.term.list, makeSearchParams, 500);
+  const { params, replaceParam } = useSearchParams(makeSearchParams);
   const result = task.result || {};
   const { items = [], total = 0, limit = api.DEFAULT_LIMIT, page = 1 } = result;
+
+  const toggleOnlyTags = () => {
+    if (params.onlyTags) {
+      replaceParam('onlyTags', '');
+    } else {
+      replaceParam('onlyTags', 'true');
+    }
+  };
 
   const rows = task.pending ? (
     <tr>
@@ -64,6 +74,11 @@ export const Terms = () => {
               </div>
               <div style={{ display: 'inline-block', width: 500, marginLeft: 50 }}>
                 <TagsFilter />
+              </div>
+              <div style={{ display: 'inline-block', marginLeft: 10 }}>
+                <Button color="info" active={params.onlyTags} onClick={toggleOnlyTags}>
+                  Only Tags
+                </Button>
               </div>
               <div style={{ display: 'inline-block', marginLeft: 50 }}>
                 <NewTermModal />

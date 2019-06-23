@@ -2,10 +2,21 @@ import _ from 'lodash';
 
 const isWord = s => s && s.match(/^\w+$/);
 
-export function makeTermQuery({ kind = 'termList', termUid, offset = 0, limit = 10, lang, searchString, tags }) {
-  const matchFn = termUid ? `uid(${termUid})` : 'has(Term)';
+export function makeTermQuery({
+  kind = 'termList',
+  termUid,
+  offset = 0,
+  limit = 10,
+  lang,
+  searchString,
+  tags,
+  onlyTags = false,
+}) {
+  const hasTermType = 'has(Term)';
+  const matchFn = termUid ? `uid(${termUid})` : hasTermType;
   const isTermList = kind === 'termList';
   const isTerm = kind === 'term';
+  const hasTagType = isTermList && onlyTags ? 'has(Tag)' : '';
 
   function countBy() {
     switch (kind) {
@@ -48,7 +59,7 @@ export function makeTermQuery({ kind = 'termList', termUid, offset = 0, limit = 
   const langFilter = lang ? `eq(lang, "${lang}")` : '';
   const tagFilter = !_.isEmpty(tags) ? brace(tags.map(t => `uid_in(tag, ${t.uid})`).join(' or ')) : '';
 
-  const filterExpr = ['has(Term)', langFilter, tagFilter, searchFilter].filter(s => !!s).join(' and ');
+  const filterExpr = [hasTermType, hasTagType, langFilter, tagFilter, searchFilter].filter(s => !!s).join(' and ');
   const termFilter = isTermList ? `@filter(${filterExpr})` : '';
   const makeTotal = (name, pred) => `${name}: count(${pred})`;
 

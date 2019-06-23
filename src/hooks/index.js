@@ -1,4 +1,4 @@
-import { noop } from 'lodash';
+import { noop, identity } from 'lodash';
 import { useContext, useEffect, useState } from 'react';
 import { StoreContext, useDispatch, useMappedState } from 'redux-react-hook';
 import { push, replace } from 'connected-react-router';
@@ -73,7 +73,7 @@ export function useNavigate(useReplace) {
   };
 }
 
-export function useSearchParams() {
+export function useSearchParams(parseParams = identity) {
   const location = useLocation();
   const dispatch = useDispatch();
   const params = new URLSearchParams(location.search);
@@ -88,7 +88,7 @@ export function useSearchParams() {
   return {
     location,
     dispatch,
-    params,
+    params: parseParams(params),
     replaceParams,
     replaceParam(name, value) {
       if (value) {
