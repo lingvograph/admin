@@ -27,7 +27,7 @@ const DefaultHeader = ({ onLogout }) => {
       <Nav className="ml-auto" navbar>
         <UncontrolledDropdown direction="down">
           <DropdownToggle nav>
-            <img src={user.avatar} className="img-avatar" alt={user.email} />
+            <img src={user.avatar} className="img-avatar" alt={user.email} style={{ height: 35 }} />
           </DropdownToggle>
           <DropdownMenu right>
             <DropdownItem>
