@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import classNames from 'classnames';
 import TagsInput from 'react-tagsinput';
 import Autosuggest from 'react-autosuggest';
 import { useFetch } from 'hooks';
@@ -66,6 +67,11 @@ const CustomTagsInput = ({ tags = [], onChange }) => {
   const [suggestions, setSuggestions] = useState([]);
   const fetchAllTags = ({ abortController }) => api.tag.list({ abortController, page: 1, limit: 100 });
   const task = useFetch(fetchAllTags);
+  const readOnly = !onChange;
+  const placeholder = readOnly ? '' : 'Add a tag';
+  const className = classNames('react-tagsinput', {
+    'react-tagsinput--readonly': readOnly,
+  });
 
   const allTags = (task.result || {}).items || [];
 
@@ -96,7 +102,7 @@ const CustomTagsInput = ({ tags = [], onChange }) => {
         shouldRenderSuggestions={() => true}
         getSuggestionValue={t => t[labelKey] || t.uid}
         renderSuggestion={t => <span>{t[labelKey] || t.uid}</span>}
-        inputProps={{ ...props, onChange: handleOnChange }}
+        inputProps={{ ...props, onChange: handleOnChange, readOnly, placeholder }}
         onSuggestionSelected={(e, { suggestion }) => {
           addTag(suggestion[labelKey]);
         }}
@@ -118,7 +124,7 @@ const CustomTagsInput = ({ tags = [], onChange }) => {
 
   const value = tags.map(t => t[labelKey]);
 
-  return <TagsInput renderInput={renderAutocomplete} value={value} onChange={handleChange} />;
+  return <TagsInput className={className} renderInput={renderAutocomplete} value={value} onChange={handleChange} />;
 };
 
 export default CustomTagsInput;

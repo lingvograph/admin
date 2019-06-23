@@ -1,11 +1,13 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Card, CardBody, CardHeader, CardFooter, Col, Row, Table, Button } from 'reactstrap';
+import Moment from 'react-moment';
 import * as api from 'api';
 import { useFetch, useSearchParams } from 'hooks';
 import Loading from 'components/Loading';
 import Pagination from 'components/Pagination';
 import SearchInput from 'components/SearchInput';
+import TagsInput from 'components/TagsInput';
 import LangFilter from './LangFilter';
 import TagsFilter, { parseTags } from './TagsFilter';
 import NewTermModal from './NewTermModal';
@@ -19,7 +21,17 @@ const TermRow = ({ term }) => {
       <td>
         <Link to={termLink}>{term.text || term.uid}</Link>
       </td>
-      <td>{term.created_at}</td>
+      <td>
+        <div style={{ display: 'inline-block', minWidth: 100, maxWidth: 300 }}>
+          <TagsInput tags={term.tag} />
+        </div>
+      </td>
+      <td>
+        <Moment date={term.created_at} fromNow />
+      </td>
+      <td>
+        <span>{term.created_by.name || 'system'}</span>
+      </td>
     </tr>
   );
 };
@@ -90,7 +102,9 @@ export const Terms = () => {
                   <tr>
                     <th scope="col">lang</th>
                     <th scope="col">text</th>
-                    <th scope="col">created</th>
+                    <th scope="col">tags</th>
+                    <th scope="col">created at</th>
+                    <th scope="col">created by</th>
                   </tr>
                 </thead>
                 <tbody>{rows}</tbody>

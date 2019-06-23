@@ -70,6 +70,11 @@ export function makeTermQuery({
       lang
       transcript@ru
       transcript@en
+      created_at
+      created_by {
+        uid
+        name
+      }
       tag {
         uid
         text
