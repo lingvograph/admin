@@ -92,7 +92,7 @@ const InfiniteAudioList = ({ term }) => {
       {({ onItemsRendered, ref }) => (
         <List
           className="list-group"
-          height={610}
+          height={61 * Math.max(3, Math.min(10, data.total))}
           itemCount={data.total}
           itemSize={61}
           onItemsRendered={onItemsRendered}
