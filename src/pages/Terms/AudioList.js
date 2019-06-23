@@ -60,12 +60,12 @@ const AudioItem = ({ audio, remove }) => {
 };
 
 const AudioList = ({ term }) => {
-  const deleteAudio = useSaga(api.file.delete);
+  const deleteAudio = useSaga(api.file.deleteAudio);
   const items = (term.audio || []).map((a, idx) => {
     const remove = () => {
       confirm({
         content: 'Are you sure you want to delete this audio file?',
-        apply: () => deleteAudio({ id: a.uid }),
+        apply: () => deleteAudio({ termId: term.uid, id: a.uid }),
       });
     };
     return <AudioItem key={idx} audio={a} remove={remove} />;

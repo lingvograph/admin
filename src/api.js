@@ -26,7 +26,7 @@ function handleApiError(error) {
   } else if (404 === status) {
     store.runSaga(navigate, '/404');
   } else if (status >= 500) {
-    store.runSaga(navigate, '/500');
+    alert(error.response.data);
   } else {
     return Promise.reject(error);
   }
@@ -149,7 +149,7 @@ function formatNquads(value) {
   return value.map(formatNquad).join('\n');
 }
 
-export function updateGraph(set, del, options = {}) {
+export function updateGraph(set, del, options = {}, abortable = true) {
   const data = {
     set: formatNquads(set),
     delete: formatNquads(del),
@@ -157,7 +157,7 @@ export function updateGraph(set, del, options = {}) {
   if (!data.set && !data.delete) {
     throw new Error('please specify set or delete mutations');
   }
-  const config = makeAxiosConfig(options);
+  const config = makeAxiosConfig(options, abortable);
   return axios.post('/api/nquads', data, config).then(resp => resp.data);
 }
 
@@ -253,6 +253,16 @@ export const term = {
 
 export const file = {
   delete({ id }) {
-    return del(`/api/file/${id}`);
+    return del(`/api/data/file/${id}`);
+  },
+  async deleteAudio({ termId, id }) {
+    try {
+      // unlink audio
+      const unlink = [termId, 'audio', id];
+      await updateGraph(undefined, [unlink], {}, false);
+    } catch (err) {
+      throw err;
+    }
+    await del(`/api/data/file/${id}`);
   },
 };
