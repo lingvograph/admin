@@ -281,6 +281,10 @@ export const file = {
     }
     await del(`/api/data/file/${id}`);
   },
+  unlinkVisual({ termId, visual }) {
+    const unlink = visual.map(t => [termId, 'visual', t.uid]);
+    return updateGraph(undefined, unlink, {}, false);
+  },
 };
 
 export const admin = {

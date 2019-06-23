@@ -95,6 +95,7 @@ export function makeTermQuery({ kind = 'termList', termUid, offset = 0, limit = 
         }
       }
       visual ${visualRange} {
+        uid
         url
         source
         content_type

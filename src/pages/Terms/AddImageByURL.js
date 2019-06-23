@@ -13,7 +13,9 @@ const AddByURL = ({ termId }) => {
 
   return (
     <React.Fragment>
-      <Button onClick={toggle}>Add by URL</Button>
+      <Button size="sm" onClick={toggle}>
+        Add by URL
+      </Button>
       <Modal className="modal-lg" isOpen={isOpen} toggle={toggle}>
         <ModalHeader>Add by URL</ModalHeader>
         <ModalBody>
