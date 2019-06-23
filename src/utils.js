@@ -28,3 +28,29 @@ export function isGeneratorFunction(obj) {
   }
   return isGenerator(constructor.prototype);
 }
+
+const createAbortError = message => {
+  try {
+    return new DOMException(message, 'AbortError');
+  } catch (e) {
+    const err = new Error(message);
+    err.name = 'AbortError';
+    return err;
+  }
+};
+
+export function delay(milliSeconds, abortController = undefined) {
+  return new Promise((resolve, reject) => {
+    const id = setTimeout(() => {
+      resolve(true);
+    }, milliSeconds);
+    if (abortController) {
+      const listener = () => {
+        abortController.signal.removeEventListener('abort', listener);
+        clearTimeout(id);
+        reject(createAbortError('timer aborted'));
+      };
+      abortController.signal.addEventListener('abort', listener);
+    }
+  });
+}

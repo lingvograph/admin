@@ -2,8 +2,9 @@ import React, { useState } from 'react';
 import classNames from 'classnames';
 import TagsInput from 'react-tagsinput';
 import Autosuggest from 'react-autosuggest';
-import { useFetch } from 'hooks';
+import { useCache, useFetch } from 'hooks';
 import * as api from 'api';
+import { delay } from 'utils';
 import 'scss/react-tagsinput.scss';
 
 // https://developer.mozilla.org/en/docs/Web/JavaScript/Guide/Regular_Expressions#Using_Special_Characters
@@ -66,7 +67,18 @@ const suggestTheme = {
 const CustomTagsInput = ({ tags = [], onChange }) => {
   const [suggestions, setSuggestions] = useState([]);
   const fetchAllTags = ({ abortController }) => api.tag.list({ abortController, page: 1, limit: 100 });
-  const task = useFetch(fetchAllTags);
+
+  const cache = useCache('tags');
+  const task = useFetch(async (...args) => {
+    if (cache()) {
+      return cache();
+    }
+    await delay(100);
+    const result = await fetchAllTags(...args);
+    cache(result);
+    return result;
+  });
+
   const readOnly = !onChange;
   const placeholder = readOnly ? '' : 'Add a tag';
   const className = classNames('react-tagsinput', {

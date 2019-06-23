@@ -1,6 +1,7 @@
 // borrowed from https://github.com/dai-shi/react-hooks-async/blob/master/src/use-async-task.js
 import { useEffect, useReducer } from 'react';
 import { REFRESH_EVENT } from './useRefresh';
+import { delay as delayPromise } from 'utils';
 
 const initialState = {
   started: false,
@@ -56,36 +57,8 @@ const reducer = (state, action) => {
   }
 };
 
-const createAbortError = message => {
-  try {
-    return new DOMException(message, 'AbortError');
-  } catch (e) {
-    const err = new Error(message);
-    err.name = 'AbortError';
-    return err;
-  }
-};
-
-function makeDelayFn(milliSeconds) {
-  if (milliSeconds <= 0) {
-    return () => new Promise(resolve => resolve(true));
-  }
-  return abortController =>
-    new Promise((resolve, reject) => {
-      const id = setTimeout(() => {
-        resolve(true);
-      }, milliSeconds);
-      abortController.signal.addEventListener('abort', () => {
-        clearTimeout(id);
-        reject(createAbortError('timer aborted'));
-      });
-    });
-}
-
 export const useAsyncTask = (func, { delay = 0 } = {}, deps = []) => {
   const [state, dispatch] = useReducer(reducer, initialState);
-
-  const delayFn = makeDelayFn(delay);
 
   const start = async (...args) => {
     if (state.started) {
@@ -94,7 +67,7 @@ export const useAsyncTask = (func, { delay = 0 } = {}, deps = []) => {
     const abortController = new AbortController();
     dispatch({ type: 'start', abortController });
     try {
-      await delayFn(abortController);
+      await delayPromise(delay, abortController);
       const result = await func(abortController, ...args);
       dispatch({ type: 'result', result });
       return { result };

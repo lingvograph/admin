@@ -6,6 +6,7 @@ import qs from 'query-string';
 import { call } from 'redux-saga/effects';
 
 import * as api from 'api';
+import { setCache } from 'actions';
 import * as selectors from 'selectors';
 import token from 'token';
 import { matchRoute } from 'routes';
@@ -13,6 +14,19 @@ import { useRefresh, REFRESH_EVENT } from './useRefresh';
 import { useAsyncTask, useAsyncRun } from './useAsyncTask';
 
 export { useRefresh };
+
+export function useCache(key) {
+  const { cache } = useMappedState(selectors.cacheState);
+  const dispatch = useDispatch();
+  useRefresh(() => dispatch(setCache({ key, value: undefined })));
+  return newValue => {
+    if (newValue !== undefined) {
+      dispatch(setCache({ key, value: newValue }));
+      return newValue;
+    }
+    return cache.get(key);
+  };
+}
 
 export function useForceUpdate() {
   const [it, setIt] = useState(false);

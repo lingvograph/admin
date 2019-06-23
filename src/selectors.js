@@ -15,6 +15,11 @@ export const currentUser = createSelector(
   currentUser => ({ currentUser }),
 );
 
+export const cacheState = createSelector(
+  state => state.common.cache,
+  cache => ({ cache }),
+);
+
 export const isLoggedIn = createSelector(
   state => !!state.common.currentUser,
   isLoggedIn => ({ isLoggedIn }),
