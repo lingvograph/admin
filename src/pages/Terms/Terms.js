@@ -112,7 +112,6 @@ export const Terms = () => {
             </CardBody>
             <CardFooter className="flex-center">
               <Pagination page={page} total={total} limit={limit} />
-              <div className="ml-2">Total: {total}</div>
             </CardFooter>
           </Card>
         </Col>
