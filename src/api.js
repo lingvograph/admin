@@ -111,9 +111,9 @@ export function del(path, options = {}) {
   return axios.delete(path, { ...config });
 }
 
-export function query(queryString, options = {}) {
+export function query(queryString, params = {}, options = {}) {
   const config = makeAxiosConfig(options);
-  return axios.post('/api/query', queryString, config).then(resp => resp.data);
+  return axios.post('/api/query', queryString, { params, ...config }).then(resp => resp.data);
 }
 
 function formatNquad(value) {
@@ -223,20 +223,19 @@ export const term = {
 
   get({ id, abortController }) {
     const q = makeTermQuery({ kind: 'term', termUid: id });
-    return query(q, { abortController }).then(data => {
+    return query(q.text, q.params, { abortController }).then(data => {
       const term = data.terms[0];
       if (!term) {
         return null;
       }
-      term.audioTotal = data.count[0].audioTotal;
-      term.visualTotal = data.count[0].visualTotal;
+      Object.assign(term, data.count[0]);
       return term;
     });
   },
 
   getAudio({ id, abortController, offset = 0, limit = DEFAULT_LIMIT }) {
     const q = makeTermQuery({ kind: 'audioList', termUid: id, offset, limit });
-    return query(q, { abortController }).then(data => {
+    return query(q.text, q.params, { abortController }).then(data => {
       const term = data.terms[0];
       if (!term) {
         return null;
@@ -251,7 +250,7 @@ export const term = {
   list({ abortController, page = 1, limit = DEFAULT_LIMIT, lang, searchString, tags, onlyTags = false }) {
     const offset = (page - 1) * limit;
     const q = makeTermQuery({ offset, limit, lang, searchString, tags, onlyTags });
-    return query(q, { abortController }).then(data => ({
+    return query(q.text, q.params, { abortController }).then(data => ({
       items: data.terms,
       total: data.count[0].total,
       page,
@@ -268,6 +267,11 @@ export const term = {
     const set = [[id, 'visual', obj.uid]];
     await updateGraph(set, undefined, { abortController });
     return await get(`/api/data/term/${id}`);
+  },
+
+  unlinkTranslation({ termId, id }) {
+    const unlink = [termId, 'translated_as', id];
+    return updateGraph(undefined, [unlink], {}, false);
   },
 };
 

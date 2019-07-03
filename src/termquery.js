@@ -1,6 +1,6 @@
 import _ from 'lodash';
 
-const isWord = s => s && s.match(/^\w+$/);
+const isWord = s => s && s.match(/^[^\s]+$/);
 
 export function makeTermQuery({
   kind = 'termList',
@@ -17,6 +17,7 @@ export function makeTermQuery({
   const isTermList = kind === 'termList';
   const isTerm = kind === 'term';
   const hasTagType = isTermList && onlyTags ? 'has(Tag)' : '';
+  const params = {};
 
   function countBy() {
     switch (kind) {
@@ -40,8 +41,16 @@ export function makeTermQuery({
     }
 
     // too small word fails with 'regular expression is too wide-ranging and can't be executed efficiently'
-    const regexp = isWord(str) && str.length >= 3 ? `regexp(text, /${str}.*/i)` : '';
-    const anyoftext = `anyoftext(text, "${str}")`;
+    const useRegexp = isWord(str) && str.length >= 3;
+
+    params.$searchString = str;
+
+    if (useRegexp) {
+      params.$regexp = `${str}.*`;
+    }
+
+    const regexp = useRegexp ? `regexp(text, /$regexp/i)` : '';
+    const anyoftext = `anyoftext(text, $searchString)`;
     const exprs = [anyoftext, regexp].filter(s => !!s);
     if (exprs.length > 1) {
       return `(${exprs.join(' or ')})`;
@@ -52,6 +61,7 @@ export function makeTermQuery({
   const range = `offset: ${offset}, first: ${limit}`;
   const audioRange = kind === 'audioList' ? `(${range})` : '(first: 10)';
   const visualRange = kind === 'visualList' ? `(${range})` : '(first: 10)';
+  const translateRange = kind === 'translationList' ? `(${range})` : '(first: 10)';
   const termRange = isTermList ? `, ${range}` : '';
 
   const brace = s => `(${s})`;
@@ -62,8 +72,12 @@ export function makeTermQuery({
   const filterExpr = [hasTermType, hasTagType, langFilter, tagFilter, searchFilter].filter(s => !!s).join(' and ');
   const termFilter = isTermList ? `@filter(${filterExpr})` : '';
   const makeTotal = (name, pred) => `${name}: count(${pred})`;
+  const args = _.keys(params)
+    .map(k => `${k}: string`)
+    .join();
+  const paramQuery = args ? `query terms(${args}) ` : '';
 
-  const q = `{
+  const text = `${paramQuery}{
     terms(func: ${matchFn}${termRange}) ${termFilter} {
       uid
       text
@@ -82,12 +96,17 @@ export function makeTermQuery({
         transcript@ru
         transcript@en
       }
-      translated_as {
+      translated_as ${translateRange} {
         uid
         text
         lang
         transcript@ru
         transcript@en
+        created_at
+        created_by {
+          uid
+          name
+        }
         tag {
           uid
           text
@@ -129,7 +148,11 @@ export function makeTermQuery({
       ${isTerm ? '' : makeTotal('total', countBy())}
       ${isTerm ? makeTotal('audioTotal', 'audio') : ''}
       ${isTerm ? makeTotal('visualTotal', 'visual') : ''}
+      ${isTerm ? makeTotal('translationTotal', 'translated_as') : ''}
     }
   }`;
-  return q;
+  return {
+    text: text.replace(/^\s*[\r\n]/gm, ''),
+    params,
+  };
 }

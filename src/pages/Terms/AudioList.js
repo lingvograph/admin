@@ -1,10 +1,9 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { ListGroupItem, ButtonGroup, Button, Badge } from 'reactstrap';
 import Moment from 'react-moment';
-import { FixedSizeList as List } from 'react-window';
-import InfiniteLoader from 'react-window-infinite-loader';
 import { confirm } from 'components/confirm';
-import { useSaga, useRefresh } from 'hooks';
+import InfiniteList from 'components/InfiniteList';
+import { useSaga } from 'hooks';
 import * as api from 'api';
 
 const source = src => {
@@ -70,50 +69,21 @@ const AudioItem = ({ style, term, audio }) => {
   );
 };
 
-const InfiniteAudioList = ({ term }) => {
+const AudioList = ({ term }) => {
   const initialData = { items: term.audio, total: term.audioTotal };
-  const [data, setData] = useState(initialData);
-  useRefresh(() => setData(initialData));
-
-  const isItemLoaded = index => index >= 0 && index < data.items.length && !!data.items[index];
-
-  const loadMoreItems = async (startIndex, stopIndex) => {
-    const result = await api.term.getAudio({ id: term.uid, offset: startIndex, limit: stopIndex - startIndex + 1 });
-    const items = data.items.slice();
-    items.length = stopIndex + 1;
-    for (let i = 0; i < result.items.length; i++) {
-      items[startIndex + i] = result.items[i];
-    }
-    setData({ items, total: result.total });
-  };
+  const loadMoreItems = ({ offset, limit }) => api.term.getAudio({ id: term.uid, offset, limit });
 
   return (
-    <InfiniteLoader isItemLoaded={isItemLoaded} itemCount={data.total} loadMoreItems={loadMoreItems}>
-      {({ onItemsRendered, ref }) => (
-        <List
-          className="list-group"
-          height={61 * Math.max(3, Math.min(10, data.total))}
-          itemCount={data.total}
-          itemSize={61}
-          onItemsRendered={onItemsRendered}
-          ref={ref}
-        >
-          {({ index, style }) => {
-            const audio = data.items[index];
-            if (audio) {
-              return <AudioItem key={index} style={style} term={term} audio={audio} />;
-            } else {
-              return (
-                <div key={index} style={style} className="list-group-item">
-                  Loading....
-                </div>
-              );
-            }
-          }}
-        </List>
-      )}
-    </InfiniteLoader>
+    <InfiniteList
+      className="list-group"
+      data={initialData}
+      loadMoreItems={loadMoreItems}
+      itemSize={61}
+      height={total => 61 * Math.max(3, Math.min(10, total))}
+    >
+      {({ item, index, style }) => <AudioItem key={index} style={style} term={term} audio={item} />}
+    </InfiniteList>
   );
 };
 
-export default InfiniteAudioList;
+export default AudioList;

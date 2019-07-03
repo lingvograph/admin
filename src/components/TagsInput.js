@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import classNames from 'classnames';
 import TagsInput from 'react-tagsinput';
-import Autosuggest from 'react-autosuggest';
+import Autosuggest from './Autosuggest';
 import { useCache, useFetch } from 'hooks';
 import * as api from 'api';
 import { delay } from 'utils';
@@ -13,56 +13,6 @@ function escapeRegexCharacters(str) {
 }
 
 const labelKey = 'text';
-
-const suggestTheme = {
-  container: {
-    display: 'inline-block',
-    position: 'relative',
-  },
-  input: {
-    width: 240,
-    height: 30,
-    //fontFamily: 'Helvetica, sans-serif',
-    fontWeight: 300,
-    //fontSize: 16,
-  },
-  inputFocused: {
-    outline: 'none',
-  },
-  inputOpen: {
-    borderBottomLeftRadius: 0,
-    borderBottomRightRadius: 0,
-  },
-  suggestionsContainer: {
-    display: 'none',
-  },
-  suggestionsContainerOpen: {
-    display: 'block',
-    position: 'absolute',
-    top: 32,
-    width: 280,
-    border: '1px solid #aaa',
-    backgroundColor: '#fff',
-    //fontFamily: 'Helvetica, sans-serif',
-    fontWeight: 300,
-    //fontSize: 16,
-    borderBottomLeftRadius: 4,
-    borderBottomRightRadius: 4,
-    zIndex: 100,
-  },
-  suggestionsList: {
-    margin: 0,
-    padding: 0,
-    listStyleType: 'none',
-  },
-  suggestion: {
-    cursor: 'pointer',
-    padding: '10px 20px',
-  },
-  suggestionHighlighted: {
-    backgroundColor: '#ddd',
-  },
-};
 
 const CustomTagsInput = ({ tags = [], onChange }) => {
   const [suggestions, setSuggestions] = useState([]);
@@ -99,7 +49,7 @@ const CustomTagsInput = ({ tags = [], onChange }) => {
   }
 
   const renderAutocomplete = ({ addTag, ...props }) => {
-    const handleOnChange = (e, { newValue, method }) => {
+    const handleChange = (e, { newValue, method }) => {
       if (method === 'enter') {
         e.preventDefault();
       } else {
@@ -109,12 +59,10 @@ const CustomTagsInput = ({ tags = [], onChange }) => {
 
     return (
       <Autosuggest
-        ref={props.ref}
         suggestions={suggestions}
-        shouldRenderSuggestions={() => true}
         getSuggestionValue={t => t[labelKey] || t.uid}
         renderSuggestion={t => <span>{t[labelKey] || t.uid}</span>}
-        inputProps={{ ...props, onChange: handleOnChange, readOnly, placeholder }}
+        inputProps={{ ...props, onChange: handleChange, readOnly, placeholder }}
         onSuggestionSelected={(e, { suggestion }) => {
           addTag(suggestion[labelKey]);
         }}
@@ -124,7 +72,6 @@ const CustomTagsInput = ({ tags = [], onChange }) => {
         onSuggestionsFetchRequested={({ value }) => {
           setSuggestions(getSuggestions(value));
         }}
-        theme={suggestTheme}
       />
     );
   };
