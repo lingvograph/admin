@@ -6,6 +6,7 @@ import { useFetch } from 'hooks';
 import Loading from 'components/Loading';
 import Pagination from 'components/Pagination';
 import { gravatarURL } from 'utils';
+import Moment from 'react-moment';
 
 const UserRow = ({ user }) => {
   const userLink = `/users/${user.uid}`;
@@ -45,7 +46,7 @@ const UserRow = ({ user }) => {
         </Link>
       </td>
       <td>{user.email}</td>
-      <td>{user.registered_at}</td>
+      <td>{user.registered_at ? <Moment date={user.registered_at} fromNow /> : null}</td>
       <td>{user.role}</td>
       <td>
         <Link to={userLink}>
