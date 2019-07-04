@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { FixedSizeList as List } from 'react-window';
 import InfiniteLoader from 'react-window-infinite-loader';
 import { useRefresh } from 'hooks';
@@ -13,7 +13,15 @@ const InfiniteList = ({
   ...listProps
 }) => {
   const [data, setData] = useState(initialData);
-  useRefresh(() => setData(initialData));
+
+  useEffect(() => {
+    // TODO optimization: consider merging items
+    setData(initialData);
+  }, [initialData]);
+
+  useRefresh(() => {
+    setData(initialData);
+  });
 
   const isItemLoaded = index => index >= 0 && index < data.items.length && !!data.items[index];
 
