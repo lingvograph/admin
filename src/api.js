@@ -273,6 +273,11 @@ export const term = {
     const unlink = [termId, 'translated_as', id];
     return updateGraph(undefined, [unlink], {}, false);
   },
+
+  linkTranslation({ termId, id }) {
+    const link = [termId, 'translated_as', id];
+    return updateGraph([link], undefined, {}, false);
+  },
 };
 
 export const file = {
@@ -300,8 +305,9 @@ export const admin = {
     return get(`/api/pyadmin/search/audio/${decodeURIComponent(text)}`, { lang });
   },
   async restoreRemoteAudio({ term, userId }) {
+    const currentUrls = new Set(_.map(term.audio, t => t.url));
     const data = await admin.searchAudio({ lang: term.lang, text: term.text });
-    const mp3 = data.mp3.filter(t => !term.audio.some(a => a.url === t.url));
+    const mp3 = data.mp3.filter(t => !currentUrls.has(t.url));
     const set = [];
     const now = new Date().toISOString();
     for (let i = 0; i < mp3.length; i++) {

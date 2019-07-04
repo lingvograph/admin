@@ -1,10 +1,11 @@
 import React from 'react';
-import { ListGroupItem, ButtonGroup, Button } from 'reactstrap';
+import { ListGroupItem, Button } from 'reactstrap';
 import Moment from 'react-moment';
 import { confirm } from 'components/confirm';
 import InfiniteList from 'components/InfiniteList';
 import { useSaga } from 'hooks';
 import * as api from 'api';
+import { Link } from 'react-router-dom';
 
 const TranslationItem = ({ style, parent, item }) => {
   const unlinkTranslation = useSaga(api.term.unlinkTranslation);
@@ -19,7 +20,9 @@ const TranslationItem = ({ style, parent, item }) => {
   return (
     <ListGroupItem className="flex" style={style}>
       <div className="mr-2">
-        {item.text}@{item.lang}
+        <Link to={`/terms/${item.uid}`}>
+          {item.text}@{item.lang}
+        </Link>
       </div>
       <div className="mr-2">
         <Moment date={item.created_at} fromNow />
@@ -27,22 +30,6 @@ const TranslationItem = ({ style, parent, item }) => {
       <div className="mr-2">
         <span>by&nbsp;</span>
         <span>{item.created_by.name || 'system'}</span>
-      </div>
-      <div className="mr-2">
-        <ButtonGroup size="sm">
-          <Button outline color="info">
-            <i className="fa fa-eye" />
-            &nbsp;{item.views}
-          </Button>
-          <Button outline color="info">
-            <i className="fa fa-thumbs-o-up" />
-            &nbsp;{item.likes}
-          </Button>
-          <Button outline color="info">
-            <i className="fa fa-thumbs-o-down" />
-            &nbsp;{item.dislikes}
-          </Button>
-        </ButtonGroup>
       </div>
       <div className="mr-2">
         <Button outline color="danger" onClick={() => remove(item)}>

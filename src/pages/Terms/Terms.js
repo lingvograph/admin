@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Card, CardBody, CardHeader, CardFooter, Col, Row, Table, Button } from 'reactstrap';
+import { Button, Card, CardBody, CardFooter, CardHeader, Col, Row, Table } from 'reactstrap';
 import Moment from 'react-moment';
 import * as api from 'api';
 import { useFetch, useSearchParams } from 'hooks';
@@ -13,13 +13,11 @@ import TagsFilter, { parseTags } from './TagsFilter';
 import NewTermModal from './NewTermModal';
 
 const TermRow = ({ term }) => {
-  const termLink = `/terms/${term.uid}`;
-
   return (
     <tr key={term.uid}>
       <td>{term.lang}</td>
       <td>
-        <Link to={termLink}>{term.text || term.uid}</Link>
+        <Link to={`/terms/${term.uid}`}>{term.text || term.uid}</Link>
       </td>
       <td>
         <div style={{ display: 'inline-block', minWidth: 100, maxWidth: 300 }}>

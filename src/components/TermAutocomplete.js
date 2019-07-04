@@ -8,12 +8,12 @@ const TermAutocomplete = ({ value, onChange, except = [] }) => {
   const [isLoading, setLoading] = useState(false);
 
   const handleChange = (event, { newValue, method }) => {
-    if (method === 'enter') {
+    setText(newValue);
+
+    if (method === 'enter' || method === 'click') {
       event.preventDefault();
       const term = suggestions.find(t => t.text === newValue);
       onChange(term);
-    } else {
-      setText(newValue);
     }
   };
 
