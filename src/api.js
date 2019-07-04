@@ -270,13 +270,15 @@ export const term = {
   },
 
   unlinkTranslation({ termId, id }) {
-    const unlink = [termId, 'translated_as', id];
-    return updateGraph(undefined, [unlink], {}, false);
+    const e1 = [termId, 'translated_as', id];
+    const e2 = [id, 'translated_as', termId];
+    return updateGraph(undefined, [e1, e2], {}, false);
   },
 
   linkTranslation({ termId, id }) {
-    const link = [termId, 'translated_as', id];
-    return updateGraph([link], undefined, {}, false);
+    const e1 = [termId, 'translated_as', id];
+    const e2 = [id, 'translated_as', termId];
+    return updateGraph([e1, e2], undefined, {}, false);
   },
 };
 
