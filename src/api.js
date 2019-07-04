@@ -280,6 +280,11 @@ export const term = {
     const e2 = [id, 'translated_as', termId];
     return updateGraph([e1, e2], undefined, {}, false);
   },
+
+  toggleTagType({ termId, isTag }) {
+    const e1 = [termId, 'Tag', isTag ? '""' : '*'];
+    return updateGraph(isTag ? [e1] : undefined, isTag ? undefined : [e1], {}, false);
+  },
 };
 
 export const file = {

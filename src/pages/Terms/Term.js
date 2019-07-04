@@ -1,5 +1,5 @@
 import React from 'react';
-import { Col, Row } from 'reactstrap';
+import { Col, Row, Button } from 'reactstrap';
 import { useFetch, useSaga } from 'hooks';
 import * as api from 'api';
 import Loading from 'components/Loading';
@@ -24,6 +24,23 @@ const fields = [
   },
 ];
 
+const TagButton = ({ term }) => {
+  const toggleTagType = useSaga(api.term.toggleTagType);
+  const isTag = term.Tag === '';
+
+  const handleClick = () => {
+    toggleTagType({ termId: term.uid, isTag: !isTag });
+  };
+
+  return (
+    <span className="ml-2">
+      <Button size="sm" outline={true} onClick={handleClick}>
+        {isTag ? 'NOT TAG' : 'TAG'}
+      </Button>
+    </span>
+  );
+};
+
 export const Term = () => {
   const task = useFetch(api.term.get);
   const submit = useSaga(api.term.update);
@@ -37,7 +54,14 @@ export const Term = () => {
     <div className="animated fadeIn">
       <Row>
         <Col lg={6}>
-          <FormCard type="Term" id={term.uid} fields={fields} data={term} submit={submit} />
+          <FormCard
+            type="Term"
+            id={term.uid}
+            fields={fields}
+            data={term}
+            submit={submit}
+            headerAddon={<TagButton term={term} />}
+          />
           <TagsCard id={term.uid} tags={term.tag} refreshTask={task} />
           <TranslationCard term={term} />
           <VisualCard term={term} />

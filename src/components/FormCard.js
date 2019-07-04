@@ -5,7 +5,7 @@ import JSONButton from './JSONButton';
 import { renderFields } from './FormFields';
 import { SubmitButton, ResetButton } from './FormButtons';
 
-const FormCard = ({ className, type, header, id, fields, data, submit, handleResult }) => {
+const FormCard = ({ className, type, header, headerAddon, id, fields, data, submit, handleResult }) => {
   const onSubmit = async (values, actions) => {
     const result = await submit({ id, data: values });
     actions.setSubmitting(false);
@@ -22,6 +22,7 @@ const FormCard = ({ className, type, header, id, fields, data, submit, handleRes
         <span className="ml-2">
           <JSONButton data={data} />
         </span>
+        {headerAddon}
       </span>
     );
   }

@@ -79,6 +79,7 @@ export function makeTermQuery({
 
   const text = `${paramQuery}{
     terms(func: ${matchFn}${termRange}) ${termFilter} {
+      Tag
       uid
       text
       lang
