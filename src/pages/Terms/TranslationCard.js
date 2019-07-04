@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Badge, Card, CardBody, CardHeader, Button } from 'reactstrap';
 import TermAutocomplete from 'components/TermAutocomplete';
-import TranslationList from './TranslationList';
+import TermList from './TermList';
 import { useSaga } from 'hooks';
 import * as api from 'api';
 
@@ -27,7 +27,7 @@ const TranslationCard = ({ term }) => {
             Add
           </Button>
         </div>
-        <TranslationList term={term} />
+        <TermList term={term} kind="'translationList'" />
       </CardBody>
     </Card>
   );

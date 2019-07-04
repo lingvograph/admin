@@ -7,7 +7,7 @@ import { useSaga } from 'hooks';
 import * as api from 'api';
 import { Link } from 'react-router-dom';
 
-const TranslationItem = ({ style, parent, item }) => {
+const TermInfo = ({ style, parent, item }) => {
   const unlinkTranslation = useSaga(api.term.unlinkTranslation);
 
   const remove = () => {
@@ -40,10 +40,9 @@ const TranslationItem = ({ style, parent, item }) => {
   );
 };
 
-const TranslationList = ({ term }) => {
+const TermList = ({ term, kind }) => {
   const initialData = { items: term.translated_as, total: term.translationTotal };
-  const loadMoreItems = ({ offset, limit }) =>
-    api.term.list({ kind: 'translationList', termId: term.uid, offset, limit });
+  const loadMoreItems = ({ offset, limit }) => api.term.list({ kind, termId: term.uid, offset, limit });
 
   return (
     <InfiniteList
@@ -54,10 +53,10 @@ const TranslationList = ({ term }) => {
       height={total => 61 * Math.max(1, Math.min(10, total))}
     >
       {({ item, index, style }) => {
-        return <TranslationItem key={index} style={style} parent={term} item={item} />;
+        return <TermInfo key={index} style={style} parent={term} item={item} />;
       }}
     </InfiniteList>
   );
 };
 
-export default TranslationList;
+export default TermList;
