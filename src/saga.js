@@ -4,6 +4,7 @@ import * as api from './api';
 import { setCurrentUser } from './actions';
 import { resolvePath } from './routes';
 import tokenStore from './token';
+import { persistFilters } from './filterPersistence';
 
 export function* navigate(routeName) {
   const path = resolvePath(routeName);
@@ -44,4 +45,5 @@ export function* autoLogin() {
 
 export function* rootSaga() {
   yield spawn(autoLogin);
+  yield spawn(persistFilters);
 }
