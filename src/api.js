@@ -16,6 +16,10 @@ axios.defaults.headers.common['Content-Type'] = 'application/json';
 
 loadProgressBar();
 
+function extractErrorMessage(data) {
+  return _.isString(data) ? data : data.error || data.error_message;
+}
+
 function handleApiError(error) {
   const status = error.response.status;
   if (401 === status) {
@@ -28,12 +32,13 @@ function handleApiError(error) {
         cancelLabel: 'No',
         apply: [navigate, '/login'],
       });
+    } else {
+      throw new Error(extractErrorMessage(error.response.data));
     }
   } else if (404 === status) {
     store.runSaga(navigate, '/404');
   } else if (status >= 500) {
-    const data = error.response.data;
-    alert(_.isString(data) ? data : data.error);
+    alert(extractErrorMessage(error.response.data));
   } else {
     return Promise.reject(error);
   }
@@ -50,15 +55,14 @@ axios.interceptors.response.use(response => {
   return response;
 }, handleApiError);
 
-export function login(username, password) {
-  return axios
-    .post('/api/login', undefined, {
-      auth: { username, password },
-    })
-    .then(resp => {
-      token.value = resp.data.token;
-      return me();
-    });
+export async function login(username, password) {
+  const resp = await axios({
+    url: '/api/login',
+    method: 'POST',
+    auth: { username, password },
+  });
+  token.value = resp.data.token;
+  return me();
 }
 
 function makeCancelConfig(abortController) {
