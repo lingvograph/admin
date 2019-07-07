@@ -19,14 +19,16 @@ loadProgressBar();
 function handleApiError(error) {
   const status = error.response.status;
   if (401 === status) {
-    confirm({
-      title: 'Session Expired',
-      content: 'Your session has expired. Would you like to be redirected to the login page?',
-      warning: true,
-      okLabel: 'Yes',
-      cancelLabel: 'No',
-      apply: [navigate, '/login'],
-    });
+    if (!window.location.pathname.endsWith('/login')) {
+      confirm({
+        title: 'Session Expired',
+        content: 'Your session has expired. Would you like to be redirected to the login page?',
+        warning: true,
+        okLabel: 'Yes',
+        cancelLabel: 'No',
+        apply: [navigate, '/login'],
+      });
+    }
   } else if (404 === status) {
     store.runSaga(navigate, '/404');
   } else if (status >= 500) {
