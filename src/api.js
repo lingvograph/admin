@@ -269,7 +269,7 @@ export const term = {
   },
 
   async addVisualURL({ id, url, abortController }) {
-    const obj = await get(`/api/fileproxy/${url}`, {}, { abortController });
+    const obj = await get(`/api/fileproxy/?url=${encodeURIComponent(url)}&remote=true`, {}, { abortController });
     const set = [[id, 'visual', obj.uid]];
     await updateGraph(set, undefined, { abortController });
     return await get(`/api/data/term/${id}`);
