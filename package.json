@@ -51,7 +51,7 @@
     "react-window-infinite-loader": "^1.0.3",
     "reactstrap": "^8.0.0",
     "recompose": "^0.30.0",
-    "redux": "^4.0.1",
+    "redux": "^4.0.2",
     "redux-actions": "^2.6.5",
     "redux-react-hook": "^3.3.2",
     "redux-saga": "^1.0.5",
@@ -69,7 +69,7 @@
     "pretty-quick": "^1.11.1",
     "react-scripts": "^3.0.1",
     "react-test-renderer": "^16.8.6",
-    "typescript": "^3.5.2"
+    "typescript": "^3.5.3"
   },
   "scripts": {
     "start": "react-scripts start",
