@@ -7,7 +7,7 @@ import FormCard from 'components/FormCard';
 import TagsCard from 'components/TagsCard';
 import VisualCard from './VisualCard';
 import AudioCard from './AudioCard';
-import TranslationCard from './TranslationCard';
+import RelatedCard from './RelatedCard';
 
 const fields = [
   {
@@ -63,7 +63,12 @@ export const Term = () => {
             headerAddon={<TagButton term={term} />}
           />
           <TagsCard id={term.uid} tags={term.tag} refreshTask={task} />
-          <TranslationCard term={term} />
+          <RelatedCard term={term} kind="translated_as" />
+          <RelatedCard term={term} kind="definition" />
+          <RelatedCard term={term} kind="in" />
+          <RelatedCard term={term} kind="related" />
+          <RelatedCard term={term} kind="synonym" />
+          <RelatedCard term={term} kind="antonym" />
           <VisualCard term={term} />
         </Col>
         <Col lg={6}>

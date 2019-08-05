@@ -7,7 +7,7 @@ import { navigate } from 'saga';
 import store from 'store';
 import token from './token';
 import { history } from './history';
-import { makeTermQuery } from './termquery';
+import { makeTermQuery, relationMap } from './termquery';
 
 export const DEFAULT_LIMIT = 11;
 
@@ -118,6 +118,7 @@ export function del(path, options = {}) {
 }
 
 export function query(queryString, params = {}, options = {}) {
+  console.log(queryString);
   const config = makeAxiosConfig(options);
   return axios.post('/api/query', queryString, { params, ...config }).then(resp => resp.data);
 }
@@ -240,7 +241,7 @@ export const term = {
   },
 
   getAudio({ id, abortController, offset = 0, limit = DEFAULT_LIMIT }) {
-    const q = makeTermQuery({ kind: 'audioList', termUid: id, offset, limit });
+    const q = makeTermQuery({ kind: 'audio', termUid: id, offset, limit });
     return query(q.text, q.params, { abortController }).then(data => {
       const term = data.terms[0];
       if (!term) {
@@ -281,9 +282,10 @@ export const term = {
     return updateGraph(undefined, [e1, e2], {}, false);
   },
 
-  linkTranslation({ termId, id }) {
-    const e1 = [termId, 'translated_as', id];
-    const e2 = [id, 'translated_as', termId];
+  linkRelated({ termId, id, edge }) {
+    const rel = relationMap[edge];
+    const e1 = [termId, edge, id];
+    const e2 = [id, rel.reverseEdge || edge, termId];
     return updateGraph([e1, e2], undefined, {}, false);
   },
 

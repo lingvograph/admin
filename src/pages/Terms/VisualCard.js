@@ -38,7 +38,7 @@ const VisualCard = ({ term }) => {
     <Card>
       <CardHeader>
         <strong>
-          Visual <Badge color="info">{term.visualTotal}</Badge>
+          Visual <Badge color="info">{term.visual_count}</Badge>
         </strong>
         <span className="ml-2">
           <AddImageByURL termId={term.uid} />

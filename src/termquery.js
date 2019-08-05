@@ -2,8 +2,42 @@ import _ from 'lodash';
 
 const isWord = s => s && s.match(/^[^\s]+$/);
 
+export const relationMap = {
+  translated_as: {
+    label: 'Translations',
+    count: 'translated_as_count',
+  },
+  definition: {
+    label: 'Definitions',
+    count: 'definition_count',
+    reverseEdge: 'definition_of',
+  },
+  definition_of: {
+    label: 'Definition for',
+    count: 'definition_of_count',
+  },
+  in: {
+    label: 'Used in',
+    count: 'in_count',
+  },
+  related: {
+    label: 'Related Terms',
+    count: 'related_count',
+  },
+  synonym: {
+    label: 'Synonyms',
+    count: 'synonym_count',
+  },
+  antonym: {
+    label: 'Antonyms',
+    count: 'antonym_count',
+  },
+};
+
+const KIND = ['term', 'terms', 'audio', 'visual'].concat(Object.keys(relationMap));
+
 export function makeTermQuery({
-  kind = 'termList',
+  kind = 'terms',
   termUid,
   offset = 0,
   limit = 10,
@@ -12,23 +46,19 @@ export function makeTermQuery({
   tags,
   onlyTags = false,
 }) {
+  if (!kind || !KIND.includes(kind)) {
+    throw new Error(`invalid kind ${kind}`);
+  }
+  if (kind === 'term' && !termUid) {
+    throw new Error('termUid is required');
+  }
+
   const hasTermType = 'has(Term)';
   const matchFn = termUid ? `uid(${termUid})` : hasTermType;
-  const isTermList = kind === 'termList';
+  const isTermList = kind === 'terms';
   const isTerm = kind === 'term';
   const hasTagType = isTermList && onlyTags ? 'has(Tag)' : '';
   const params = {};
-
-  function countBy() {
-    switch (kind) {
-      case 'audioList':
-        return 'audio';
-      case 'visualList':
-        return 'visual';
-      default:
-        return 'uid';
-    }
-  }
 
   function makeSearchFilter() {
     if (!isTermList) {
@@ -59,9 +89,6 @@ export function makeTermQuery({
   }
 
   const range = `offset: ${offset}, first: ${limit}`;
-  const audioRange = kind === 'audioList' ? `(${range})` : '(first: 10)';
-  const visualRange = kind === 'visualList' ? `(${range})` : '(first: 10)';
-  const translateRange = kind === 'translationList' ? `(${range})` : '(first: 10)';
   const termRange = isTermList ? `, ${range}` : '';
 
   const brace = s => `(${s})`;
@@ -71,11 +98,74 @@ export function makeTermQuery({
 
   const filterExpr = [hasTermType, hasTagType, langFilter, tagFilter, searchFilter].filter(s => !!s).join(' and ');
   const termFilter = isTermList ? `@filter(${filterExpr})` : '';
-  const makeTotal = (name, pred) => `${name}: count(${pred})`;
+
   const args = _.keys(params)
     .map(k => `${k}: string`)
     .join();
   const paramQuery = args ? `query terms(${args}) ` : '';
+
+  const termBody = `{
+    uid
+    text
+    lang
+    transcript@ru
+    transcript@en
+    created_at
+    created_by {
+      uid
+      name
+    }
+    tag {
+      uid
+      text
+      lang
+      transcript@ru
+      transcript@en
+    }
+  }`;
+
+  const fileBody = `{
+    uid
+    url
+    source
+    content_type
+    views: count(see)
+    likes: count(like)
+    dislikes: count(dislike)
+    created_at
+    created_by {
+      uid
+      name
+    }
+  }`;
+
+  const edgesMeta = {
+    translated_as: {},
+    definition: {},
+    definition_of: {},
+    in: {},
+    related: {},
+    synonym: {},
+    antonym: {},
+    audio: { file: true },
+    visual: { file: true },
+  };
+
+  const makeEdge = (name, isFile) => {
+    const myrange = kind === name ? `(${range})` : '(first: 10)';
+    const body = isFile ? fileBody : termBody;
+    return `${name} ${myrange} ${body}`;
+  };
+
+  const edges = _.mapValues(relationMap, (_, name) => makeEdge(name, false)).join('\n');
+
+  const makeTotal = (pred, name) => {
+    if (!name) {
+      name = `${pred}_count`;
+    }
+    return `${name}: count(${pred})`;
+  };
+  const totals = isTerm ? _.mapValues(edgesMeta, (_, name) => makeTotal(name)).join('\n') : '';
 
   const text = `${paramQuery}{
     terms(func: ${matchFn}${termRange}) ${termFilter} {
@@ -97,59 +187,13 @@ export function makeTermQuery({
         transcript@ru
         transcript@en
       }
-      translated_as ${translateRange} {
-        uid
-        text
-        lang
-        transcript@ru
-        transcript@en
-        created_at
-        created_by {
-          uid
-          name
-        }
-        tag {
-          uid
-          text
-          lang
-          transcript@ru
-          transcript@en
-        }
-      }
-      audio ${audioRange} {
-        uid
-        url
-        source
-        content_type
-        views: count(see)
-        likes: count(like)
-        dislikes: count(dislike)
-        created_at
-        created_by {
-          uid
-          name
-        }
-      }
-      visual ${visualRange} {
-        uid
-        url
-        source
-        content_type
-        views: count(see)
-        likes: count(like)
-        dislikes: count(dislike)
-        created_at
-        created_by {
-          uid
-          name
-        }
-      }
+      ${edges}
+      ${makeEdge('audio', true)}
+      ${makeEdge('visual', true)}
     }
     count(func: ${matchFn}) ${termFilter} {
-      ${isTerm ? '' : makeTotal('total', countBy())}
-      ${isTerm ? makeTotal('audioTotal', 'audio') : ''}
-      ${isTerm ? makeTotal('visualTotal', 'visual') : ''}
-      ${isTerm ? makeTotal('translationTotal', 'translated_as') : ''}
+      ${isTerm ? '' : makeTotal(isTermList ? 'uid' : kind, 'total')}
+      ${totals}
     }
   }`;
   return {

@@ -6,6 +6,7 @@ import InfiniteList from 'components/InfiniteList';
 import { useSaga } from 'hooks';
 import * as api from 'api';
 import { Link } from 'react-router-dom';
+import { relationMap } from 'termquery';
 
 const TermInfo = ({ style, parent, item }) => {
   const unlinkTranslation = useSaga(api.term.unlinkTranslation);
@@ -41,7 +42,8 @@ const TermInfo = ({ style, parent, item }) => {
 };
 
 const TermList = ({ term, kind }) => {
-  const initialData = { items: term.translated_as, total: term.translationTotal };
+  const rel = relationMap[kind];
+  const initialData = { items: term.translated_as, total: term[rel.count] };
   const loadMoreItems = ({ offset, limit }) => api.term.list({ kind, termId: term.uid, offset, limit });
 
   return (

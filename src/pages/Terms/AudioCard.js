@@ -12,7 +12,7 @@ const AudioCard = ({ term }) => {
     <Card>
       <CardHeader>
         <strong>
-          Audio <Badge color="info">{term.audioTotal}</Badge>
+          Audio <Badge color="info">{term.audio_count}</Badge>
         </strong>
         <span className="ml-2">
           <Button size="sm" onClick={() => restoreAudio()}>

@@ -70,7 +70,7 @@ const AudioItem = ({ style, term, audio }) => {
 };
 
 const AudioList = ({ term }) => {
-  const initialData = { items: term.audio, total: term.audioTotal };
+  const initialData = { items: term.audio, total: term.audio_count };
   const loadMoreItems = ({ offset, limit }) => api.term.getAudio({ id: term.uid, offset, limit });
 
   return (
