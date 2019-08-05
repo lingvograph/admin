@@ -56,7 +56,7 @@ const Login = () => {
                   <Form onSubmit={onSubmit}>
                     <h1>Login</h1>
                     <p className="text-muted">Sign In to your account</p>
-                    <InputGroup className="mb-3">
+                    <InputGroup className="mb-2">
                       <InputGroupAddon addonType="prepend">
                         <InputGroupText>
                           <i className="icon-user" />
@@ -70,7 +70,7 @@ const Login = () => {
                         onChange={username.onChange}
                       />
                     </InputGroup>
-                    <InputGroup className="mb-4">
+                    <InputGroup className="mb-2">
                       <InputGroupAddon addonType="prepend">
                         <InputGroupText>
                           <i className="icon-lock" />
@@ -87,7 +87,12 @@ const Login = () => {
                     {error ? (
                       <Row>
                         <Col xs="12">
-                          <div className="error">{error}</div>
+                          <div
+                            className="error bg-danger mb-2 flex-center"
+                            style={{ padding: '2px', borderRadius: '4px' }}
+                          >
+                            {error}
+                          </div>
                         </Col>
                       </Row>
                     ) : null}
