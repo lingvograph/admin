@@ -36,6 +36,44 @@ export const relationMap = {
 
 const KIND = ['term', 'terms', 'audio', 'visual'].concat(Object.keys(relationMap));
 
+const TAG = `tag {
+        uid
+        text
+        lang
+        transcript@ru
+        transcript@en
+      }`;
+
+const TERM_BODY = `{
+    uid
+    text
+    lang
+    transcript@ru
+    transcript@en
+    created_at
+    created_by {
+      uid
+      name
+    }
+    ${TAG}
+  }`;
+
+const FILE_BODY = `{
+    uid
+    url
+    source
+    content_type
+    views: count(see)
+    likes: count(like)
+    dislikes: count(dislike)
+    created_at
+    created_by {
+      uid
+      name
+    }
+    ${TAG}
+  }`;
+
 export function makeTermQuery({
   kind = 'terms',
   termUid,
@@ -104,60 +142,16 @@ export function makeTermQuery({
     .join();
   const paramQuery = args ? `query terms(${args}) ` : '';
 
-  const termBody = `{
-    uid
-    text
-    lang
-    transcript@ru
-    transcript@en
-    created_at
-    created_by {
-      uid
-      name
-    }
-    tag {
-      uid
-      text
-      lang
-      transcript@ru
-      transcript@en
-    }
-  }`;
-
-  const fileBody = `{
-    uid
-    url
-    source
-    content_type
-    views: count(see)
-    likes: count(like)
-    dislikes: count(dislike)
-    created_at
-    created_by {
-      uid
-      name
-    }
-  }`;
-
-  const edgesMeta = {
-    translated_as: {},
-    definition: {},
-    definition_of: {},
-    in: {},
-    related: {},
-    synonym: {},
-    antonym: {},
-    audio: { file: true },
-    visual: { file: true },
-  };
-
-  const makeEdge = (name, isFile) => {
+  const fileEdges = ['audio', 'visual'];
+  const makeEdge = name => {
+    const isFile = fileEdges.includes(name);
     const myrange = kind === name ? `(${range})` : '(first: 10)';
-    const body = isFile ? fileBody : termBody;
+    const body = isFile ? FILE_BODY : TERM_BODY;
     return `${name} ${myrange} ${body}`;
   };
 
-  const edges = _.mapValues(relationMap, (_, name) => makeEdge(name, false)).join('\n');
+  const allEdgeKeys = Object.keys(relationMap).concat(fileEdges);
+  const edges = allEdgeKeys.map(makeEdge).join('\n');
 
   const makeTotal = (pred, name) => {
     if (!name) {
@@ -165,7 +159,7 @@ export function makeTermQuery({
     }
     return `${name}: count(${pred})`;
   };
-  const totals = isTerm ? _.mapValues(edgesMeta, (_, name) => makeTotal(name)).join('\n') : '';
+  const totals = isTerm ? allEdgeKeys.map(k => makeTotal(k)).join('\n') : '';
 
   const text = `${paramQuery}{
     terms(func: ${matchFn}${termRange}) ${termFilter} {
@@ -188,14 +182,15 @@ export function makeTermQuery({
         transcript@en
       }
       ${edges}
-      ${makeEdge('audio', true)}
-      ${makeEdge('visual', true)}
     }
     count(func: ${matchFn}) ${termFilter} {
       ${isTerm ? '' : makeTotal(isTermList ? 'uid' : kind, 'total')}
       ${totals}
     }
   }`;
+
+  console.log(text);
+
   return {
     text: text.replace(/^\s*[\r\n]/gm, ''),
     params,
