@@ -69,9 +69,9 @@ export const Term = () => {
           <RelatedCard term={term} kind="related" />
           <RelatedCard term={term} kind="synonym" />
           <RelatedCard term={term} kind="antonym" />
-          <VisualCard term={term} />
         </Col>
         <Col lg={6}>
+          <VisualCard term={term} />
           <AudioCard term={term} />
         </Col>
       </Row>
