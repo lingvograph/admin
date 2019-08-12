@@ -21,7 +21,7 @@ function extractErrorMessage(data) {
 }
 
 function handleApiError(error) {
-  const status = error.response.status;
+  const status = _.get(error, 'response.status');
   if (401 === status) {
     if (!window.location.pathname.endsWith('/login')) {
       confirm({
@@ -118,7 +118,6 @@ export function del(path, options = {}) {
 }
 
 export function query(queryString, params = {}, options = {}) {
-  console.log(queryString);
   const config = makeAxiosConfig(options);
   return axios.post('/api/query', queryString, { params, ...config }).then(resp => resp.data);
 }
@@ -254,9 +253,19 @@ export const term = {
     });
   },
 
-  list({ abortController, page = 1, limit = DEFAULT_LIMIT, lang, searchString, tags, onlyTags = false }) {
+  list({
+    abortController,
+    termId,
+    kind = 'terms',
+    page = 1,
+    limit = DEFAULT_LIMIT,
+    lang,
+    searchString,
+    tags,
+    onlyTags = false,
+  }) {
     const offset = (page - 1) * limit;
-    const q = makeTermQuery({ offset, limit, lang, searchString, tags, onlyTags });
+    const q = makeTermQuery({ kind, termUid: termId, offset, limit, lang, searchString, tags, onlyTags });
     return query(q.text, q.params, { abortController }).then(data => ({
       items: data.terms,
       total: data.count[0].total,

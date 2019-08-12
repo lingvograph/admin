@@ -189,8 +189,6 @@ export function makeTermQuery({
     }
   }`;
 
-  console.log(text);
-
   return {
     text: text.replace(/^\s*[\r\n]/gm, ''),
     params,

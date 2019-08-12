@@ -43,15 +43,10 @@ const TermList = ({ term, kind }) => {
   const rel = relationMap[kind];
   const initialData = { items: term[kind], total: term[rel.count] };
   const loadMoreItems = ({ offset, limit }) => api.term.list({ kind, termId: term.uid, offset, limit });
+  const height = total => 61 * Math.max(1, Math.min(10, total));
 
   return (
-    <InfiniteList
-      className="list-group"
-      data={initialData}
-      loadMoreItems={loadMoreItems}
-      itemSize={61}
-      height={total => 61 * Math.max(1, Math.min(10, total))}
-    >
+    <InfiniteList className="list-group" data={initialData} loadMoreItems={loadMoreItems} itemSize={61} height={height}>
       {({ item, index, style }) => {
         return <TermInfo key={index} style={style} parent={term} item={item} kind={kind} />;
       }}
