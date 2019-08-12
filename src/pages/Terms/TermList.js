@@ -21,9 +21,7 @@ const TermInfo = ({ style, parent, item, kind }) => {
   return (
     <ListGroupItem className="flex" style={style}>
       <div className="mr-2">
-        <Link to={`/terms/${item.uid}`}>
-          {item.text}@{item.lang}
-        </Link>
+        <Link to={`/terms/${item.uid}`}>{item.text}</Link>
       </div>
       <div className="mr-2">
         <Moment date={item.created_at} fromNow />

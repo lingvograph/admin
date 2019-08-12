@@ -12,6 +12,7 @@ const RelatedCard = ({ term, kind }) => {
 
   const handleAdd = () => {
     linkRelated({ termId: term.uid, id: related.uid, edge: kind });
+    setRelated({ text: '', lang: '', uid: '' });
   };
 
   const rel = relationMap[kind];
