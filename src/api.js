@@ -276,9 +276,10 @@ export const term = {
     return await get(`/api/data/term/${id}`);
   },
 
-  unlinkTranslation({ termId, id }) {
-    const e1 = [termId, 'translated_as', id];
-    const e2 = [id, 'translated_as', termId];
+  unlinkRelated({ termId, id, edge }) {
+    const rel = relationMap[edge];
+    const e1 = [termId, edge, id];
+    const e2 = [id, rel.reverseEdge || edge, termId];
     return updateGraph(undefined, [e1, e2], {}, false);
   },
 

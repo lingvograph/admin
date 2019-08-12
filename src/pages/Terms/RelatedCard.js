@@ -11,7 +11,7 @@ const RelatedCard = ({ term, kind }) => {
   const linkRelated = useSaga(api.term.linkRelated);
 
   const handleAdd = () => {
-    linkRelated({ termId: term.uid, id: related.uid, kind });
+    linkRelated({ termId: term.uid, id: related.uid, edge: kind });
   };
 
   const rel = relationMap[kind];
@@ -25,7 +25,7 @@ const RelatedCard = ({ term, kind }) => {
       </CardHeader>
       <CardBody>
         <div className="flex mb-2">
-          <TermAutocomplete value={related} onChange={setRelated} except={term[kind]} />
+          <TermAutocomplete value={related} onChange={setRelated} except={term[kind]} kind={kind} />
           <Button className="ml-2" size="sm" onClick={handleAdd} disabled={!related.uid}>
             Add
           </Button>

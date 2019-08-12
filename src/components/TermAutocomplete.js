@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import Autosuggest from './Autosuggest';
 import * as api from 'api';
+import { relationMap } from 'termquery';
 
-const TermAutocomplete = ({ value, onChange, except = [] }) => {
+const TermAutocomplete = ({ value, onChange, kind, except = [] }) => {
+  const meta = relationMap[kind];
   const [text, setText] = useState((value && (value.text || value.uid)) || '');
   const [suggestions, setSuggestions] = useState([]);
   const [isLoading, setLoading] = useState(false);
@@ -46,7 +48,7 @@ const TermAutocomplete = ({ value, onChange, except = [] }) => {
         renderSuggestion={t => <span>{t.text || t.uid}</span>}
         inputProps={{
           className: 'form-control',
-          placeholder: 'Find translation...',
+          placeholder: `Find ${meta.label}...`,
           onChange: handleChange,
           value: text,
         }}

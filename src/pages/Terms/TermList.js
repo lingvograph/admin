@@ -8,13 +8,13 @@ import * as api from 'api';
 import { Link } from 'react-router-dom';
 import { relationMap } from 'termquery';
 
-const TermInfo = ({ style, parent, item }) => {
-  const unlinkTranslation = useSaga(api.term.unlinkTranslation);
+const TermInfo = ({ style, parent, item, kind }) => {
+  const unlinkRelated = useSaga(api.term.unlinkRelated);
 
   const remove = () => {
     confirm({
-      content: 'Are you sure you want to detach this translation?',
-      apply: () => unlinkTranslation({ termId: parent.uid, id: item.uid }),
+      content: 'Are you sure you want to unlink this term?',
+      apply: () => unlinkRelated({ termId: parent.uid, id: item.uid, edge: kind }),
     });
   };
 
@@ -43,7 +43,7 @@ const TermInfo = ({ style, parent, item }) => {
 
 const TermList = ({ term, kind }) => {
   const rel = relationMap[kind];
-  const initialData = { items: term.translated_as, total: term[rel.count] };
+  const initialData = { items: term[kind], total: term[rel.count] };
   const loadMoreItems = ({ offset, limit }) => api.term.list({ kind, termId: term.uid, offset, limit });
 
   return (
@@ -55,7 +55,7 @@ const TermList = ({ term, kind }) => {
       height={total => 61 * Math.max(1, Math.min(10, total))}
     >
       {({ item, index, style }) => {
-        return <TermInfo key={index} style={style} parent={term} item={item} />;
+        return <TermInfo key={index} style={style} parent={term} item={item} kind={kind} />;
       }}
     </InfiniteList>
   );
