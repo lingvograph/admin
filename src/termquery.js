@@ -2,37 +2,36 @@ import _ from 'lodash';
 
 const isWord = s => s && s.match(/^[^\s]+$/);
 
-export const relationMap = {
-  translated_as: {
-    label: 'Translations',
-    count: 'translated_as_count',
+export const relationMap = _.mapValues(
+  {
+    translated_as: {
+      label: 'Translations',
+    },
+    definition: {
+      label: 'Definitions',
+      reverseEdge: 'definition_of',
+    },
+    definition_of: {
+      label: 'Definition for',
+    },
+    in: {
+      label: 'Used in',
+    },
+    related: {
+      label: 'Related Terms',
+    },
+    synonym: {
+      label: 'Synonyms',
+    },
+    antonym: {
+      label: 'Antonyms',
+    },
   },
-  definition: {
-    label: 'Definitions',
-    count: 'definition_count',
-    reverseEdge: 'definition_of',
-  },
-  definition_of: {
-    label: 'Definition for',
-    count: 'definition_of_count',
-  },
-  in: {
-    label: 'Used in',
-    count: 'in_count',
-  },
-  related: {
-    label: 'Related Terms',
-    count: 'related_count',
-  },
-  synonym: {
-    label: 'Synonyms',
-    count: 'synonym_count',
-  },
-  antonym: {
-    label: 'Antonyms',
-    count: 'antonym_count',
-  },
-};
+  (rel, name) => ({
+    ...rel,
+    count: `${name}_count`,
+  }),
+);
 
 const KIND = ['term', 'terms', 'audio', 'visual'].concat(Object.keys(relationMap));
 
