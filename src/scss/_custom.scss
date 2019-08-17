@@ -1,0 +1,32 @@
+// Here you can add other styles
+
+.flex {
+  display: flex;
+  align-items: center;
+}
+
+.flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.hr-heading {
+  display: flex;
+  align-items: center;
+  font-weight: bold;
+
+  .hr {
+    flex: 1;
+    margin-top: 2px;
+    margin-left: 10px;
+    height: 1px;
+    background: #d4d4d4;
+  }
+}
+
+.card-footer {
+  .pagination {
+    margin-bottom: 0;
+  }
+}

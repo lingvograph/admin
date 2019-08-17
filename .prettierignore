@@ -1,0 +1,10 @@
+node_modules
+LICENSE
+*.md
+*.lock
+*.jpg
+*.png
+*.svg
+*.ico
+*.iml
+.*
