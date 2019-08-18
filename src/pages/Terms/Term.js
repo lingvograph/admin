@@ -17,11 +17,6 @@ const fields = [
   {
     id: 'text',
   },
-  {
-    id: 'transcript',
-    label: 'Transcription',
-    type: 'multilang',
-  },
 ];
 
 const TagButton = ({ term }) => {
@@ -63,6 +58,7 @@ export const Term = () => {
             headerAddon={<TagButton term={term} />}
           />
           <TagsCard id={term.uid} tags={term.tag} refreshTask={task} />
+          <RelatedCard term={term} kind="transcription" />
           <RelatedCard term={term} kind="translated_as" />
           <RelatedCard term={term} kind="definition" />
           <RelatedCard term={term} kind="in" />

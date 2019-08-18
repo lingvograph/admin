@@ -7,6 +7,7 @@ import { useSaga } from 'hooks';
 import * as api from 'api';
 import { Link } from 'react-router-dom';
 import { relationMap } from 'termquery';
+import { createdBy } from 'utils';
 
 const TermInfo = ({ style, parent, item, kind }) => {
   const unlinkRelated = useSaga(api.term.unlinkRelated);
@@ -28,7 +29,7 @@ const TermInfo = ({ style, parent, item, kind }) => {
       </div>
       <div className="mr-2">
         <span>by&nbsp;</span>
-        <span>{item.created_by.name || 'system'}</span>
+        <span>{createdBy(item)}</span>
       </div>
       <div className="mr-2">
         <Button outline color="danger" onClick={() => remove(item)}>

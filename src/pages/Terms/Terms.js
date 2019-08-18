@@ -11,6 +11,7 @@ import TagsInput from 'components/TagsInput';
 import LangFilter from './LangFilter';
 import TagsFilter, { parseTags } from './TagsFilter';
 import NewTermModal from './NewTermModal';
+import { createdBy } from 'utils';
 
 const TermRow = ({ term }) => {
   return (
@@ -28,7 +29,7 @@ const TermRow = ({ term }) => {
         <Moment date={term.created_at} fromNow />
       </td>
       <td>
-        <span>{term.created_by.name || 'system'}</span>
+        <span>{createdBy(term)}</span>
       </td>
     </tr>
   );

@@ -5,6 +5,7 @@ import { confirm } from 'components/confirm';
 import InfiniteList from 'components/InfiniteList';
 import { useSaga } from 'hooks';
 import * as api from 'api';
+import { createdBy } from 'utils';
 
 const source = src => {
   const url = new URL(src);
@@ -39,7 +40,7 @@ const AudioItem = ({ style, term, audio }) => {
       </div>
       <div className="mr-2">
         <span>by&nbsp;</span>
-        <span>{audio.created_by.name || 'system'}</span>
+        <span>{createdBy(audio)}</span>
       </div>
       <div className="mr-2">
         <Badge color="info">{source(audio.url)}</Badge>

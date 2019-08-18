@@ -7,12 +7,21 @@ export const relationMap = _.mapValues(
     translated_as: {
       label: 'Translations',
     },
+    transcription: {
+      label: 'Transcriptions',
+      reverseEdge: 'transcription_of',
+    },
+    transcription_of: {
+      label: 'Transcription for',
+      reverseEdge: 'transcription',
+    },
     definition: {
       label: 'Definitions',
       reverseEdge: 'definition_of',
     },
     definition_of: {
       label: 'Definition for',
+      reverseEdge: 'definition',
     },
     in: {
       label: 'Used in',
@@ -35,25 +44,24 @@ export const relationMap = _.mapValues(
 
 const KIND = ['term', 'terms', 'audio', 'visual'].concat(Object.keys(relationMap));
 
+const META = `created_at
+    created_by {
+      uid
+      name
+    }`;
+
 const TAG = `tag {
         uid
         text
         lang
-        transcript@ru
-        transcript@en
+        ${META}
       }`;
 
 const TERM_BODY = `{
     uid
     text
     lang
-    transcript@ru
-    transcript@en
-    created_at
-    created_by {
-      uid
-      name
-    }
+    ${META}
     ${TAG}
   }`;
 
@@ -65,11 +73,7 @@ const FILE_BODY = `{
     views: count(see)
     likes: count(like)
     dislikes: count(dislike)
-    created_at
-    created_by {
-      uid
-      name
-    }
+    ${META}
     ${TAG}
   }`;
 
@@ -166,20 +170,8 @@ export function makeTermQuery({
       uid
       text
       lang
-      transcript@ru
-      transcript@en
-      created_at
-      created_by {
-        uid
-        name
-      }
-      tag {
-        uid
-        text
-        lang
-        transcript@ru
-        transcript@en
-      }
+      ${META}
+      ${TAG}
       ${edges}
     }
     count(func: ${matchFn}) ${termFilter} {

@@ -3,6 +3,10 @@ import md5 from 'md5';
 
 const MD5_REGEX = /^[0-9a-f]{32}$/;
 
+export function createdBy(item) {
+  return (item.created_by || {}).name || 'system';
+}
+
 export function gravatarURL(email, size = 80) {
   if (!email) return undefined;
   email = email.trim().toLowerCase();
