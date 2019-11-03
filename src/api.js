@@ -224,7 +224,20 @@ export const tag = {
 
 export const term = {
   create({ data, abortController }) {
-    return post('/api/data/term', data, { abortController });
+    const tkeys = ['en', 'ru'].map(t => ({ lang: t, key: `transcript@${t}` }));
+    const payload = _.omit(data, tkeys.map(t => t.key));
+    const transcript = tkeys.filter(t => !!data[t.key]).map(t => ({ text: data[t.key], lang: t.lang }));
+    return post('/api/pyadmin/term', payload, { abortController }).then(async term => {
+      if (_.isEmpty(transcript)) {
+        return term;
+      }
+      const transcriptions = await Promise.all(transcript.map(t => post('/api/pyadmin/term', t, { abortController })));
+      const edges = _.flatten(
+        transcriptions.map(t => [[term.uid, 'transcription', t.uid], [t.uid, 'transcription_of', term.uid]]),
+      );
+      await updateGraph(edges, undefined, { abortController });
+      return term;
+    });
   },
 
   get({ id, abortController }) {
