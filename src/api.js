@@ -227,7 +227,7 @@ export const term = {
     const tkeys = ['en', 'ru'].map(t => ({ lang: t, key: `transcript@${t}` }));
     const payload = _.omit(data, tkeys.map(t => t.key));
     const transcript = tkeys.filter(t => !!data[t.key]).map(t => ({ text: data[t.key], lang: t.lang }));
-    return post('/api/pyadmin/term', payload, { abortController }).then(async term => {
+    return post('/api/lingvo/term', payload, { abortController }).then(async term => {
       if (_.isEmpty(transcript)) {
         return term;
       }
@@ -340,7 +340,7 @@ export const file = {
 
 export const admin = {
   searchAudio({ lang, text }) {
-    return get(`/api/pyadmin/search/audio/${decodeURIComponent(text)}`, { lang });
+    return get(`/api/lingvo/search/audio/${decodeURIComponent(text)}`, { lang });
   },
   async restoreRemoteAudio({ term, userId }) {
     const currentUrls = new Set(_.map(term.audio, t => t.url));
